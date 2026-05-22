@@ -15,6 +15,7 @@ The libraries, services, and platforms used to build Faros. Each entry notes its
 - **Charts**: [Recharts](https://github.com/recharts/recharts). Retro view visualizations (funnel, conversion rates, source breakdown, resume performance).
 - **Date Library**: [date-fns](https://github.com/date-fns/date-fns). Date formatting and math. Tree-shakeable, no Moment-style bundle bloat.
 - **Toasts**: [Sonner](https://github.com/emilkowalski/sonner). User feedback for actions (saved, moved, deleted, error states).
+- **Rich Text Editor**: [Lexical](https://lexical.dev/). Powers the notes-taking feature on applications. Basic formatting only (bold, italic, underline, bullet points).
 
 ## Validation
 
@@ -56,3 +57,7 @@ Both are solid choices for serverless background jobs. Inngest orchestrates and 
 ### Vercel Blob vs Cloudflare R2 vs Amazon S3
 
 For resume PDFs the workload is tiny (a few MB per user, infrequently accessed), so the egress-cost advantage that usually favors R2 is irrelevant here. Vercel Blob has the easiest setup when already deploying on Vercel. Reconsider R2 if storage or bandwidth ever becomes meaningful.
+
+### Lexical vs Tiptap
+
+Tiptap ships more features out of the box (built on ProseMirror with a large extension ecosystem), but most of them are unused for the notes feature, which only needs basic bold, italic, underline, and bullet points. Lexical has a smaller core bundle, better runtime performance, and first-class React support via `@lexical/react` (it comes from Meta, same team as React). The tradeoff is more wiring up front for advanced features, which is acceptable given the simple feature set.
