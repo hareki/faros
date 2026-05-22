@@ -173,7 +173,8 @@
     "eslint-plugin-react-naming-convention",
     "@stylistic/eslint-plugin",
     "eslint-plugin-better-tailwindcss",
-    "eslint-plugin-unused-imports"
+    "eslint-plugin-unused-imports",
+    { "name": "import-x-js", "specifier": "eslint-plugin-import-x" }
   ],
   "rules": {
     "constructor-super": "error",
@@ -527,6 +528,37 @@
     "import/no-duplicates": "warn",
     "import/no-cycle": "error",
     "import/no-anonymous-default-export": "error",
+    "import-x-js/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          ["sibling", "parent"],
+          "index",
+          "object",
+          "type"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "@/**",
+            "group": "internal"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["react"],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ],
     "curly": "error",
     "object-shorthand": "error",
     "prefer-template": "warn",
