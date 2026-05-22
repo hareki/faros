@@ -5,13 +5,13 @@ import js from '@eslint/js';
 import nextRules from '@next/eslint-plugin-next';
 import stylistic from '@stylistic/eslint-plugin';
 import { defineConfig, includeIgnoreFile } from 'eslint/config';
+import eslintConfigPrettier from 'eslint-config-prettier/flat';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import eslintPluginBetterTailwindcss from 'eslint-plugin-better-tailwindcss';
 import { getDefaultSelectors } from 'eslint-plugin-better-tailwindcss/api/defaults';
 import { SelectorKind } from 'eslint-plugin-better-tailwindcss/types';
 import eslintPluginImportX from 'eslint-plugin-import-x';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactNamingConvention from 'eslint-plugin-react-naming-convention';
@@ -25,6 +25,7 @@ const gitignorePath = fileURLToPath(new URL('.gitignore', import.meta.url));
 const eslintConfig = defineConfig([
   // Override default ignores of eslint-config-next.
   includeIgnoreFile(gitignorePath),
+  { ignores: ['.agents/**'] },
   {
     files: [`**/*.${scriptExtensions}`],
     extends: [
@@ -39,7 +40,7 @@ const eslintConfig = defineConfig([
       ...fixupConfigRules(react.configs.flat['jsx-runtime']),
       eslintPluginImportX.flatConfigs.recommended,
       eslintPluginImportX.flatConfigs.typescript,
-      eslintPluginPrettierRecommended,
+      eslintConfigPrettier,
     ],
     languageOptions: {
       parser: tseslint.parser,
@@ -187,13 +188,6 @@ const eslintConfig = defineConfig([
           varsIgnorePattern: '^_',
           args: 'after-used',
           argsIgnorePattern: '^_',
-        },
-      ],
-      'prettier/prettier': [
-        'warn',
-        {},
-        {
-          usePrettierrc: true,
         },
       ],
       '@stylistic/quotes': [
