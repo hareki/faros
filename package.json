@@ -7,7 +7,7 @@
     "build": "bun --bun next build",
     "start": "bun --bun next start",
     "typecheck": "tsc",
-    "fmt": "prettier --write .",
+    "fmt": "oxfmt",
     "lint": "oxlint --fix",
     "cleanup": "pnpm typecheck && pnpm fmt && pnpm lint"
   },
@@ -26,9 +26,9 @@
     "eslint-plugin-better-tailwindcss": "^4.5.0",
     "eslint-plugin-react-naming-convention": "^5.8.3",
     "eslint-plugin-unused-imports": "^4.4.1",
+    "oxfmt": "^0.51.0",
     "oxlint": "^1.66.0",
     "oxlint-tsgolint": "^0.23.0",
-    "prettier": "^3.8.3",
     "tailwindcss": "^4.3.0",
     "typescript": "^6.0.3"
   }
