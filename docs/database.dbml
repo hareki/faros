@@ -1,40 +1,121 @@
 // ============================================================
-// AUTH
+// AUTH (Better Auth, stateless JWT)
 // ============================================================
+// Three tables: users, accounts, verifications.
+// All three are managed by Better Auth. App code generally does
+// not write to them directly.
+//
+// NO `sessions` table: session data lives in a signed/encrypted
+// cookie (JWE or JWT). The server verifies the cookie signature
+// without a DB hit.
+//
+// Tradeoff: no "log out all devices" / "list active sessions" UI.
+// To invalidate everything at once, bump cookieCache.version and
+// redeploy.
+//
+// Better Auth defaults to singular table names ('user', 'account',
+// 'verification') and camelCase field names. Configure it in
+// auth.ts to match this schema:
+//
+//   export const auth = betterAuth({
+//     user:    { modelName: "users",
+//                fields: { emailVerified: "email_verified" } },
+//     account: { modelName: "accounts",
+//                fields: { userId: "user_id",
+//                          accountId: "account_id",
+//                          providerId: "provider_id",
+//                          accessToken: "access_token",
+//                          refreshToken: "refresh_token",
+//                          accessTokenExpiresAt: "access_token_expires_at",
+//                          refreshTokenExpiresAt: "refresh_token_expires_at",
+//                          idToken: "id_token",
+//                          createdAt: "created_at",
+//                          updatedAt: "updated_at" } },
+//     verification: { modelName: "verifications",
+//                     fields: { expiresAt: "expires_at",
+//                               createdAt: "created_at",
+//                               updatedAt: "updated_at" } },
+//     advanced: { database: { generateId: "uuid" } },
+//     // Stateless session config:
+//     session: {
+//       cookieCache: {
+//         enabled: true,
+//         maxAge: 7 * 24 * 60 * 60, // 7 days
+//         strategy: "jwe",          // or "jwt"
+//         refreshCache: true,       // refresh cookie before expiry, no DB hit
+//       },
+//     },
+//     account: {
+//       storeStateStrategy: "cookie",
+//       storeAccountCookie: true,
+//     },
+//   });
+//
+// With Drizzle you can skip most of the `fields` mapping by using
+// the camelCase TS name and snake_case DB column name in the
+// Drizzle table definition, e.g.:
+//   emailVerified: boolean("email_verified").notNull()
 
-Enum oauth_provider {
-  google
-  github
+Table users {
+  id uuid [pk, default: `gen_random_uuid()`]
+  email varchar [unique, not null]
+  email_verified boolean [not null, default: false]
+  name varchar [not null]
+  image varchar [note: 'avatar url, populated from OAuth profile when available']
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
 }
 
-// Auth methods (at least one must be set):
-//   - Email/password: password_hash is set
-//   - OAuth: oauth_provider AND oauth_provider_account_id are both set
-// Enforce in raw SQL with a CHECK constraint:
-//   CHECK (
-//     password_hash IS NOT NULL
-//     OR (oauth_provider IS NOT NULL AND oauth_provider_account_id IS NOT NULL)
-//   )
-// And the both-or-neither invariant on the OAuth pair:
-//   CHECK (
-//     (oauth_provider IS NULL AND oauth_provider_account_id IS NULL)
-//     OR (oauth_provider IS NOT NULL AND oauth_provider_account_id IS NOT NULL)
-//   )
-Table users {
-  id uuid [pk]
-  email varchar [unique, not null]
-  password_hash varchar [note: 'nullable for OAuth-only users']
+// One row per auth method per user.
+//   Email/password: provider_id = 'credential',
+//                   account_id  = users.id (string form),
+//                   password    = bcrypt/argon2 hash
+//   OAuth:          provider_id = 'google' | 'github',
+//                   account_id  = provider's stable user id,
+//                   password    = NULL,
+//                   access_token / refresh_token / id_token / scope set
+// A single user can have multiple rows (linked Google + GitHub + credential).
+Table accounts {
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [ref: > users.id, not null, note: 'ON DELETE CASCADE']
+  account_id varchar [not null, note: 'provider account id, or users.id for credential']
+  provider_id varchar [not null, note: "'credential' | 'google' | 'github'"]
 
-  oauth_provider oauth_provider
-  oauth_provider_account_id varchar
+  // OAuth tokens (nullable, only set for OAuth providers)
+  access_token text
+  refresh_token text
+  access_token_expires_at timestamptz
+  refresh_token_expires_at timestamptz
+  scope varchar
+  id_token text
 
-  name varchar
+  // For email/password (nullable for OAuth-only accounts)
+  password varchar [note: 'password hash; only set when provider_id = credential']
+
   created_at timestamptz [not null, default: `now()`]
   updated_at timestamptz [not null, default: `now()`]
 
   indexes {
-    // Same OAuth identity cannot be linked to two different users
-    (oauth_provider, oauth_provider_account_id) [unique]
+    user_id
+    // Same provider identity cannot be linked to two different users.
+    (provider_id, account_id) [unique]
+  }
+}
+
+// Used for email verification, password reset, magic links, etc.
+// These tokens MUST persist server-side; they cannot live in cookies.
+// Better Auth writes/reads this; app code does not touch it directly.
+Table verifications {
+  id uuid [pk, default: `gen_random_uuid()`]
+  identifier varchar [not null, note: 'email or other identifier being verified']
+  value varchar [not null, note: 'token / code']
+  expires_at timestamptz [not null]
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    identifier
+    expires_at
   }
 }
 
@@ -356,4 +437,3 @@ Table user_notification_prefs {
   quiet_hours_end time
   timezone varchar
 }
-
