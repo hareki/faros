@@ -204,7 +204,7 @@ export default defineConfig({
     'typescript/consistent-generic-constructors': 'error',
     'typescript/consistent-indexed-object-style': 'error',
     'typescript/consistent-type-assertions': 'error',
-    'typescript/consistent-type-definitions': 'off',
+    'typescript/consistent-type-definitions': ['error', 'interface'],
     'typescript/dot-notation': 'error',
     'typescript/no-confusing-non-null-assertion': 'error',
     'typescript/no-inferrable-types': 'error',
@@ -221,6 +221,12 @@ export default defineConfig({
       {
         prefer: 'type-imports',
         fixStyle: 'inline-type-imports',
+      },
+    ],
+    'typescript/consistent-type-exports': [
+      'error',
+      {
+        fixMixedExportsWithInlineTypeSpecifier: true,
       },
     ],
     'react/rules-of-hooks': 'error',
