@@ -6,6 +6,7 @@ Build-order roadmap derived from `high-level-design.md`, `database.dbml`, and `t
 
 - [x] Install UI deps: shadcn CLI + base components, `lucide-react`, `clsx`, `tailwind-merge` (`cn` util)
 - [x] Integrate Catppuccin palette
+- [x] Integrate i18n with `next-intl`
 - [ ] Install form/validation deps: `react-hook-form`, `zod`, `@hookform/resolvers`, `drizzle-zod`
 - [ ] Install client-state + interaction deps: `zustand`, `@dnd-kit/*`, `date-fns`, `sonner`, `recharts`, `lexical` + `@lexical/react`
 - [ ] Install backend deps: `drizzle-orm`, `drizzle-kit`, `@neondatabase/serverless`, `better-auth`, `resend`, `react-email`, `inngest`
