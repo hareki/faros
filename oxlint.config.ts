@@ -24,7 +24,7 @@ export default defineConfig({
     },
     linkComponents: [{ name: 'Link', linkAttribute: ['to'] }],
     'better-tailwindcss': {
-      entryPoint: 'app/globals.css',
+      entryPoint: 'app/styles/globals.css',
       selectors: [
         ...getDefaultSelectors(),
         {

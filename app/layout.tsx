@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 
 import type { Metadata } from 'next';
 
-import './globals.css';
+import './styles/globals.css';
 
 // TODO: Remove unused fonts once I finalize the design
 const rubik = localFont({
