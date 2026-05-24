@@ -490,7 +490,7 @@ export default defineConfig({
     'better-tailwindcss/no-unknown-classes': [
       'error',
       {
-        ignore: [],
+        ignore: ['toaster'],
       },
     ],
   },

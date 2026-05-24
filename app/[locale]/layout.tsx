@@ -3,9 +3,11 @@ import { type PropsWithChildren } from 'react';
 import { type Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
+import { ThemeProvider } from 'next-themes';
 
 import { cn } from '@/app/lib/tailwind/utils';
 
+import Toaster from '../components/ui/Sonner';
 import { rubik } from '../fonts';
 
 import '../styles/globals.css';
@@ -30,9 +32,17 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
   const { locale } = await params;
 
   return (
-    <html lang={locale} className={cn('h-full', 'antialiased', rubik.variable, 'font-sans')}>
+    <html
+      lang={locale}
+      className={cn('h-full', 'antialiased', rubik.variable, 'font-sans')}
+      // https://github.com/pacocoursey/next-themes#with-app
+      suppressHydrationWarning
+    >
       <body className='flex min-h-full flex-col'>
-        <NextIntlClientProvider messages={null}>{children}</NextIntlClientProvider>
+        <ThemeProvider attribute='data-theme'>
+          <NextIntlClientProvider messages={null}>{children}</NextIntlClientProvider>
+          <Toaster position='top-center' />
+        </ThemeProvider>
       </body>
     </html>
   );

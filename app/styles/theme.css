@@ -1,4 +1,4 @@
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:is([data-theme="dark"] *));
 
 @theme inline {
   --color-background: var(--background);
@@ -78,5 +78,5 @@
   --sidebar-ring: var(--ctp-overlay1);
 }
 
-.dark {
+[data-theme='dark'] {
 }

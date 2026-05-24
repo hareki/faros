@@ -11,7 +11,7 @@ Build-order roadmap derived from `high-level-design.md`, `database.dbml`, and `t
 - [ ] Install form/validation deps: `react-hook-form`, `zod`, `@hookform/resolvers`, `drizzle-zod`
 - [ ] Install client-state + interaction deps: `zustand`, `@dnd-kit/*`, `date-fns`, `sonner`, `recharts`, `lexical` + `@lexical/react`
 - [ ] Install backend deps: `drizzle-orm`, `drizzle-kit`, `@neondatabase/serverless`, `better-auth`, `resend`, `react-email`, `inngest`
-- [ ] Set up Tailwind v4 + shadcn theme tokens; create global `<ThemeProvider>` and Sonner `<Toaster>` in `app/layout.tsx`
+- [x] Set up Tailwind v4 + shadcn theme tokens; create global `<ThemeProvider>` and Sonner `<Toaster>` in `app/layout.tsx`
 - [ ] App shell: header with nav + auth menu + active-hunt switcher slot
 
 ## 2. Database
