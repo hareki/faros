@@ -18,7 +18,7 @@ const withNextIntl = createNextIntlPlugin({
     // Enables usage of `useExtracted`
     // extract: true,
     messages: {
-      path: './locales',
+      path: './app/lib/next-intl/messages',
       // https://next-intl.dev/docs/usage/extraction#formats
       format: 'po',
       locales: 'infer',
@@ -26,7 +26,7 @@ const withNextIntl = createNextIntlPlugin({
       precompile: true,
     },
 
-    createMessagesDeclaration: './locales/en-US.json',
+    createMessagesDeclaration: './app/lib/next-intl/messages/en-US.json',
   },
 });
 

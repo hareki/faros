@@ -41,5 +41,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-locales/en-US.d.json.ts
-locales/en-US.po
+# next-intl
+app/lib/next-intl/messages/en-US.d.json.ts
+app/lib/next-intl/messages/locales/en-US.po
