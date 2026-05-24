@@ -13,6 +13,12 @@
       "skillPath": ".agents/skills/migrate-oxlint/SKILL.md",
       "computedHash": "7bc6dccdcc557cdb7d887fc16c6632e685b13860d202b9c9ce5da7504f0dbe18"
     },
+    "neon-postgres": {
+      "source": "neondatabase/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/neon-postgres/SKILL.md",
+      "computedHash": "3c53df29c959dc0a7f724ff8620063b20fabd2b1fa702ec97e3f17e6a23d5a1c"
+    },
     "shadcn": {
       "source": "shadcn/ui",
       "sourceType": "github",
