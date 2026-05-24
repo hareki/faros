@@ -1,3 +1,5 @@
+import './lib/t3-env';
+
 import { type NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
 

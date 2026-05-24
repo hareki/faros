@@ -7,10 +7,10 @@ Build-order roadmap derived from `high-level-design.md`, `database.dbml`, and `t
 - [x] Install UI deps: shadcn CLI + base components, `lucide-react`, `clsx`, `tailwind-merge` (`cn` util)
 - [x] Integrate Catppuccin palette
 - [x] Integrate i18n with `next-intl`
+- [x] Configure `t3-env` with server/client schemas and wire into `next.config.ts`
 - [ ] Install form/validation deps: `react-hook-form`, `zod`, `@hookform/resolvers`, `drizzle-zod`
 - [ ] Install client-state + interaction deps: `zustand`, `@dnd-kit/*`, `date-fns`, `sonner`, `recharts`, `lexical` + `@lexical/react`
 - [ ] Install backend deps: `drizzle-orm`, `drizzle-kit`, `@neondatabase/serverless`, `better-auth`, `resend`, `react-email`, `inngest`
-- [ ] Configure `t3-env` with server/client schemas and wire into `next.config.ts`
 - [ ] Set up Tailwind v4 + shadcn theme tokens; create global `<ThemeProvider>` and Sonner `<Toaster>` in `app/layout.tsx`
 - [ ] App shell: header with nav + auth menu + active-hunt switcher slot
 
