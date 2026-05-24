@@ -38,7 +38,13 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
   return (
     <html
       lang={locale}
-      className={cn('h-full', 'antialiased', rubik.variable, 'font-sans')}
+      className={cn(
+        'font-sans',
+        'h-full',
+        'antialiased',
+        /* Enable using font-sans className*/
+        rubik.variable,
+      )}
       // https://github.com/pacocoursey/next-themes#with-app
       suppressHydrationWarning
     >
@@ -46,7 +52,7 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
         <ThemeProvider attribute='data-theme'>
           <Suspense>
             <NextIntlClientProvider messages={null}>{children}</NextIntlClientProvider>
-            <Toaster position='top-center' />
+            <Toaster position='top-center' toastOptions={{ className: 'font-sans' }} />
           </Suspense>
         </ThemeProvider>
       </body>
