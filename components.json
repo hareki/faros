@@ -13,11 +13,11 @@
   "iconLibrary": "tabler",
   "rtl": false,
   "aliases": {
-    "components": "@/components",
-    "utils": "@/lib/tailwind/utils",
-    "ui": "@/components/ui",
-    "lib": "@/lib",
-    "hooks": "@/hooks"
+    "components": "@/app/components",
+    "utils": "@/app/lib/tailwind/utils",
+    "ui": "@/app/components/ui",
+    "lib": "@/app/lib",
+    "hooks": "@/app/hooks"
   },
   "menuColor": "default-translucent",
   "menuAccent": "subtle",

@@ -4,7 +4,7 @@ import { type Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 
-import { cn } from '@/lib/tailwind/utils';
+import { cn } from '@/app/lib/tailwind/utils';
 
 import { rubik } from '../fonts';
 

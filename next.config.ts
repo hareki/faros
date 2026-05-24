@@ -1,4 +1,4 @@
-import './lib/t3-env';
+import './app/lib/t3-env';
 
 import { type NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
 };
 
 const withNextIntl = createNextIntlPlugin({
-  requestConfig: './lib/next-intl/request.ts',
+  requestConfig: './app/lib/next-intl/request.ts',
   experimental: {
     // This is required when `extract` is enabled.
     // Not using a `src` folder

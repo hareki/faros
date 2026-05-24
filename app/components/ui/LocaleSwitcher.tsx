@@ -2,8 +2,8 @@
 
 import { Fragment } from 'react/jsx-runtime';
 
-import { Link, usePathname } from '@/lib/next-intl/navigation';
-import { routing } from '@/lib/next-intl/routing';
+import { Link, usePathname } from '@/app/lib/next-intl/navigation';
+import { routing } from '@/app/lib/next-intl/routing';
 
 export default function LocaleSwitcher() {
   const pathname = usePathname();
