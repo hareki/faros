@@ -5,8 +5,8 @@ import * as z from 'zod';
 
 export const env = createEnv({
   server: {
-    SHARED_ENV: z.string().min(1),
     DB_CONNECTION_STRING: z.url(),
+    RESEND_API_KEY: z.string(),
   },
   experimental__runtimeEnv: {},
 });

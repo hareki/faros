@@ -1,5 +1,10 @@
+packages:
+  - packages/react-email
+
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver
 onlyBuiltDependencies:
+  - esbuild
+  - inngest-cli
   - msw
