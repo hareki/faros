@@ -1,9 +1,11 @@
 import { Suspense, type PropsWithChildren } from 'react';
 
+// Use this instead of 'next-themes'
+// https://github.com/pacocoursey/next-themes/issues/387#issuecomment-4181891723
+import { ThemeProvider } from '@teispace/next-themes';
 import { type Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
-import { ThemeProvider } from 'next-themes';
 
 import { cn } from '@/app/lib/tailwind/utils';
 

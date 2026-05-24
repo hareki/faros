@@ -7,7 +7,7 @@ import {
   IconAlertOctagon,
   IconLoader,
 } from '@tabler/icons-react';
-import { useTheme } from 'next-themes';
+import { useTheme } from '@teispace/next-themes';
 import { Toaster as Sonner, type ToasterProps } from 'sonner';
 
 export default function Toaster({ ...props }: ToasterProps) {
