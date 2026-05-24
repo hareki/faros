@@ -1,4 +1,4 @@
-import { type PropsWithChildren } from 'react';
+import { Suspense, type PropsWithChildren } from 'react';
 
 import { type Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
@@ -9,6 +9,7 @@ import { cn } from '@/app/lib/tailwind/utils';
 
 import Toaster from '../components/ui/Sonner';
 import { rubik } from '../fonts';
+import { routing } from '../lib/next-intl/routing';
 
 import '../styles/globals.css';
 
@@ -26,8 +27,11 @@ export async function generateMetadata({
   };
 }
 
-type RootLayoutProps = PropsWithChildren<{ params: Promise<{ locale: string }> }>;
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
 
+type RootLayoutProps = PropsWithChildren<{ params: Promise<{ locale: string }> }>;
 export default async function RootLayout({ children, params }: RootLayoutProps) {
   const { locale } = await params;
 
@@ -40,8 +44,10 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
     >
       <body className='flex min-h-full flex-col'>
         <ThemeProvider attribute='data-theme'>
-          <NextIntlClientProvider messages={null}>{children}</NextIntlClientProvider>
-          <Toaster position='top-center' />
+          <Suspense>
+            <NextIntlClientProvider messages={null}>{children}</NextIntlClientProvider>
+            <Toaster position='top-center' />
+          </Suspense>
         </ThemeProvider>
       </body>
     </html>
