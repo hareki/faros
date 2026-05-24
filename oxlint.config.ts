@@ -494,4 +494,15 @@ export default defineConfig({
       },
     ],
   },
+  overrides: [
+    {
+      files: ['app/db/schema/**'],
+      rules: {
+        // Mutual foreign keys (e.g. applications <-> resumes) require cyclic
+        // module imports; type cycles are broken via AnyPgColumn, and the FK
+        // references are lazy callbacks resolved after all modules load.
+        'import/no-cycle': 'off',
+      },
+    },
+  ],
 });

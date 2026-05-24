@@ -11,7 +11,12 @@
     "fmt": "oxfmt",
     "lint": "oxlint --fix",
     "cleanup": "pnpm typecheck && pnpm fmt && pnpm lint",
-    "inngest:dev": "inngest-cli dev"
+    "inngest:dev": "inngest-cli dev",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:seed": "bun app/db/seed.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
@@ -24,6 +29,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.45.2",
+    "drizzle-zod": "^0.8.3",
     "inngest": "^4.4.0",
     "next": "16.2.6",
     "next-intl": "^4.12.0",

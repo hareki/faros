@@ -16,14 +16,15 @@ Build-order roadmap derived from `high-level-design.md`, `database.dbml`, and `t
 
 ## 2. Database
 
-- [ ] Translate `docs/database.dbml` into Drizzle schema modules under `db/schema/` (auth, hunt, application, resume, event, activity, notification)
-- [ ] Create Neon-backed db client singleton (`db/client.ts`)
-- [ ] Generate initial migration with `drizzle-kit`
-- [ ] Add raw-SQL constraints not expressible in Drizzle:
-  - Partial unique index `one_active_hunt_per_user` on `job_hunts(user_id) WHERE status = 'active'`
+- [x] Translate `docs/database.dbml` into Drizzle schema modules under `app/db/schema/` (auth, job_hunt, application, resume, event, activity, notification)
+- [x] Create Neon-backed db client singleton (`app/db/client.ts`)
+- [x] Generate initial migration with `drizzle-kit`
+- [x] Add DB-level constraints (expressed natively in Drizzle via `check()` + partial unique index):
+  - Partial unique index `one_active_job_hunt_per_user` on `job_hunts(user_id) WHERE status = 'active'`
   - `CHECK` on `resumes` enforcing `(scope='library') <=> (application_id IS NULL)`
   - `CHECK` on `applications` enforcing `closed_outcome` and `closed_at` set iff `stage = 'closed'`
-- [ ] Dev seed script (one user, one active hunt, a handful of apps across stages, sample resumes/events)
+- [x] Dev seed script (one user, one active job_hunt, a handful of apps across stages, sample resumes/events)
+- [x] Drizzle schemas with `drizzle-zod` for `applications`, `sub_stages`, `tags`, `application_tags`
 
 ## 3. Auth
 
@@ -46,7 +47,6 @@ Build-order roadmap derived from `high-level-design.md`, `database.dbml`, and `t
 
 ## 5. Application core (data + mutations)
 
-- [ ] Drizzle schemas with `drizzle-zod` for `applications`, `sub_stages`, `tags`, `application_tags`
 - [ ] Server actions: `createApplication`, `updateApplication`, `moveStage`, `setSubStage`, `setTags`, `closeApplication` (writes `closed_outcome` + `closed_at`)
 - [ ] `logActivity()` helper invoked by every mutation; writes typed `activity_log` rows with `metadata` diff
 - [ ] Sub-stage CRUD per user per stage (settings screen)
