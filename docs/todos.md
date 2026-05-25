@@ -7,8 +7,8 @@ Build-order roadmap derived from `high-level-design.md`, `database.dbml`, and `t
 ### A. Tooling & dependencies
 
 - [x] [FE] Install UI deps: shadcn CLI + base components, `lucide-react`, `clsx`, `tailwind-merge` (`cn` util)
-- [ ] [FE] Install form/validation deps: `react-hook-form`, `@hookform/resolvers`
-- [ ] [FE] Install client-state + interaction deps: `zustand`, `@dnd-kit/*`, `date-fns`, `sonner`, `recharts`, `lexical` + `@lexical/react`
+- [x] [FE] Install form/validation deps: `react-hook-form`, `@hookform/resolvers`
+- [x] [FE] Install client-state + interaction deps: `zustand`, `@dnd-kit/*`, `date-fns`, `sonner`, `recharts`, `lexical` + `@lexical/react`
 - [x] [BE] Install backend deps: `drizzle-orm`, `drizzle-kit`, `drizzle-zod`, `@neondatabase/serverless`, `better-auth`, `resend`, `react-email`, `inngest`
 - [x] [BE] Configure `t3-env` with server/client schemas and wire into `next.config.ts`
 
