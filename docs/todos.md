@@ -37,7 +37,7 @@ BE config → flows → FE pages; the data model is dictated by Better Auth, so 
 - [x] [BE] Configure Better Auth with the table/field mappings shown in `database.dbml` header comment
 - [x] [BE] Enable DB-backed sessions with a short-lived signed cookie cache (`cookieCache`, `strategy: 'compact'`); `version` bump = global revocation
 - [x] [BE] Add Google + GitHub OAuth providers + Vercel env vars (provider blocks wired in `app/lib/auth`; pending real OAuth app credentials + Vercel env vars)
-- [ ] [BE] `requireUser()` helper for server actions and `getUser()` for RSC reads
+- [x] [BE] `requireUser()` helper for server actions and `getUser()` for RSC reads
 - [ ] [BE] Email verification flow (token write → email via Resend → confirm route)
 - [ ] [BE] Password reset flow (request → email → reset form)
 - [ ] [FE] React Email templates for verification + reset
