@@ -11,7 +11,7 @@ import { useTheme } from '@teispace/next-themes';
 import { Toaster as Sonner, type ToasterProps } from 'sonner';
 
 export default function Toaster({ ...props }: ToasterProps) {
-  const { theme = 'system' } = useTheme();
+  const { theme } = useTheme();
 
   return (
     <Sonner
