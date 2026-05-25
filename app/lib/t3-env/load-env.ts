@@ -4,9 +4,6 @@ import { loadEnvConfig } from '@next/env';
 
 // Dotenv files live in `env/` instead of the project root, so Next.js never
 // auto-loads them. Re-run Next's own loader pointed at that directory.
-//   .env                shared across all environments
-//   .env.development    dev only, overrides .env   (next dev)
-//   .env.production     prod only, overrides .env  (next build / next start)
 const envDir = path.join(process.cwd(), 'env');
 const isDev = process.env.NODE_ENV !== 'production';
 

@@ -7,6 +7,7 @@ export const env = createEnv({
   server: {
     DB_CONNECTION_STRING: z.url(),
     RESEND_API_KEY: z.string(),
+    STAGE: z.enum(['development', 'production']),
   },
   experimental__runtimeEnv: {},
 });
