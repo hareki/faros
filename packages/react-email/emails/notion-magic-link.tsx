@@ -1,8 +1,8 @@
 import { Body, Container, Head, Heading, Html, Img, Link, Preview, Text } from 'react-email';
 
-interface NotionMagicLinkEmailProps {
+type NotionMagicLinkEmailProps = {
   loginCode?: string;
-}
+};
 
 const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '';
 

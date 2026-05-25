@@ -16,7 +16,7 @@ import {
   Text,
 } from 'react-email';
 
-interface VercelInviteUserEmailProps {
+type VercelInviteUserEmailProps = {
   username?: string;
   userImage?: string;
   invitedByUsername?: string;
@@ -26,7 +26,7 @@ interface VercelInviteUserEmailProps {
   inviteLink?: string;
   inviteFromIp?: string;
   inviteFromLocation?: string;
-}
+};
 
 const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '';
 

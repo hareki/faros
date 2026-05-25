@@ -4,5 +4,33 @@
   },
   "HomePage": {
     "title": "Hello world!"
+  },
+  "Auth": {
+    "signIn": {
+      "title": "Log in to Faros",
+      "subtitle": "Don't have an account? <link>Sign up</link>.",
+      "footer": "By signing in, you agree to our <terms>Terms</terms> and <privacy>Privacy Policy</privacy>."
+    },
+    "signUp": {
+      "title": "Create a Faros account",
+      "subtitle": "Already have an account? <link>Log in</link>.",
+      "footer": "By signing up, you agree to our <terms>Terms</terms>, <acceptableUse>Acceptable Use</acceptableUse>, and <privacy>Privacy Policy</privacy>."
+    }
+  },
+  "AuthClient": {
+    "email": "Email",
+    "emailPlaceholder": "name@example.com",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "signInSubmit": "Log in",
+    "signUpSubmit": "Create account",
+    "google": "Continue with Google",
+    "or": "or",
+    "github": "Continue with GitHub",
+    "validation": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Enter a valid email address",
+      "passwordRequired": "Password is required"
+    }
   }
 }

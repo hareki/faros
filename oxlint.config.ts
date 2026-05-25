@@ -3,7 +3,6 @@ import { SelectorKind } from 'eslint-plugin-better-tailwindcss/types';
 import { defineConfig } from 'oxlint';
 
 export default defineConfig({
-  $schema: './node_modules/oxlint/configuration_schema.json',
   plugins: ['typescript', 'react', 'nextjs', 'jsx-a11y', 'import', 'unicorn', 'oxc'],
   categories: {
     correctness: 'off',
@@ -204,7 +203,7 @@ export default defineConfig({
     'typescript/consistent-generic-constructors': 'error',
     'typescript/consistent-indexed-object-style': 'error',
     'typescript/consistent-type-assertions': 'error',
-    'typescript/consistent-type-definitions': ['error', 'interface'],
+    'typescript/consistent-type-definitions': ['error', 'type'],
     'typescript/dot-notation': 'error',
     'typescript/no-confusing-non-null-assertion': 'error',
     'typescript/no-inferrable-types': 'error',
@@ -490,11 +489,17 @@ export default defineConfig({
     'better-tailwindcss/no-unknown-classes': [
       'error',
       {
-        ignore: ['toaster'],
+        ignore: ['toaster', 'tabler-icon'],
       },
     ],
   },
   overrides: [
+    {
+      files: ['**/declaration.ts'],
+      rules: {
+        'typescript/consistent-type-definitions': 'off',
+      },
+    },
     {
       files: ['app/db/schema/**'],
       rules: {

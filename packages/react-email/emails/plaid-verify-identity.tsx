@@ -1,8 +1,8 @@
 import { Body, Container, Head, Heading, Html, Img, Link, Section, Text } from 'react-email';
 
-interface PlaidVerifyIdentityEmailProps {
+type PlaidVerifyIdentityEmailProps = {
   validationCode?: string;
-}
+};
 
 const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '';
 
