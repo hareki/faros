@@ -8,6 +8,13 @@
       "when": 1779614441319,
       "tag": "0000_round_overlord",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1779682902924,
+      "tag": "0001_tiresome_sentry",
+      "breakpoints": true
     }
   ]
 }

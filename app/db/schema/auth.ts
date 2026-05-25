@@ -10,11 +10,17 @@ import {
 } from 'drizzle-orm/pg-core';
 
 // ============================================================
-// AUTH (Better Auth, stateless JWT — no sessions table)
+// AUTH (Better Auth, DB-backed sessions + cookie cache)
 // ============================================================
-// Managed by Better Auth via the Drizzle adapter. App code
-// generally does not write to these directly. See the header of
-// docs/database.dbml for the Better Auth field-mapping config.
+// Four tables: users, accounts, sessions, verifications. All are
+// managed by Better Auth via the Drizzle adapter; app code
+// generally does not write to them directly.
+//
+// Sessions live in the `sessions` table. A short-lived signed
+// cookie cache (configured in app/lib/auth) serves session reads
+// without a DB hit; once it lapses the next read revalidates
+// against this table. See the header of docs/database.dbml for the
+// session/cookie-cache config rationale.
 
 export const users = pgTable('users', {
   id: uuid().primaryKey().defaultRandom(),
@@ -60,6 +66,25 @@ export const accounts = pgTable(
     // Same provider identity cannot be linked to two different users.
     uniqueIndex('accounts_provider_account_unique').on(table.providerId, table.accountId),
   ],
+);
+
+// https://better-auth.com/docs/concepts/session-management#session-table
+export const sessions = pgTable(
+  'sessions',
+  {
+    id: uuid().primaryKey().defaultRandom(),
+    token: varchar().notNull().unique(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    // captured from the request when the session is created; nullable
+    ipAddress: varchar('ip_address'),
+    userAgent: text('user_agent'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [index('sessions_user_id_idx').on(table.userId)],
 );
 
 // Email verification, password reset, magic links. These tokens MUST

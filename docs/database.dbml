@@ -1,60 +1,51 @@
 // ============================================================
-// AUTH (Better Auth, stateless JWT)
+// AUTH (Better Auth, DB-backed sessions + cookie cache)
 // ============================================================
-// Three tables: users, accounts, verifications.
-// All three are managed by Better Auth. App code generally does
-// not write to them directly.
+// Four tables: users, accounts, sessions, verifications.
+// All are managed by Better Auth. App code generally does not
+// write to them directly.
 //
-// NO `sessions` table: session data lives in a signed/encrypted
-// cookie (JWE or JWT). The server verifies the cookie signature
-// without a DB hit.
+// Sessions ARE persisted (in `sessions`). better-auth 1.6.11
+// requires a session row whenever a database adapter is configured
+// — a truly tableless/stateless session is only available in
+// DB-less or secondary-storage (Redis) setups, which we don't use.
 //
-// Tradeoff: no "log out all devices" / "list active sessions" UI.
-// To invalidate everything at once, bump cookieCache.version and
-// redeploy.
+// To keep reads cheap we put a short-lived signed cookie cache in
+// front of the table: within `cookieCache.maxAge` the session is
+// read straight from the cookie (no DB hit); after it lapses the
+// next read revalidates against `sessions` and rewrites the cookie.
 //
-// Better Auth defaults to singular table names ('user', 'account',
-// 'verification') and camelCase field names. Configure it in
-// auth.ts to match this schema:
+// Revocation: deleting a `sessions` row takes effect at the next
+// cache lapse (<= maxAge). To invalidate every cookie at once, bump
+// `cookieCache.version` and redeploy.
+//
+// Better Auth defaults to singular model names ('user', 'account',
+// 'session', 'verification'). Our tables are plural, so the Drizzle
+// adapter is configured with `usePlural: true`. No per-field mapping
+// is needed: the Drizzle table uses the camelCase TS property name
+// Better Auth expects with a snake_case DB column, e.g.
+//   emailVerified: boolean("email_verified").notNull()
+// so the adapter matches fields by property name automatically.
+//
+// Config lives in app/lib/auth:
 //
 //   export const auth = betterAuth({
-//     user:    { modelName: "users",
-//                fields: { emailVerified: "email_verified" } },
-//     account: { modelName: "accounts",
-//                fields: { userId: "user_id",
-//                          accountId: "account_id",
-//                          providerId: "provider_id",
-//                          accessToken: "access_token",
-//                          refreshToken: "refresh_token",
-//                          accessTokenExpiresAt: "access_token_expires_at",
-//                          refreshTokenExpiresAt: "refresh_token_expires_at",
-//                          idToken: "id_token",
-//                          createdAt: "created_at",
-//                          updatedAt: "updated_at" } },
-//     verification: { modelName: "verifications",
-//                     fields: { expiresAt: "expires_at",
-//                               createdAt: "created_at",
-//                               updatedAt: "updated_at" } },
-//     advanced: { database: { generateId: "uuid" } },
-//     // Stateless session config:
+//     database: drizzleAdapter(db, { provider: "pg", schema, usePlural: true }),
+//     advanced: { database: { generateId: "uuid" } }, // Postgres gen_random_uuid()
 //     session: {
+//       expiresIn: 60 * 60 * 24 * 7, // 7 days (DB session lifetime)
+//       updateAge: 60 * 60 * 24,     // 1 day (sliding refresh of expiry)
 //       cookieCache: {
 //         enabled: true,
-//         maxAge: 7 * 24 * 60 * 60, // 7 days
-//         strategy: "jwe",          // or "jwt"
-//         refreshCache: true,       // refresh cookie before expiry, no DB hit
+//         maxAge: 5 * 60,      // 5 min cookie-read window
+//         version: "1",        // bump + redeploy = global cookie revocation
+//         strategy: "compact", // signed; readable base64 (not encrypted)
 //       },
-//     },
-//     account: {
-//       storeStateStrategy: "cookie",
-//       storeAccountCookie: true,
 //     },
 //   });
 //
-// With Drizzle you can skip most of the `fields` mapping by using
-// the camelCase TS name and snake_case DB column name in the
-// Drizzle table definition, e.g.:
-//   emailVerified: boolean("email_verified").notNull()
+// (`refreshCache` is intentionally omitted — better-auth disables it
+//  with a warning whenever a database adapter is present.)
 
 Table users {
   id uuid [pk, default: `gen_random_uuid()`]
@@ -99,6 +90,24 @@ Table accounts {
     user_id
     // Same provider identity cannot be linked to two different users.
     (provider_id, account_id) [unique]
+  }
+}
+
+// One row per active session. Better Auth writes a row on sign-in and
+// reads it when the cookie cache lapses. `token` doubles as the session
+// cookie value. App code does not touch this directly.
+Table sessions {
+  id uuid [pk, default: `gen_random_uuid()`]
+  token varchar [unique, not null, note: 'session token; also the cookie value']
+  user_id uuid [ref: > users.id, not null, note: 'ON DELETE CASCADE']
+  expires_at timestamptz [not null]
+  ip_address varchar [note: 'captured from the request at creation; nullable']
+  user_agent text
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    user_id
   }
 }
 

@@ -2,7 +2,7 @@ import { relations } from 'drizzle-orm';
 
 import { activityLog } from '@/app/db/schema/activity';
 import { applicationTags, applications, subStages, tags } from '@/app/db/schema/application';
-import { accounts, users } from '@/app/db/schema/auth';
+import { accounts, sessions, users } from '@/app/db/schema/auth';
 import { events } from '@/app/db/schema/event';
 import { jobHunts } from '@/app/db/schema/job-hunt';
 import {
@@ -14,6 +14,7 @@ import { resumes } from '@/app/db/schema/resume';
 
 export const usersRelations = relations(users, ({ many, one }) => ({
   accounts: many(accounts),
+  sessions: many(sessions),
   jobHunts: many(jobHunts),
   subStages: many(subStages),
   tags: many(tags),
@@ -25,6 +26,10 @@ export const usersRelations = relations(users, ({ many, one }) => ({
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
   user: one(users, { fields: [accounts.userId], references: [users.id] }),
+}));
+
+export const sessionsRelations = relations(sessions, ({ one }) => ({
+  user: one(users, { fields: [sessions.userId], references: [users.id] }),
 }));
 
 export const jobHuntsRelations = relations(jobHunts, ({ one, many }) => ({
