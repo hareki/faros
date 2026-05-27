@@ -35,6 +35,7 @@ export default defineConfig({
   },
   jsPlugins: [
     'eslint-plugin-react-naming-convention',
+    'eslint-plugin-react-refresh',
     '@stylistic/eslint-plugin',
     'eslint-plugin-better-tailwindcss',
     'eslint-plugin-unused-imports',
@@ -494,6 +495,32 @@ export default defineConfig({
     ],
   },
   overrides: [
+    {
+      files: ['**/*.jsx', '**/*.tsx'],
+      rules: {
+        'react-refresh/only-export-components': [
+          'warn',
+          {
+            allowConstantExport: true,
+            // Next.js special named exports
+            allowExportNames: [
+              'metadata',
+              'generateMetadata',
+              'generateStaticParams',
+              'generateViewport',
+              'viewport',
+              'revalidate',
+              'dynamic',
+              'dynamicParams',
+              'fetchCache',
+              'runtime',
+              'preferredRegion',
+              'maxDuration',
+            ],
+          },
+        ],
+      },
+    },
     {
       files: ['**/declaration.ts'],
       rules: {
