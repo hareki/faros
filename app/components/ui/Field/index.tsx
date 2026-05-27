@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { type VariantProps } from 'class-variance-authority';
 
@@ -216,18 +216,69 @@ function FieldError({
     );
   }, [children, errors]);
 
-  if (!content) {
+  // Keep the last non-empty content rendered while collapsing so the exit
+  // animation has something to show.
+  const [renderedContent, setRenderedContent] = useState(content);
+  const [mounted, setMounted] = useState(!!content);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (content) {
+      setRenderedContent(content);
+      setMounted(true);
+    }
+  }, [content]);
+
+  useEffect(() => {
+    if (!mounted) {
+      return;
+    }
+
+    // The collapse transition (and its transitionend) never fires under
+    // reduced motion, so unmount immediately when the error clears.
+    if (!content && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setMounted(false);
+
+      return;
+    }
+
+    setOpen(!!content);
+  }, [mounted, content]);
+
+  if (!mounted) {
     return null;
   }
 
   return (
     <div
-      role='alert'
-      data-slot='field-error'
-      className={cn('text-sm font-normal text-destructive', className)}
-      {...props}
+      data-slot='field-error-wrapper'
+      data-state={open ? 'open' : 'closed'}
+      className={cn(`
+        -mt-3 grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,opacity,margin-top]
+        duration-200 ease-out
+        data-[state=open]:mt-0 data-[state=open]:grid-rows-[1fr] data-[state=open]:opacity-100
+        motion-reduce:transition-none
+      `)}
+      onTransitionEnd={(event) => {
+        if (
+          event.target === event.currentTarget &&
+          event.propertyName === 'grid-template-rows' &&
+          !open
+        ) {
+          setMounted(false);
+        }
+      }}
     >
-      {content}
+      <div className='overflow-hidden'>
+        <div
+          role='alert'
+          data-slot='field-error'
+          className={cn('text-sm font-normal text-destructive', className)}
+          {...props}
+        >
+          {renderedContent}
+        </div>
+      </div>
     </div>
   );
 }
