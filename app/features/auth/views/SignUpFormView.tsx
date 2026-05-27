@@ -23,6 +23,7 @@ type SignUpFormProps = {
 // TODO
 // - make it a view, extract logic to view model
 // - Do form system (borrow from web-app-v2)
+// - Add forgot password above the password field in sign in page
 export default function SignUpFormView({ title, subtitle, footer, messages }: SignUpFormProps) {
   const t = useTranslations('GlobalValidation');
   const schema = z.object({
