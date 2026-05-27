@@ -10,6 +10,7 @@ import GoogleIcon from '@/app/components/icons/GoogleIcon';
 import Button from '@/app/components/ui/Button';
 import { Card, CardContent } from '@/app/components/ui/Card';
 import { Separator } from '@/app/components/ui/Separator';
+import { H3, Muted } from '@/app/components/ui/Typography';
 
 export type SocialProvider = 'google' | 'github';
 
@@ -40,8 +41,8 @@ export default function AuthFormWrapperView({
 
           {/* Heading */}
           <div className='flex flex-col gap-2 text-center'>
-            <h1 className='text-2xl font-semibold tracking-tight'>{title}</h1>
-            <p className='text-sm text-muted-foreground'>{subtitle}</p>
+            <H3 as='h1'>{title}</H3>
+            <Muted>{subtitle}</Muted>
           </div>
 
           {/* Social login */}
@@ -81,7 +82,7 @@ export default function AuthFormWrapperView({
           {children}
 
           {/* Legal footer */}
-          <p className='text-center text-sm text-muted-foreground'>{footer}</p>
+          <Muted className='text-center'>{footer}</Muted>
         </div>
       </CardContent>
     </Card>

@@ -1,5 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 
+import { H1 } from '@/app/components/ui/Typography';
+
 import LocaleSwitcher from '../lib/next-intl/components/LocaleSwitcher';
 
 export default async function HomePage() {
@@ -8,7 +10,7 @@ export default async function HomePage() {
   return (
     <div>
       <LocaleSwitcher />
-      <h1>{t('title')}</h1>
+      <H1>{t('title')}</H1>
     </div>
   );
 }
