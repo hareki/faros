@@ -2,10 +2,11 @@
 
 import { type PropsWithChildren, type ReactNode } from 'react';
 
-import { IconBrandGithub, IconBrandGoogle } from '@tabler/icons-react';
 import { type Messages } from 'next-intl';
 
 import FavIcon from '@/app/components/icons/FavIcon';
+import GitHubIcon from '@/app/components/icons/GitHubIcon';
+import GoogleIcon from '@/app/components/icons/GoogleIcon';
 import Button from '@/app/components/ui/Button';
 import { Card, CardContent } from '@/app/components/ui/Card';
 import { Separator } from '@/app/components/ui/Separator';
@@ -53,7 +54,7 @@ export default function AuthFormWrapperView({
                 onSocialClick('google');
               }}
             >
-              <IconBrandGoogle />
+              <GoogleIcon />
               {messages.google}
             </Button>
             <Button
@@ -64,7 +65,7 @@ export default function AuthFormWrapperView({
                 onSocialClick('github');
               }}
             >
-              <IconBrandGithub />
+              <GitHubIcon />
               {messages.github}
             </Button>
           </div>

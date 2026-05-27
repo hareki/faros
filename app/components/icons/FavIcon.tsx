@@ -1,6 +1,6 @@
 import createIcon from './create-icon';
 
-const FavIcon = createIcon((props) => {
+const FavIcon = createIcon(function FavIcon(props) {
   return (
     <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 548.207' {...props}>
       <g fill='none' fillRule='evenodd'>
