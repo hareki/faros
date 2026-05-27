@@ -3,6 +3,8 @@ import './app/lib/t3-env';
 import { type NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
 
+export const MESSAGE_PATH = './app/lib/next-intl/messages/en-US.json';
+
 const nextConfig: NextConfig = {
   reactCompiler: true,
   cacheComponents: true,
@@ -13,7 +15,7 @@ const withNextIntl = createNextIntlPlugin({
   experimental: {
     // Not using a `src` folder
     srcPath: './',
-    createMessagesDeclaration: './app/lib/next-intl/messages/en-US.json',
+    createMessagesDeclaration: MESSAGE_PATH,
   },
 });
 

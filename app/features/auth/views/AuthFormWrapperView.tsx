@@ -3,7 +3,7 @@
 import { type PropsWithChildren, type ReactNode } from 'react';
 
 import { IconBrandGithub, IconBrandGoogle } from '@tabler/icons-react';
-import { useMessages } from 'next-intl';
+import { type Messages } from 'next-intl';
 
 import FavIcon from '@/app/components/icons/FavIcon';
 import Button from '@/app/components/ui/Button';
@@ -15,6 +15,7 @@ type AuthFormWrapperViewProps = PropsWithChildren<{
   subtitle: ReactNode;
   footer: ReactNode;
   onSocialClick: (provider: SocialProvider) => void;
+  messages: Messages['ClientAuth'];
 }>;
 
 export default function AuthFormWrapperView({
@@ -23,9 +24,8 @@ export default function AuthFormWrapperView({
   footer,
   onSocialClick,
   children,
+  messages,
 }: AuthFormWrapperViewProps) {
-  const messages = useMessages().AuthClient;
-
   return (
     <div className='flex w-full max-w-sm flex-col gap-6'>
       {/* Logo */}

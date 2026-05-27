@@ -1,14 +1,15 @@
-import { getTranslations } from 'next-intl/server';
+import { getMessages, getTranslations } from 'next-intl/server';
 
+import SignUpFormView from '@/app/features/auth/views/SignUpFormView';
 import { Link } from '@/app/lib/next-intl/navigation';
-
-import SignUpForm from './SignUpForm';
 
 export default async function SignUp() {
   const t = await getTranslations('Auth');
+  const messages = (await getMessages()).ClientAuth;
 
   return (
-    <SignUpForm
+    <SignUpFormView
+      messages={messages}
       title={t('signUp.title')}
       subtitle={t.rich('signUp.subtitle', {
         link: (chunks) => (

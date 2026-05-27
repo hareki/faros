@@ -4,13 +4,13 @@ import { Suspense, type PropsWithChildren } from 'react';
 // https://github.com/pacocoursey/next-themes/issues/387#issuecomment-4181891723
 import { ThemeProvider } from '@teispace/next-themes';
 import { type Metadata } from 'next';
-import { NextIntlClientProvider } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 
 import { cn } from '@/app/lib/tailwind/utils';
 
 import Toaster from '../components/ui/Sonner';
 import { rubik } from '../fonts';
+import GlobalClientProvider from '../lib/next-intl/components/GlobalClientProvider';
 import { routing } from '../lib/next-intl/routing';
 
 import '../styles/globals.css';
@@ -53,9 +53,9 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
       <body className='flex min-h-full flex-col'>
         <ThemeProvider attribute='data-theme'>
           <Suspense>
-            <NextIntlClientProvider messages={null}>{children}</NextIntlClientProvider>
-            <Toaster position='top-center' toastOptions={{ className: 'font-sans' }} />
+            <GlobalClientProvider>{children}</GlobalClientProvider>
           </Suspense>
+          <Toaster position='top-center' toastOptions={{ className: 'font-sans' }} />
         </ThemeProvider>
       </body>
     </html>

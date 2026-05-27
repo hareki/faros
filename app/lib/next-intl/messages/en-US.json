@@ -17,7 +17,7 @@
       "footer": "By signing up, you agree to our <terms>Terms</terms>, <acceptableUse>Acceptable Use</acceptableUse>, and <privacy>Privacy Policy</privacy>."
     }
   },
-  "AuthClient": {
+  "ClientAuth": {
     "email": "Email",
     "emailPlaceholder": "name@example.com",
     "password": "Password",
@@ -26,11 +26,16 @@
     "signUpSubmit": "Create account",
     "google": "Continue with Google",
     "or": "or",
-    "github": "Continue with GitHub",
-    "validation": {
-      "emailRequired": "Email is required",
-      "emailInvalid": "Enter a valid email address",
-      "passwordRequired": "Password is required"
+    "github": "Continue with GitHub"
+  },
+  "GlobalValidation": {
+    "required": "Please enter {object}",
+    "objectInvalid": "Invalid {object}",
+    "min": {
+      "character": "At least {count, plural, =1 {# character} other {# characters}}."
+    },
+    "max": {
+      "character": "At most {count, plural, =1 {character} other {# characters}}."
     }
   }
 }

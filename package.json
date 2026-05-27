@@ -17,6 +17,7 @@
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "db:seed": "bun app/db/seed.ts",
+    "intl:generate": "NODE_ENV=production bun scripts/generateNextIntlTypes.ts",
     "email:dev": "pnpm --filter react-email dev --port 3002"
   },
   "dependencies": {
