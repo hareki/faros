@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import Button from '@/app/components/ui/Button';
-import { Input } from '@/app/components/ui/input';
+import { Input } from '@/app/components/ui/Input';
 
 import AuthFormWrapperView, { type SocialProvider } from './AuthFormWrapperView';
 

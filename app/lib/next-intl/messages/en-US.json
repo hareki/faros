@@ -24,9 +24,9 @@
     "passwordPlaceholder": "Enter your password",
     "signInSubmit": "Log in",
     "signUpSubmit": "Create account",
-    "google": "Continue with Google",
+    "google": "Log in with Google",
     "or": "or",
-    "github": "Continue with GitHub"
+    "github": "Log in with GitHub"
   },
   "GlobalValidation": {
     "required": "Please enter {object}",
@@ -35,7 +35,7 @@
       "character": "At least {count, plural, =1 {# character} other {# characters}}."
     },
     "max": {
-      "character": "At most {count, plural, =1 {character} other {# characters}}."
+      "character": "At most {count, plural, =1 {# character} other {# characters}}."
     }
   }
 }

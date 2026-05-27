@@ -46,13 +46,13 @@
 :root {
   --background: var(--ctp-base);
   --foreground: var(--ctp-text);
-  --card: var(--ctp-base);
+  --card: var(--ctp-surface0);
   --card-foreground: var(--ctp-text);
   --popover: var(--ctp-base);
   --popover-foreground: var(--ctp-text);
   --primary: var(--ctp-accent);
   --primary-foreground: var(--ctp-base);
-  --secondary: var(--ctp-surface0);
+  --secondary: var(--ctp-surface1);
   --secondary-foreground: var(--ctp-text);
   --muted: var(--ctp-surface0);
   --muted-foreground: var(--ctp-subtext0);
