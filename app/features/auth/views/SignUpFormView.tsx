@@ -4,11 +4,12 @@ import { type ReactNode } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations, type Messages } from 'next-intl';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import Button from '@/app/components/ui/Button';
+import { Field, FieldError, FieldLabel } from '@/app/components/ui/Field';
 import { Input } from '@/app/components/ui/Input';
+import { useForm } from '@/app/lib/form/hooks/useForm';
 
 import AuthFormWrapperView, { type SocialProvider } from './AuthFormWrapperView';
 
@@ -60,10 +61,8 @@ export default function SignUpFormView({ title, subtitle, footer, messages }: Si
       onSocialClick={onSocialSignIn}
     >
       <form onSubmit={onSubmit} className='flex flex-col gap-4'>
-        <div className='flex flex-col gap-1.5'>
-          <label htmlFor='email' className='text-sm font-medium'>
-            {messages.email}
-          </label>
+        <Field>
+          <FieldLabel htmlFor='email'>{messages.email}</FieldLabel>
           <Input
             id='email'
             type='email'
@@ -72,13 +71,11 @@ export default function SignUpFormView({ title, subtitle, footer, messages }: Si
             aria-invalid={!!errors.email}
             {...register('email')}
           />
-          {errors.email ? <p className='text-sm text-destructive'>{errors.email.message}</p> : null}
-        </div>
+          <FieldError errors={[errors.email]} />
+        </Field>
 
-        <div className='flex flex-col gap-1.5'>
-          <label htmlFor='password' className='text-sm font-medium'>
-            {messages.password}
-          </label>
+        <Field>
+          <FieldLabel htmlFor='password'>{messages.password}</FieldLabel>
           <Input
             id='password'
             type='password'
@@ -87,10 +84,8 @@ export default function SignUpFormView({ title, subtitle, footer, messages }: Si
             aria-invalid={!!errors.password}
             {...register('password')}
           />
-          {errors.password ? (
-            <p className='text-sm text-destructive'>{errors.password.message}</p>
-          ) : null}
-        </div>
+          <FieldError errors={[errors.password]} />
+        </Field>
 
         <Button type='submit' className='w-full'>
           {messages.signUpSubmit}

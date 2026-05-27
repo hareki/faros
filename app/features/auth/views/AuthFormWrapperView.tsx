@@ -8,6 +8,7 @@ import { type Messages } from 'next-intl';
 import FavIcon from '@/app/components/icons/FavIcon';
 import Button from '@/app/components/ui/Button';
 import { Card, CardContent } from '@/app/components/ui/Card';
+import { Separator } from '@/app/components/ui/Separator';
 
 export type SocialProvider = 'google' | 'github';
 
@@ -70,9 +71,9 @@ export default function AuthFormWrapperView({
 
           {/* Divider */}
           <div className='flex items-center gap-3 text-sm text-muted-foreground'>
-            <hr className='flex-1 border-border' />
+            <Separator className='flex-1' />
             <span>{messages.or}</span>
-            <hr className='flex-1 border-border' />
+            <Separator className='flex-1' />
           </div>
 
           {/* Form (input fields + submit button) */}
