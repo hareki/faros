@@ -9,12 +9,12 @@ import { getLocale, getTranslations } from 'next-intl/server';
 
 import { cn } from '@/app/lib/tailwind/utils';
 
-import Toaster from './components/ui/Sonner';
-import { rubik } from './fonts';
-import GlobalClientProvider from './lib/next-intl/components/GlobalClientProvider';
-import { env } from './lib/t3-env';
+import Toaster from '../components/ui/Sonner';
+import { rubik } from '../fonts';
+import GlobalClientProvider from '../lib/next-intl/components/GlobalClientProvider';
+import { env } from '../lib/t3-env';
 
-import './styles/globals.css';
+import '../styles/globals.css';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('Metadata');
