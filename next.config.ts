@@ -6,6 +6,7 @@ import createNextIntlPlugin from 'next-intl/plugin';
 export const MESSAGE_PATH = './app/lib/next-intl/messages/en-US.json';
 
 const nextConfig: NextConfig = {
+  typedRoutes: true,
   reactCompiler: true,
   cacheComponents: true,
 };

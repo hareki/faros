@@ -20,11 +20,6 @@ type SignUpFormProps = {
   messages: Messages['ClientAuth'];
 };
 
-// TODO
-// - Make it a view, extract logic to view model
-// - Add forgot password above the password field in sign in page
-// - Type safe routing?
-// - Support storing states in the URL using nuqs (later, roadmap??)?
 export default function SignUpFormView({ title, subtitle, footer, messages }: SignUpFormProps) {
   const t = useTranslations('GlobalValidation');
   const schema = z.object({
