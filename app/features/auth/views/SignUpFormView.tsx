@@ -7,7 +7,7 @@ import { useTranslations, type Messages } from 'next-intl';
 import { z } from 'zod';
 
 import Button from '@/app/components/ui/Button';
-import { Field, FieldError, FieldLabel } from '@/app/components/ui/Field';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/app/components/ui/Field';
 import { Input } from '@/app/components/ui/Input';
 import { useForm } from '@/app/lib/form/hooks/useForm';
 
@@ -24,6 +24,9 @@ type SignUpFormProps = {
 // - make it a view, extract logic to view model
 // - Do form system (borrow from web-app-v2)
 // - Add forgot password above the password field in sign in page
+// - Form spacing
+// - Type safe routing?
+// - Support storing states in the URL using nuqs (later, roadmap??)?
 export default function SignUpFormView({ title, subtitle, footer, messages }: SignUpFormProps) {
   const t = useTranslations('GlobalValidation');
   const schema = z.object({
@@ -61,36 +64,38 @@ export default function SignUpFormView({ title, subtitle, footer, messages }: Si
       footer={footer}
       onSocialClick={onSocialSignIn}
     >
-      <form onSubmit={onSubmit} className='flex flex-col gap-4'>
-        <Field>
-          <FieldLabel htmlFor='email'>{messages.email}</FieldLabel>
-          <Input
-            id='email'
-            type='email'
-            autoComplete='email'
-            placeholder={messages.emailPlaceholder}
-            aria-invalid={!!errors.email}
-            {...register('email')}
-          />
-          <FieldError errors={[errors.email]} />
-        </Field>
+      <form onSubmit={onSubmit}>
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor='email'>{messages.email}</FieldLabel>
+            <Input
+              id='email'
+              type='email'
+              autoComplete='email'
+              placeholder={messages.emailPlaceholder}
+              aria-invalid={!!errors.email}
+              {...register('email')}
+            />
+            <FieldError errors={[errors.email]} />
+          </Field>
 
-        <Field>
-          <FieldLabel htmlFor='password'>{messages.password}</FieldLabel>
-          <Input
-            id='password'
-            type='password'
-            autoComplete='new-password'
-            placeholder={messages.passwordPlaceholder}
-            aria-invalid={!!errors.password}
-            {...register('password')}
-          />
-          <FieldError errors={[errors.password]} />
-        </Field>
+          <Field>
+            <FieldLabel htmlFor='password'>{messages.password}</FieldLabel>
+            <Input
+              id='password'
+              type='password'
+              autoComplete='new-password'
+              placeholder={messages.passwordPlaceholder}
+              aria-invalid={!!errors.password}
+              {...register('password')}
+            />
+            <FieldError errors={[errors.password]} />
+          </Field>
 
-        <Button type='submit' className='w-full'>
-          {messages.signUpSubmit}
-        </Button>
+          <Button type='submit' className='w-full'>
+            {messages.signUpSubmit}
+          </Button>
+        </FieldGroup>
       </form>
     </AuthFormWrapperView>
   );

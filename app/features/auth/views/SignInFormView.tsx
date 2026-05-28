@@ -7,7 +7,7 @@ import { useTranslations, type Messages } from 'next-intl';
 import { z } from 'zod';
 
 import Button from '@/app/components/ui/Button';
-import { Field, FieldError, FieldLabel } from '@/app/components/ui/Field';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/app/components/ui/Field';
 import { Input } from '@/app/components/ui/Input';
 import { useForm } from '@/app/lib/form/hooks/useForm';
 
@@ -30,14 +30,16 @@ export default function SignInForm({ title, subtitle, footer, messages }: SignIn
     password: z.string().min(1, t('required', { object: messages.password })),
   });
 
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: { email: '', password: '' },
+  });
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
-    defaultValues: { email: '', password: '' },
-  });
+  } = form;
 
   const onSubmit = handleSubmit((values) => {
     // TODO: replace with authClient.signIn.email({ email, password })
@@ -57,36 +59,38 @@ export default function SignInForm({ title, subtitle, footer, messages }: SignIn
       footer={footer}
       onSocialClick={onSocialSignIn}
     >
-      <form onSubmit={onSubmit} className='flex flex-col gap-4'>
-        <Field>
-          <FieldLabel htmlFor='email'>{messages.email}</FieldLabel>
-          <Input
-            id='email'
-            type='email'
-            autoComplete='email'
-            placeholder={messages.emailPlaceholder}
-            aria-invalid={!!errors.email}
-            {...register('email')}
-          />
-          <FieldError errors={[errors.email]} />
-        </Field>
+      <form onSubmit={onSubmit}>
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor='email'>{messages.email}</FieldLabel>
+            <Input
+              id='email'
+              type='email'
+              autoComplete='email'
+              placeholder={messages.emailPlaceholder}
+              aria-invalid={!!errors.email}
+              {...register('email')}
+            />
+            <FieldError errors={[errors.email]} />
+          </Field>
 
-        <Field>
-          <FieldLabel htmlFor='password'>{messages.password}</FieldLabel>
-          <Input
-            id='password'
-            type='password'
-            autoComplete='current-password'
-            placeholder={messages.passwordPlaceholder}
-            aria-invalid={!!errors.password}
-            {...register('password')}
-          />
-          <FieldError errors={[errors.password]} />
-        </Field>
+          <Field>
+            <FieldLabel htmlFor='password'>{messages.password}</FieldLabel>
+            <Input
+              id='password'
+              type='password'
+              autoComplete='current-password'
+              placeholder={messages.passwordPlaceholder}
+              aria-invalid={!!errors.password}
+              {...register('password')}
+            />
+            <FieldError errors={[errors.password]} />
+          </Field>
 
-        <Button type='submit' className='w-full'>
-          {messages.signInSubmit}
-        </Button>
+          <Button type='submit' className='w-full'>
+            {messages.signInSubmit}
+          </Button>
+        </FieldGroup>
       </form>
     </AuthFormWrapperView>
   );
