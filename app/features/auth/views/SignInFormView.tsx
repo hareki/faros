@@ -7,8 +7,8 @@ import { useTranslations, type Messages } from 'next-intl';
 import { z } from 'zod';
 
 import Button from '@/app/components/ui/Button';
-import { Field, FieldError, FieldGroup, FieldLabel } from '@/app/components/ui/Field';
-import { Input } from '@/app/components/ui/Input';
+import { FieldGroup } from '@/app/components/ui/Field';
+import { FormTextField } from '@/app/lib/form/components/FormTextField';
 import { useForm } from '@/app/lib/form/hooks/useForm';
 
 import AuthFormWrapperView, { type SocialProvider } from './AuthFormWrapperView';
@@ -30,21 +30,14 @@ export default function SignInForm({ title, subtitle, footer, messages }: SignIn
     password: z.string().min(1, t('required', { object: messages.password })),
   });
 
-  const form = useForm<z.infer<typeof schema>>({
+  const [{ control }, Form] = useForm({
     resolver: zodResolver(schema),
-    defaultValues: { email: '', password: '' },
   });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = form;
-
-  const onSubmit = handleSubmit((values) => {
+  const onSubmit = (values: z.infer<typeof schema>) => {
     // TODO: replace with authClient.signIn.email({ email, password })
     console.log('[mock] sign-in', values);
-  });
+  };
 
   const onSocialSignIn = (provider: SocialProvider) => {
     // TODO: replace with authClient.signIn.social({ provider })
@@ -59,39 +52,35 @@ export default function SignInForm({ title, subtitle, footer, messages }: SignIn
       footer={footer}
       onSocialClick={onSocialSignIn}
     >
-      <form onSubmit={onSubmit}>
+      <Form onSubmit={onSubmit}>
         <FieldGroup>
-          <Field>
-            <FieldLabel htmlFor='email'>{messages.email}</FieldLabel>
-            <Input
-              id='email'
-              type='email'
-              autoComplete='email'
-              placeholder={messages.emailPlaceholder}
-              aria-invalid={!!errors.email}
-              {...register('email')}
-            />
-            <FieldError errors={[errors.email]} />
-          </Field>
+          <FormTextField
+            control={control}
+            name='email'
+            label={messages.email}
+            inputProps={{
+              type: 'email',
+              autoComplete: 'email',
+              placeholder: messages.emailPlaceholder,
+            }}
+          />
 
-          <Field>
-            <FieldLabel htmlFor='password'>{messages.password}</FieldLabel>
-            <Input
-              id='password'
-              type='password'
-              autoComplete='current-password'
-              placeholder={messages.passwordPlaceholder}
-              aria-invalid={!!errors.password}
-              {...register('password')}
-            />
-            <FieldError errors={[errors.password]} />
-          </Field>
+          <FormTextField
+            control={control}
+            name='password'
+            label={messages.password}
+            inputProps={{
+              type: 'password',
+              autoComplete: 'current-password',
+              placeholder: messages.passwordPlaceholder,
+            }}
+          />
 
           <Button type='submit' className='w-full'>
             {messages.signInSubmit}
           </Button>
         </FieldGroup>
-      </form>
+      </Form>
     </AuthFormWrapperView>
   );
 }

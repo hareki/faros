@@ -42,6 +42,7 @@ BE config → flows → FE pages; the data model is dictated by Better Auth, so 
 - [ ] [BE] Password reset flow (request → email → reset form)
 - [ ] [FE] React Email templates for verification + reset
 - [ ] [FE] Sign-in, sign-up, and OAuth callback routes/pages
+- [x] [FE] Comprehensive, scalable client form system
 
 ### E. App shell
 

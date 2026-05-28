@@ -67,10 +67,13 @@ function P<T extends React.ElementType = 'p'>({ as, className, ...props }: Polym
   return (
     <Comp
       data-slot='typography-p'
-      className={cn(`
-        leading-7
-        not-first:mt-6
-      `, className)}
+      className={cn(
+        `
+          leading-7
+          not-first:mt-6
+        `,
+        className,
+      )}
       {...props}
     />
   );
@@ -92,16 +95,23 @@ function Blockquote<T extends React.ElementType = 'blockquote'>({
   );
 }
 
-function List<T extends React.ElementType = 'ul'>({ as, className, ...props }: PolymorphicProps<T>) {
+function List<T extends React.ElementType = 'ul'>({
+  as,
+  className,
+  ...props
+}: PolymorphicProps<T>) {
   const Comp: React.ElementType = as ?? 'ul';
 
   return (
     <Comp
       data-slot='typography-list'
-      className={cn(`
-        my-6 ml-6 list-disc
-        [&>li]:mt-2
-      `, className)}
+      className={cn(
+        `
+          my-6 ml-6 list-disc
+          [&>li]:mt-2
+        `,
+        className,
+      )}
       {...props}
     />
   );
@@ -146,7 +156,11 @@ function Large<T extends React.ElementType = 'div'>({
   const Comp: React.ElementType = as ?? 'div';
 
   return (
-    <Comp data-slot='typography-large' className={cn('text-lg font-semibold', className)} {...props} />
+    <Comp
+      data-slot='typography-large'
+      className={cn('text-lg font-semibold', className)}
+      {...props}
+    />
   );
 }
 
@@ -166,7 +180,11 @@ function Small<T extends React.ElementType = 'small'>({
   );
 }
 
-function Muted<T extends React.ElementType = 'p'>({ as, className, ...props }: PolymorphicProps<T>) {
+function Muted<T extends React.ElementType = 'p'>({
+  as,
+  className,
+  ...props
+}: PolymorphicProps<T>) {
   const Comp: React.ElementType = as ?? 'p';
 
   return (
