@@ -4,6 +4,7 @@ import { Suspense, type PropsWithChildren } from 'react';
 // https://github.com/pacocoursey/next-themes/issues/387#issuecomment-4181891723
 import { ThemeProvider } from '@teispace/next-themes';
 import { type Metadata } from 'next';
+import Script from 'next/script';
 import { getTranslations } from 'next-intl/server';
 
 import { cn } from '@/app/lib/tailwind/utils';
@@ -12,6 +13,7 @@ import Toaster from '../components/ui/Sonner';
 import { rubik } from '../fonts';
 import GlobalClientProvider from '../lib/next-intl/components/GlobalClientProvider';
 import { routing } from '../lib/next-intl/routing';
+import { env } from '../lib/t3-env';
 
 import '../styles/globals.css';
 
@@ -50,6 +52,15 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
       // https://github.com/pacocoursey/next-themes#with-app
       suppressHydrationWarning
     >
+      <head>
+        {env.STAGE === 'development' && (
+          <Script
+            src='//unpkg.com/react-scan/dist/auto.global.js'
+            crossOrigin='anonymous'
+            strategy='beforeInteractive'
+          />
+        )}
+      </head>
       <body className='flex min-h-full flex-col'>
         <ThemeProvider attribute='data-theme'>
           <Suspense>
