@@ -1,29 +1,34 @@
+import Link from 'next/link';
 import { getMessages, getTranslations } from 'next-intl/server';
 
-import SignInForm from '@/app/features/auth/views/SignInFormView';
-import { Link } from '@/app/lib/next-intl/navigation';
+import SignUpFormView from '@/app/features/auth/views/SignUpFormView';
 
-export default async function SignIn() {
+export default async function SignUp() {
   const t = await getTranslations('Auth');
   const messages = (await getMessages()).ClientAuth;
 
   return (
-    <SignInForm
+    <SignUpFormView
       messages={messages}
-      title={t('signIn.title')}
-      subtitle={t.rich('signIn.subtitle', {
+      title={t('signUp.title')}
+      subtitle={t.rich('signUp.subtitle', {
         link: (chunks) => (
           <Link
-            href='/sign-up'
+            href='/sign-in'
             className='font-medium text-foreground underline underline-offset-4'
           >
             {chunks}
           </Link>
         ),
       })}
-      footer={t.rich('signIn.footer', {
+      footer={t.rich('signUp.footer', {
         terms: (chunks) => (
           <Link href='/terms' className='underline underline-offset-4'>
+            {chunks}
+          </Link>
+        ),
+        acceptableUse: (chunks) => (
+          <Link href='/acceptable-use' className='underline underline-offset-4'>
             {chunks}
           </Link>
         ),

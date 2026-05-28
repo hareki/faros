@@ -1,19 +1,36 @@
 'use client';
 
-import { Fragment } from 'react/jsx-runtime';
+import { Fragment, useTransition } from 'react';
 
-import { Link, usePathname } from '@/app/lib/next-intl/navigation';
-import { routing } from '@/app/lib/next-intl/routing';
+import { useRouter } from 'next/navigation';
+import { useLocale } from 'next-intl';
+
+import { locales, type Locale } from '@/app/lib/next-intl/config';
+import { setUserLocale } from '@/app/lib/next-intl/locale';
 
 export default function LocaleSwitcher() {
-  const pathname = usePathname();
+  const activeLocale = useLocale();
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  function onSelect(locale: Locale) {
+    startTransition(async () => {
+      await setUserLocale(locale);
+      router.refresh();
+    });
+  }
 
   return (
     <Fragment>
-      {routing.locales.map((locale) => (
-        <Link key={locale} href={pathname} locale={locale}>
+      {locales.map((locale) => (
+        <button
+          key={locale}
+          type='button'
+          disabled={isPending || locale === activeLocale}
+          onClick={() =>{  onSelect(locale); }}
+        >
           {locale}
-        </Link>
+        </button>
       ))}
     </Fragment>
   );

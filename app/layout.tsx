@@ -5,25 +5,19 @@ import { Suspense, type PropsWithChildren } from 'react';
 import { ThemeProvider } from '@teispace/next-themes';
 import { type Metadata } from 'next';
 import Script from 'next/script';
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 
 import { cn } from '@/app/lib/tailwind/utils';
 
-import Toaster from '../components/ui/Sonner';
-import { rubik } from '../fonts';
-import GlobalClientProvider from '../lib/next-intl/components/GlobalClientProvider';
-import { routing } from '../lib/next-intl/routing';
-import { env } from '../lib/t3-env';
+import Toaster from './components/ui/Sonner';
+import { rubik } from './fonts';
+import GlobalClientProvider from './lib/next-intl/components/GlobalClientProvider';
+import { env } from './lib/t3-env';
 
-import '../styles/globals.css';
+import './styles/globals.css';
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
-  const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'Metadata' });
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('Metadata');
 
   return {
     title: 'Faros',
@@ -31,13 +25,10 @@ export async function generateMetadata({
   };
 }
 
-export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
-}
+type RootLayoutProps = PropsWithChildren;
 
-type RootLayoutProps = PropsWithChildren<{ params: Promise<{ locale: string }> }>;
-export default async function RootLayout({ children, params }: RootLayoutProps) {
-  const { locale } = await params;
+async function InnerRootLayout({ children }: RootLayoutProps) {
+  const locale = await getLocale();
 
   return (
     <html
@@ -70,5 +61,13 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
         </ThemeProvider>
       </body>
     </html>
+  );
+}
+
+export default function RootLayout({ children }: RootLayoutProps) {
+  return (
+    <Suspense>
+      <InnerRootLayout>{children}</InnerRootLayout>
+    </Suspense>
   );
 }
