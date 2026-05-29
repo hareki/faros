@@ -10,7 +10,8 @@ The libraries, services, and platforms used to build Faros. Each entry notes its
 - **Forms**: [React Hook Form](https://github.com/react-hook-form/react-hook-form). Client-side form state and validation. Wired to Zod via `@hookform/resolvers`.
 - **State Management**:
   - React Context for cross-cutting config (theme, current user, active job hunt) and for compound components (composition pattern, e.g. passing shared state between a parent and its sub-components without prop drilling).
-  - [Zustand](https://github.com/pmndrs/zustand) for shared client state (board filters, drag state, modal state).
+  - [Zustand](https://github.com/pmndrs/zustand) for shared client state (drag state, modal state).
+  - [nuqs](https://github.com/47ng/nuqs) for URL-synced state. Board filters (tags, sub-stage, source, working model) live in the query string so a filtered board view survives refresh, is bookmarkable, and is shareable.
 - **Drag and Drop**: [dnd-kit](https://github.com/clauderic/dnd-kit). Powers the Kanban board (cards between columns, sub-stage reordering).
 - **Charts**: [Recharts](https://github.com/recharts/recharts). Retro view visualizations (funnel, conversion rates, source breakdown, resume performance).
 - **Date Library**: [date-fns](https://github.com/date-fns/date-fns). Date formatting and math. Tree-shakeable, no Moment-style bundle bloat.
@@ -41,6 +42,10 @@ The libraries, services, and platforms used to build Faros. Each entry notes its
 ## Decision Log
 
 Alternatives considered and why they were not chosen.
+
+### Board filters: nuqs (URL query) vs Zustand
+
+Board filters could live in Zustand alongside the other client state, but they are navigational: a user filtering to "remote frontend apps" is describing a view they may want to refresh into, bookmark, or share. Storing them in the URL query string via nuqs gives all three for free, and the back button naturally undoes a filter. Purely transient board state (drag, modal open/close) stays in Zustand, since it is meaningless in a URL. The split rule: shareable/bookmarkable state goes to nuqs, ephemeral interaction state stays in Zustand.
 
 ### Zod vs ArkType
 

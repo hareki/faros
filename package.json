@@ -41,6 +41,7 @@
     "lexical": "^0.44.0",
     "next": "16.2.6",
     "next-intl": "^4.12.0",
+    "nuqs": "^2.8.9",
     "react": "19.2.6",
     "react-dom": "19.2.6",
     "react-hook-form": "^7.76.1",
