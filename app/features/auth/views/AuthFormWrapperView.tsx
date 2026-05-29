@@ -1,6 +1,6 @@
 'use client';
 
-import { type PropsWithChildren, type ReactNode, ViewTransition } from 'react';
+import { Fragment, type PropsWithChildren, type ReactNode, ViewTransition } from 'react';
 
 import { type Messages } from 'next-intl';
 
@@ -18,8 +18,9 @@ export type SocialProvider = 'google' | 'github';
 type AuthFormWrapperViewProps = PropsWithChildren<{
   title: ReactNode;
   subtitle: ReactNode;
-  footer: ReactNode;
-  onSocialClick: (provider: SocialProvider) => void;
+  footer?: ReactNode;
+  // Omit to hide the social sign-in section (and its divider) entirely.
+  onSocialClick?: (provider: SocialProvider) => void;
   messages: Messages['ClientAuth'];
 }>;
 
@@ -55,44 +56,48 @@ export default function AuthFormWrapperView({
                 <Muted>{subtitle}</Muted>
               </div>
 
-              {/* Social login */}
-              <div className='grid grid-cols-2 gap-3'>
-                <Button
-                  type='button'
-                  variant='secondary'
-                  size='lg'
-                  onClick={() => {
-                    onSocialClick('google');
-                  }}
-                >
-                  <GoogleIcon />
-                  {messages.google}
-                </Button>
-                <Button
-                  type='button'
-                  variant='secondary'
-                  size='lg'
-                  onClick={() => {
-                    onSocialClick('github');
-                  }}
-                >
-                  <GitHubIcon />
-                  {messages.github}
-                </Button>
-              </div>
+              {onSocialClick && (
+                <Fragment>
+                  {/* Social login */}
+                  <div className='grid grid-cols-2 gap-3'>
+                    <Button
+                      type='button'
+                      variant='secondary'
+                      size='lg'
+                      onClick={() => {
+                        onSocialClick('google');
+                      }}
+                    >
+                      <GoogleIcon />
+                      {messages.google}
+                    </Button>
+                    <Button
+                      type='button'
+                      variant='secondary'
+                      size='lg'
+                      onClick={() => {
+                        onSocialClick('github');
+                      }}
+                    >
+                      <GitHubIcon />
+                      {messages.github}
+                    </Button>
+                  </div>
 
-              {/* Divider */}
-              <div className='flex items-center gap-3 text-sm text-muted-foreground'>
-                <Separator className='flex-1' />
-                <span>{messages.or}</span>
-                <Separator className='flex-1' />
-              </div>
+                  {/* Divider */}
+                  <div className='flex items-center gap-3 text-sm text-muted-foreground'>
+                    <Separator className='flex-1' />
+                    <span>{messages.or}</span>
+                    <Separator className='flex-1' />
+                  </div>
+                </Fragment>
+              )}
 
               {/* Form (input fields + submit button) */}
               {children}
 
               {/* Legal footer */}
-              <Muted className='text-center text-xs'>{footer}</Muted>
+              {footer && <Muted className='text-center text-xs'>{footer}</Muted>}
             </div>
           </CardContent>
         </Card>

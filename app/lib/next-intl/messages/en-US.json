@@ -15,6 +15,10 @@
       "title": "Create a Faros account",
       "subtitle": "Already have an account? <link>Log in</link>.",
       "footer": "By signing up, you agree to our <terms>Terms</terms>, <acceptableUse>Acceptable Use</acceptableUse>, and <privacy>Privacy Policy</privacy>."
+    },
+    "resetPassword": {
+      "title": "Reset password",
+      "subtitle": "Include the email address associated with your account and we'll send you an email with instructions to reset your password."
     }
   },
   "ClientAuth": {
@@ -24,6 +28,7 @@
     "passwordPlaceholder": "Enter your password",
     "signInSubmit": "Log in",
     "signUpSubmit": "Create account",
+    "resetPasswordSubmit": "Send reset instructions",
     "google": "Log in with Google",
     "or": "or",
     "github": "Log in with GitHub"

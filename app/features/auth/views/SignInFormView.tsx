@@ -71,7 +71,7 @@ export default function SignInForm({ title, subtitle, footer, messages }: SignIn
             name='password'
             label={messages.password}
             labelAddon={
-              <Link variant='action' href='#'>
+              <Link variant='action' href='/reset-password'>
                 Forgot your password?
               </Link>
             }

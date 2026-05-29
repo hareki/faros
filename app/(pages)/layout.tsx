@@ -6,6 +6,7 @@ import { ThemeProvider } from '@teispace/next-themes';
 import { type Metadata } from 'next';
 import Script from 'next/script';
 import { getLocale, getTranslations } from 'next-intl/server';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 import { cn } from '@/app/lib/tailwind/utils';
 
@@ -55,7 +56,9 @@ async function InnerRootLayout({ children }: RootLayoutProps) {
       <body className='flex min-h-full flex-col'>
         <ThemeProvider attribute='data-theme'>
           <Suspense>
-            <GlobalClientProvider>{children}</GlobalClientProvider>
+            <NuqsAdapter>
+              <GlobalClientProvider>{children}</GlobalClientProvider>
+            </NuqsAdapter>
           </Suspense>
           <Toaster position='top-center' toastOptions={{ className: 'font-sans' }} />
         </ThemeProvider>

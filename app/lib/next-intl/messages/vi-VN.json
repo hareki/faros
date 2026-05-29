@@ -3,32 +3,44 @@
     "description": "Công cụ Theo dõi Xin việc"
   },
   "HomePage": {
-    "title": "Xin chào thế giới"
+    "title": "Xin chào thế giới!"
   },
   "Auth": {
-    "or": "hoặc",
-    "google": "Tiếp tục với Google",
-    "github": "Tiếp tục với GitHub",
-    "email": "Email",
-    "emailPlaceholder": "ten@example.com",
-    "password": "Mật khẩu",
-    "passwordPlaceholder": "Nhập mật khẩu của bạn",
-    "validation": {
-      "emailRequired": "Vui lòng nhập email",
-      "emailInvalid": "Email không hợp lệ",
-      "passwordRequired": "Vui lòng nhập mật khẩu"
-    },
     "signIn": {
       "title": "Đăng nhập vào Faros",
       "subtitle": "Chưa có tài khoản? <link>Đăng ký</link>.",
-      "footer": "Khi đăng nhập, bạn đồng ý với <terms>Điều khoản</terms> và <privacy>Chính sách Bảo mật</privacy> của chúng tôi.",
-      "submit": "Đăng nhập"
+      "footer": "Khi đăng nhập, bạn đồng ý với <terms>Điều khoản</terms> và <privacy>Chính sách Bảo mật</privacy> của chúng tôi."
     },
     "signUp": {
       "title": "Tạo tài khoản Faros",
       "subtitle": "Đã có tài khoản? <link>Đăng nhập</link>.",
-      "footer": "Khi đăng ký, bạn đồng ý với <terms>Điều khoản</terms>, <acceptableUse>Quy định Sử dụng</acceptableUse> và <privacy>Chính sách Bảo mật</privacy> của chúng tôi.",
-      "submit": "Tạo tài khoản"
+      "footer": "Khi đăng ký, bạn đồng ý với <terms>Điều khoản</terms>, <acceptableUse>Quy định Sử dụng</acceptableUse> và <privacy>Chính sách Bảo mật</privacy> của chúng tôi."
+    },
+    "resetPassword": {
+      "title": "Đặt lại mật khẩu",
+      "subtitle": "Nhập địa chỉ email liên kết với tài khoản của bạn và chúng tôi sẽ gửi cho bạn email kèm hướng dẫn đặt lại mật khẩu."
+    }
+  },
+  "ClientAuth": {
+    "email": "Email",
+    "emailPlaceholder": "ten@example.com",
+    "password": "Mật khẩu",
+    "passwordPlaceholder": "Nhập mật khẩu của bạn",
+    "signInSubmit": "Đăng nhập",
+    "signUpSubmit": "Tạo tài khoản",
+    "resetPasswordSubmit": "Gửi hướng dẫn đặt lại",
+    "google": "Đăng nhập với Google",
+    "or": "hoặc",
+    "github": "Đăng nhập với GitHub"
+  },
+  "GlobalValidation": {
+    "required": "Vui lòng nhập {object}",
+    "objectInvalid": "{object} không hợp lệ",
+    "min": {
+      "character": "Tối thiểu {count, plural, other {# ký tự}}."
+    },
+    "max": {
+      "character": "Tối đa {count, plural, other {# ký tự}}."
     }
   }
 }
