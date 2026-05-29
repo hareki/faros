@@ -1,6 +1,6 @@
 'use client';
 
-import { type PropsWithChildren, type ReactNode } from 'react';
+import { type PropsWithChildren, type ReactNode, ViewTransition } from 'react';
 
 import { type Messages } from 'next-intl';
 
@@ -32,69 +32,71 @@ export default function AuthFormWrapperView({
   messages,
 }: AuthFormWrapperViewProps) {
   return (
-    <div className='relative'>
-      <div
-        // https://github.com/tailwindlabs/tailwindcss/discussions/19582#discussioncomment-15683979
-        className={cn(`
-          absolute inset-0 size-full scale-[0.75] transform rounded-4xl bg-linear-to-r
-          from-(--ctp-blue) to-(--ctp-yellow) blur-3xl
-        `)}
-      />
-      <Card className='relative'>
-        <CardContent>
-          <div className='flex w-full max-w-sm flex-col gap-6'>
-            {/* Logo */}
-            <div className='flex-center'>
-              <FavIcon className='size-12' />
+    <ViewTransition name='auth-card' share='morph' default='none'>
+      <div className='relative'>
+        <div
+          // https://github.com/tailwindlabs/tailwindcss/discussions/19582#discussioncomment-15683979
+          className={cn(`
+            absolute inset-0 size-full scale-[0.75] transform rounded-4xl bg-linear-to-r
+            from-(--ctp-blue) to-(--ctp-yellow) blur-3xl
+          `)}
+        />
+        <Card className='relative'>
+          <CardContent>
+            <div className='flex w-full max-w-sm flex-col gap-6'>
+              {/* Logo */}
+              <div className='flex-center'>
+                <FavIcon className='size-12' />
+              </div>
+
+              {/* Heading */}
+              <div className='flex flex-col gap-2 text-center'>
+                <H3 as='h1'>{title}</H3>
+                <Muted>{subtitle}</Muted>
+              </div>
+
+              {/* Social login */}
+              <div className='grid grid-cols-2 gap-3'>
+                <Button
+                  type='button'
+                  variant='secondary'
+                  size='lg'
+                  onClick={() => {
+                    onSocialClick('google');
+                  }}
+                >
+                  <GoogleIcon />
+                  {messages.google}
+                </Button>
+                <Button
+                  type='button'
+                  variant='secondary'
+                  size='lg'
+                  onClick={() => {
+                    onSocialClick('github');
+                  }}
+                >
+                  <GitHubIcon />
+                  {messages.github}
+                </Button>
+              </div>
+
+              {/* Divider */}
+              <div className='flex items-center gap-3 text-sm text-muted-foreground'>
+                <Separator className='flex-1' />
+                <span>{messages.or}</span>
+                <Separator className='flex-1' />
+              </div>
+
+              {/* Form (input fields + submit button) */}
+              {children}
+
+              {/* Legal footer */}
+              <Muted className='text-center text-xs'>{footer}</Muted>
             </div>
-
-            {/* Heading */}
-            <div className='flex flex-col gap-2 text-center'>
-              <H3 as='h1'>{title}</H3>
-              <Muted>{subtitle}</Muted>
-            </div>
-
-            {/* Social login */}
-            <div className='grid grid-cols-2 gap-3'>
-              <Button
-                type='button'
-                variant='secondary'
-                size='lg'
-                onClick={() => {
-                  onSocialClick('google');
-                }}
-              >
-                <GoogleIcon />
-                {messages.google}
-              </Button>
-              <Button
-                type='button'
-                variant='secondary'
-                size='lg'
-                onClick={() => {
-                  onSocialClick('github');
-                }}
-              >
-                <GitHubIcon />
-                {messages.github}
-              </Button>
-            </div>
-
-            {/* Divider */}
-            <div className='flex items-center gap-3 text-sm text-muted-foreground'>
-              <Separator className='flex-1' />
-              <span>{messages.or}</span>
-              <Separator className='flex-1' />
-            </div>
-
-            {/* Form (input fields + submit button) */}
-            {children}
-
-            {/* Legal footer */}
-            <Muted className='text-center text-xs'>{footer}</Muted>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+          </CardContent>
+        </Card>
+      </div>
+    </ViewTransition>
   );
 }

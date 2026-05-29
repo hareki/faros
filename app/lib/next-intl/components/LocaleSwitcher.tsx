@@ -27,7 +27,9 @@ export default function LocaleSwitcher() {
           key={locale}
           type='button'
           disabled={isPending || locale === activeLocale}
-          onClick={() =>{  onSelect(locale); }}
+          onClick={() => {
+            onSelect(locale);
+          }}
         >
           {locale}
         </button>

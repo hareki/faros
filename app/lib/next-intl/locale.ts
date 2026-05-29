@@ -12,7 +12,9 @@ const baseOf = (tag: string) => tag.toLowerCase().split('-')[0];
 // Pick the best supported locale from the `Accept-Language` header,
 // used only on the first visit before a `NEXT_LOCALE` cookie exists.
 function detectFromHeaders(acceptLanguage: string | null): Locale {
-  if (!acceptLanguage) {return defaultLocale;}
+  if (!acceptLanguage) {
+    return defaultLocale;
+  }
 
   const ranked = acceptLanguage
     .split(',')
@@ -28,7 +30,9 @@ function detectFromHeaders(acceptLanguage: string | null): Locale {
   for (const { base } of ranked) {
     const match = locales.find((locale) => baseOf(locale) === base);
 
-    if (match) {return match;}
+    if (match) {
+      return match;
+    }
   }
 
   return defaultLocale;
@@ -37,7 +41,9 @@ function detectFromHeaders(acceptLanguage: string | null): Locale {
 export async function getUserLocale(): Promise<Locale> {
   const stored = (await cookies()).get(COOKIE_NAME)?.value;
 
-  if (hasLocale(locales, stored)) {return stored;}
+  if (hasLocale(locales, stored)) {
+    return stored;
+  }
 
   return detectFromHeaders((await headers()).get('accept-language'));
 }

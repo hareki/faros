@@ -1,0 +1,27 @@
+:root {
+  --duration-move: 300ms;
+}
+
+::view-transition-group(.morph) {
+  animation-duration: var(--duration-move);
+}
+
+/* Replaces the default linear cross-fade with one that blurs to 3px at the midpoint */
+::view-transition-image-pair(.morph) {
+  animation-name: via-blur;
+}
+
+@keyframes via-blur {
+  30% {
+    filter: blur(3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
