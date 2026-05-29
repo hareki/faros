@@ -23,12 +23,12 @@ export default async function SignIn() {
       })}
       footer={t.rich('signIn.footer', {
         terms: (chunks) => (
-          <Link href='/terms' className='underline underline-offset-4'>
+          <Link href='#' className='underline underline-offset-4'>
             {chunks}
           </Link>
         ),
         privacy: (chunks) => (
-          <Link href='/privacy' className='underline underline-offset-4'>
+          <Link href='#' className='underline underline-offset-4'>
             {chunks}
           </Link>
         ),
