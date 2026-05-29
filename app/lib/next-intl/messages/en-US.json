@@ -3,7 +3,8 @@
     "description": "Job Application Tracker"
   },
   "HomePage": {
-    "title": "Hello world!"
+    "title": "Hello world!",
+    "toSignIn": "To Sign In Page"
   },
   "Auth": {
     "signIn": {
@@ -31,7 +32,10 @@
     "resetPasswordSubmit": "Send reset instructions",
     "google": "Log in with Google",
     "or": "or",
-    "github": "Log in with GitHub"
+    "github": "Log in with GitHub",
+    "checkEmailTitle": "Check your email",
+    "checkEmailSubtitle": "We just sent a verification link to {email}.",
+    "goToLogin": "Go to login"
   },
   "GlobalValidation": {
     "required": "Please enter {object}",

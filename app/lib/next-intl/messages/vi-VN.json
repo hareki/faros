@@ -31,7 +31,10 @@
     "resetPasswordSubmit": "Gửi hướng dẫn đặt lại",
     "google": "Đăng nhập với Google",
     "or": "hoặc",
-    "github": "Đăng nhập với GitHub"
+    "github": "Đăng nhập với GitHub",
+    "checkEmailTitle": "Kiểm tra email của bạn",
+    "checkEmailSubtitle": "Chúng tôi vừa gửi liên kết xác minh đến {email}.",
+    "goToLogin": "Đến trang đăng nhập"
   },
   "GlobalValidation": {
     "required": "Vui lòng nhập {object}",

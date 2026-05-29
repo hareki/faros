@@ -19,6 +19,8 @@ type AuthFormWrapperViewProps = PropsWithChildren<{
   title: ReactNode;
   subtitle: ReactNode;
   footer?: ReactNode;
+  // Defaults to the Faros logo; override to swap the icon shown above the heading.
+  icon?: ReactNode;
   // Omit to hide the social sign-in section (and its divider) entirely.
   onSocialClick?: (provider: SocialProvider) => void;
   messages: Messages['ClientAuth'];
@@ -28,12 +30,20 @@ export default function AuthFormWrapperView({
   title,
   subtitle,
   footer,
+  icon = <FavIcon className='size-12' />,
   onSocialClick,
   children,
   messages,
 }: AuthFormWrapperViewProps) {
   return (
-    <ViewTransition name='auth-card' share='morph' default='none'>
+    <ViewTransition
+      name='auth-card'
+      // instance is replaced, names match
+      share='morph'
+      // instance stays, children change
+      update='morph'
+      default='none'
+    >
       <div className='relative'>
         <div
           // https://github.com/tailwindlabs/tailwindcss/discussions/19582#discussioncomment-15683979
@@ -46,9 +56,7 @@ export default function AuthFormWrapperView({
           <CardContent>
             <div className='flex w-full max-w-sm flex-col gap-6'>
               {/* Logo */}
-              <div className='flex-center'>
-                <FavIcon className='size-12' />
-              </div>
+              <div className='flex-center'>{icon}</div>
 
               {/* Heading */}
               <div className='flex flex-col gap-2 text-center'>
