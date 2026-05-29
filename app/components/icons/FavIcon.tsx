@@ -1,4 +1,4 @@
-import createIcon from './create-icon';
+import createIcon from './utils/createIcon';
 
 const FavIcon = createIcon(function FavIcon(props) {
   return (

@@ -1,4 +1,4 @@
-import createIcon from './create-icon';
+import createIcon from './utils/createIcon';
 
 const GitHubIcon = createIcon(function GitHubIcon(props) {
   return (
