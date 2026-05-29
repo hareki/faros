@@ -45,10 +45,6 @@ export const buttonVariants = cva(
           dark:hover:bg-destructive/30
           dark:focus-visible:ring-destructive/40
         `,
-        link: `
-          text-primary underline-offset-4
-          hover:underline
-        `,
       },
       size: {
         default: `

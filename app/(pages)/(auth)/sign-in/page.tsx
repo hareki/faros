@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import { getMessages, getTranslations } from 'next-intl/server';
 
+import Link from '@/app/components/ui/Link';
 import SignInForm from '@/app/features/auth/views/SignInFormView';
 
 export default async function SignIn() {
@@ -13,22 +13,19 @@ export default async function SignIn() {
       title={t('signIn.title')}
       subtitle={t.rich('signIn.subtitle', {
         link: (chunks) => (
-          <Link
-            href='/sign-up'
-            className='font-medium text-foreground underline underline-offset-4'
-          >
+          <Link variant='action' href='/sign-up'>
             {chunks}
           </Link>
         ),
       })}
       footer={t.rich('signIn.footer', {
         terms: (chunks) => (
-          <Link href='#' className='underline underline-offset-4'>
+          <Link href='#' size='sm'>
             {chunks}
           </Link>
         ),
         privacy: (chunks) => (
-          <Link href='#' className='underline underline-offset-4'>
+          <Link href='#' size='sm'>
             {chunks}
           </Link>
         ),

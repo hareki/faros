@@ -91,7 +91,7 @@ export default function AuthFormWrapperView({
             {children}
 
             {/* Legal footer */}
-            <Muted className='text-center'>{footer}</Muted>
+            <Muted className='text-center text-xs'>{footer}</Muted>
           </div>
         </CardContent>
       </Card>

@@ -29,6 +29,7 @@ export function FormTextField<
   control,
   name,
   label,
+  labelAddon,
   description,
   disabled,
   inputProps,
@@ -43,14 +44,25 @@ export function FormTextField<
       // This is the last fallback, `useForm({ defaultValues })` still take precedence if provided
       // Useful place to provide common `defaultValue` without redeclaring them every single time in useForm
       defaultValue={'' as FieldPathValue<TFieldValues, TName>}
-      render={({ field, fieldState }) => (
-        <Field>
-          {label && <FieldLabel htmlFor={id}>{label}</FieldLabel>}
-          <Input id={id} aria-invalid={!!fieldState.error} {...inputProps} {...field} />
-          {description && <FieldDescription>{description}</FieldDescription>}
-          <FieldError errors={[fieldState.error]} />
-        </Field>
-      )}
+      render={({ field, fieldState }) => {
+        const labelJsx = label && <FieldLabel htmlFor={id}>{label}</FieldLabel>;
+
+        return (
+          <Field>
+            {label && labelAddon && (
+              <div className='flex justify-between'>
+                {labelJsx}
+                {labelAddon}
+              </div>
+            )}
+            {label && !labelAddon && labelJsx}
+
+            <Input id={id} aria-invalid={!!fieldState.error} {...inputProps} {...field} />
+            {description && <FieldDescription>{description}</FieldDescription>}
+            <FieldError errors={[fieldState.error]} />
+          </Field>
+        );
+      }}
     />
   );
 }

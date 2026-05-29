@@ -8,6 +8,7 @@ import { z } from 'zod';
 
 import Button from '@/app/components/ui/Button';
 import { FieldGroup } from '@/app/components/ui/Field';
+import Link from '@/app/components/ui/Link';
 import { FormTextField } from '@/app/lib/form/components/FormTextField';
 import { useForm } from '@/app/lib/form/hooks/useForm';
 
@@ -69,6 +70,11 @@ export default function SignInForm({ title, subtitle, footer, messages }: SignIn
             control={control}
             name='password'
             label={messages.password}
+            labelAddon={
+              <Link variant='action' href='#'>
+                Forgot your password?
+              </Link>
+            }
             inputProps={{
               type: 'password',
               autoComplete: 'current-password',

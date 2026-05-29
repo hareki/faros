@@ -1,4 +1,8 @@
+import { type ReactNode } from 'react';
+
 import { type FieldPath, type FieldValues, type Control } from 'react-hook-form';
+
+import type { XOR } from 'ts-xor';
 
 export type FormInputProps<
   TFieldValues extends FieldValues,
@@ -8,9 +12,8 @@ export type FormInputProps<
   control: Control<TFieldValues>;
   name: TName;
 
-  label?: string;
   description?: string;
   disabled?: boolean;
 
   inputProps?: InputProps;
-};
+} & XOR<{ label?: string }, { label: string; labelAddon?: ReactNode }>;
