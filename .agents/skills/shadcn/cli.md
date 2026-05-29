@@ -212,11 +212,11 @@ Displays project info and `components.json` configuration. Run this first to dis
 | `tailwind.config`    | `string`  | Tailwind config path                                                                       |
 | `tailwind.css`       | `string`  | Global CSS path — this is where custom CSS variables go                                    |
 | `iconLibrary`        | `string`  | Icon library — determines icon import package (e.g. `lucide-react`, `@tabler/icons-react`) |
-| `aliases.components` | `string`  | Component import alias (e.g. `@/app/components`)                                               |
-| `aliases.utils`      | `string`  | Utils import alias (e.g. `@/app/lib/tailwind/utils`)                                                    |
-| `aliases.ui`         | `string`  | UI component alias (e.g. `@/app/components/ui`)                                                |
-| `aliases.lib`        | `string`  | Lib alias (e.g. `@/app/lib`)                                                                   |
-| `aliases.hooks`      | `string`  | Hooks alias (e.g. `@/ap/hooks`)                                                               |
+| `aliases.components` | `string`  | Component import alias (e.g. `@/components`)                                               |
+| `aliases.utils`      | `string`  | Utils import alias (e.g. `@/lib/utils`)                                                    |
+| `aliases.ui`         | `string`  | UI component alias (e.g. `@/components/ui`)                                                |
+| `aliases.lib`        | `string`  | Lib alias (e.g. `@/lib`)                                                                   |
+| `aliases.hooks`      | `string`  | Hooks alias (e.g. `@/hooks`)                                                               |
 | `resolvedPaths`      | `object`  | Absolute file-system paths for each alias                                                  |
 | `registries`         | `object`  | Configured custom registries                                                               |
 
