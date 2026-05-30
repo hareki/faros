@@ -45,4 +45,3 @@ next-env.d.ts
 app/lib/next-intl/messages/en-US.d.json.ts
 app/lib/next-intl/messages/locales/en-US.po
 
-.codegraph
