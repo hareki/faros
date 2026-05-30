@@ -19,7 +19,7 @@ import AuthFormWrapperView from './AuthFormWrapperView';
 type NewPasswordFormProps = {
   title: ReactNode;
   subtitle: ReactNode;
-  messages: Messages['ClientAuthentication'];
+  messages: Messages['ClientAuthentication'] & Messages['ClientNewPassword'];
   // Reset token lifted from the `?token=` query param by the page.
   token: string;
 };
@@ -33,8 +33,8 @@ export default function NewPasswordFormView({
   const t = useTranslations('GlobalValidation');
   const schema = z
     .object({
-      password: z.string().min(1, t('required', { object: messages.newPassword })),
-      confirmPassword: z.string().min(1, t('required', { object: messages.confirmPassword })),
+      password: z.string().min(1, t('required', { object: messages.label })),
+      confirmPassword: z.string().min(1, t('required', { object: messages.confirmLabel })),
     })
     .refine((values) => values.password === values.confirmPassword, {
       message: messages.passwordsMustMatch,
@@ -70,27 +70,27 @@ export default function NewPasswordFormView({
           <FormTextField
             control={control}
             name='password'
-            label={messages.newPassword}
+            label={messages.label}
             inputProps={{
               type: 'password',
               autoComplete: 'new-password',
-              placeholder: messages.newPasswordPlaceholder,
+              placeholder: messages.placeholder,
             }}
           />
 
           <FormTextField
             control={control}
             name='confirmPassword'
-            label={messages.confirmPassword}
+            label={messages.confirmLabel}
             inputProps={{
               type: 'password',
               autoComplete: 'new-password',
-              placeholder: messages.confirmPasswordPlaceholder,
+              placeholder: messages.confirmPlaceholder,
             }}
           />
 
           <Button type='submit' className='w-full' disabled={isPending}>
-            {messages.setNewPasswordSubmit}
+            {messages.submit}
           </Button>
         </FieldGroup>
       </Form>

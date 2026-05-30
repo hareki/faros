@@ -24,7 +24,7 @@ type SignInFormProps = {
   title: ReactNode;
   subtitle: ReactNode;
   footer: ReactNode;
-  messages: Messages['ClientAuthentication'];
+  messages: Messages['ClientAuthentication'] & Messages['ClientSignIn'];
 };
 
 export default function SignInForm({ title, subtitle, footer, messages }: SignInFormProps) {
@@ -143,7 +143,7 @@ export default function SignInForm({ title, subtitle, footer, messages }: SignIn
           />
 
           <Button type='submit' className='w-full' disabled={isPending}>
-            {messages.signInSubmit}
+            {messages.submit}
           </Button>
         </FieldGroup>
       </Form>

@@ -21,7 +21,7 @@ import CheckEmailView from './CheckEmailView';
 type ResetPasswordFormProps = {
   title: ReactNode;
   subtitle: ReactNode;
-  messages: Messages['ClientAuthentication'];
+  messages: Messages['ClientAuthentication'] & Messages['ClientForgotPassword'];
 };
 
 export default function ResetPasswordFormView({
@@ -91,7 +91,7 @@ export default function ResetPasswordFormView({
           />
 
           <Button type='submit' className='w-full' disabled={isPending}>
-            {messages.resetPasswordSubmit}
+            {messages.submit}
           </Button>
         </FieldGroup>
       </Form>

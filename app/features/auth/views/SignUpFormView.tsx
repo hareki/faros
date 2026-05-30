@@ -23,7 +23,7 @@ type SignUpFormProps = {
   title: ReactNode;
   subtitle: ReactNode;
   footer: ReactNode;
-  messages: Messages['ClientAuthentication'];
+  messages: Messages['ClientAuthentication'] & Messages['ClientSignUp'];
 };
 
 export default function SignUpFormView({ title, subtitle, footer, messages }: SignUpFormProps) {
@@ -133,7 +133,7 @@ export default function SignUpFormView({ title, subtitle, footer, messages }: Si
           />
 
           <Button type='submit' className='w-full' disabled={isPending}>
-            {messages.signUpSubmit}
+            {messages.submit}
           </Button>
         </FieldGroup>
       </Form>

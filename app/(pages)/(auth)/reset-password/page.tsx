@@ -9,25 +9,30 @@ type ResetPasswordProps = {
 
 export default async function ResetPassword({ searchParams }: ResetPasswordProps) {
   const { token } = await searchParams;
-  const t = await getTranslations('Authentication');
-  const messages = (await getMessages()).ClientAuthentication;
+  const allMessages = await getMessages();
 
   if (token) {
+    const t = await getTranslations('NewPassword');
+    const messages = { ...allMessages.ClientAuthentication, ...allMessages.ClientNewPassword };
+
     return (
       <NewPasswordFormView
         messages={messages}
         token={token}
-        title={t('newPassword.title')}
-        subtitle={t('newPassword.subtitle')}
+        title={t('title')}
+        subtitle={t('subtitle')}
       />
     );
   }
 
+  const t = await getTranslations('ForgotPassword');
+  const messages = { ...allMessages.ClientAuthentication, ...allMessages.ClientForgotPassword };
+
   return (
     <ResetPasswordFormView
       messages={messages}
-      title={t('resetPassword.title')}
-      subtitle={t('resetPassword.subtitle')}
+      title={t('title')}
+      subtitle={t('subtitle')}
     />
   );
 }
