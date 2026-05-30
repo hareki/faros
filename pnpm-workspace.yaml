@@ -1,5 +1,5 @@
 packages:
-  - packages/react-email
+  - packages/emails
 
 ignoredBuiltDependencies:
   - sharp

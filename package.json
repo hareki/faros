@@ -18,12 +18,13 @@
     "db:studio": "drizzle-kit studio",
     "db:seed": "bun app/db/seed.ts",
     "intl:generate": "NODE_ENV=production bun scripts/generateNextIntlTypes.ts",
-    "email:dev": "pnpm --filter react-email dev --port 3002"
+    "email:dev": "pnpm --filter @faros/emails dev --port 3002"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
     "@dnd-kit/react": "^0.4.0",
     "@epic-web/remember": "^1.1.0",
+    "@faros/emails": "workspace:*",
     "@hookform/resolvers": "^5.4.0",
     "@lexical/react": "^0.44.0",
     "@neondatabase/serverless": "^1.1.0",

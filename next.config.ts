@@ -9,6 +9,8 @@ const nextConfig: NextConfig = {
   typedRoutes: true,
   reactCompiler: true,
   cacheComponents: true,
+  // The email templates package ships raw .tsx source; let Next transpile it.
+  transpilePackages: ['@faros/emails'],
   experimental: {
     viewTransition: true,
   },
