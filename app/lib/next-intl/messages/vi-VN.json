@@ -5,7 +5,7 @@
   "HomePage": {
     "title": "Xin chào thế giới!"
   },
-  "Auth": {
+  "Authentication": {
     "signIn": {
       "title": "Đăng nhập vào Faros",
       "subtitle": "Chưa có tài khoản? <link>Đăng ký</link>.",
@@ -19,9 +19,34 @@
     "resetPassword": {
       "title": "Đặt lại mật khẩu",
       "subtitle": "Nhập địa chỉ email liên kết với tài khoản của bạn và chúng tôi sẽ gửi cho bạn email kèm hướng dẫn đặt lại mật khẩu."
+    },
+    "newPassword": {
+      "title": "Đặt mật khẩu mới",
+      "subtitle": "Chọn một mật khẩu mới cho tài khoản của bạn."
+    },
+    "email": {
+      "common": {
+        "fallback": "hoặc sao chép và dán URL này vào trình duyệt của bạn:",
+        "footer": "Nếu bạn không yêu cầu email này, bạn có thể bỏ qua nó một cách an toàn."
+      },
+      "verify": {
+        "subject": "Xác minh địa chỉ email của bạn",
+        "preview": "Xác minh email để hoàn tất thiết lập tài khoản Faros của bạn",
+        "heading": "Xác minh email của bạn",
+        "body": "Cảm ơn bạn đã đăng ký Faros. Nhấp vào nút bên dưới để xác minh địa chỉ email và kích hoạt tài khoản của bạn.",
+        "cta": "Xác minh email"
+      },
+      "reset": {
+        "subject": "Đặt lại mật khẩu của bạn",
+        "preview": "Đặt lại mật khẩu cho tài khoản Faros của bạn",
+        "heading": "Đặt lại mật khẩu của bạn",
+        "body": "Chúng tôi đã nhận được yêu cầu đặt lại mật khẩu Faros của bạn. Nhấp vào nút bên dưới để chọn mật khẩu mới.",
+        "cta": "Đặt lại mật khẩu",
+        "expiryNote": "Liên kết này sẽ hết hạn sau 1 giờ. Nếu bạn không yêu cầu đặt lại mật khẩu, bạn có thể bỏ qua email này một cách an toàn."
+      }
     }
   },
-  "ClientAuth": {
+  "ClientAuthentication": {
     "email": "Email",
     "emailPlaceholder": "ten@example.com",
     "password": "Mật khẩu",
@@ -34,7 +59,22 @@
     "github": "Đăng nhập với GitHub",
     "checkEmailTitle": "Kiểm tra email của bạn",
     "checkEmailSubtitle": "Chúng tôi vừa gửi liên kết xác minh đến {email}.",
-    "goToLogin": "Đến trang đăng nhập"
+    "goToLogin": "Đến trang đăng nhập",
+    "resendEmail": "Gửi lại email",
+    "resendEmailSuccess": "Đã gửi email xác minh.",
+    "resetCheckEmailTitle": "Kiểm tra email của bạn",
+    "resetCheckEmailSubtitle": "Nếu tồn tại tài khoản cho {email}, chúng tôi đã gửi hướng dẫn đặt lại mật khẩu.",
+    "newPassword": "Mật khẩu mới",
+    "newPasswordPlaceholder": "Nhập mật khẩu mới",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "confirmPasswordPlaceholder": "Nhập lại mật khẩu mới của bạn",
+    "setNewPasswordSubmit": "Đặt lại mật khẩu",
+    "passwordsMustMatch": "Mật khẩu không khớp",
+    "resetSuccess": "Mật khẩu của bạn đã được đặt lại. Vui lòng đăng nhập.",
+    "errorInvalidCredentials": "Email hoặc mật khẩu không đúng.",
+    "errorInvalidToken": "Liên kết đặt lại này không hợp lệ hoặc đã hết hạn.",
+    "errorEmailInUse": "Đã tồn tại tài khoản với email này.",
+    "errorGeneric": "Đã có lỗi xảy ra. Vui lòng thử lại."
   },
   "GlobalValidation": {
     "required": "Vui lòng nhập {object}",

@@ -1,7 +1,13 @@
-import { eq } from 'drizzle-orm';
+import { stdin as input, stdout as output } from 'node:process';
+import readline from 'node:readline/promises';
+
+import { getTableName, is, sql } from 'drizzle-orm';
+import { PgTable } from 'drizzle-orm/pg-core';
 
 import { db } from '@/app/db/client';
+import * as schema from '@/app/db/schema';
 import {
+  accounts,
   activityLog,
   applicationTags,
   applications,
@@ -12,22 +18,65 @@ import {
   tags,
   users,
 } from '@/app/db/schema';
+import { auth } from '@/app/lib/better-auth';
 
-// Fixed identity so re-running the seed replaces the previous dataset
-// (deleting the user cascades to every owned row).
-const SEED_EMAIL = 'dev@faros.local';
+const SEED_EMAIL = 'minhtu1392000@gmail.com';
+// Super weak on purpose — local testing only.
+const SEED_PASSWORD = 'admin';
 
 const DAY = 24 * 60 * 60 * 1000;
 
-async function seed() {
-  console.log('Deleting existing seed user...');
-  await db.delete(users).where(eq(users.email, SEED_EMAIL));
+// Interactive guard: every run wipes the ENTIRE database, so make the caller
+// confirm. Pass --yes / -y to skip the prompt (CI / scripted runs).
+async function confirmWipe() {
+  if (process.argv.includes('--yes') || process.argv.includes('-y')) {
+    return;
+  }
 
+  const rl = readline.createInterface({ input, output });
+  const answer = await rl.question(
+    '\n⚠️  WARNING: this will PERMANENTLY DELETE ALL data in the database before seeding.\n   Type "yes" to continue: ',
+  );
+
+  rl.close();
+
+  if (answer.trim().toLowerCase() !== 'yes') {
+    console.log('Aborted. No changes made.');
+    process.exit(0);
+  }
+}
+
+// Truncate every table in one shot. The table list is derived from the schema
+// so nothing is missed; CASCADE makes FK ordering irrelevant and RESTART
+// IDENTITY is harmless (all PKs are uuid defaultRandom).
+async function wipe() {
+  console.log('Wiping all tables...');
+  const tables = Object.values(schema).filter((value) => is(value, PgTable)) as PgTable[];
+  const names = tables.map((t) => `"${getTableName(t)}"`).join(', ');
+
+  await db.execute(sql.raw(`TRUNCATE TABLE ${names} RESTART IDENTITY CASCADE`));
+}
+
+async function seed() {
   console.log('Seeding user...');
   const [user] = await db
     .insert(users)
     .values({ email: SEED_EMAIL, name: 'Dev User', emailVerified: true })
     .returning();
+
+  // Credential (non-OAuth) account so the seeded user can sign in with
+  // email/password. Reuse Better Auth's own hasher so the stored hash always
+  // matches the live verifier; credential rows use users.id as accountId.
+  console.log('Seeding credential account...');
+  const ctx = await auth.$context;
+  const hashedPassword = await ctx.password.hash(SEED_PASSWORD);
+
+  await db.insert(accounts).values({
+    userId: user.id,
+    accountId: user.id,
+    providerId: 'credential',
+    password: hashedPassword,
+  });
 
   console.log('Seeding job_hunt...');
   const [hunt] = await db
@@ -191,12 +240,18 @@ async function seed() {
   ]);
 
   console.log(
-    `Seeded ${user.email}: hunt "${hunt.name}", 3 sub-stages, ` +
+    `Seeded ${user.email} (password: ${SEED_PASSWORD}): hunt "${hunt.name}", 3 sub-stages, ` +
       `${tagRows.length} tags, 4 applications (1 per stage), 3 resumes, 2 events.`,
   );
 }
 
-seed()
+async function main() {
+  await confirmWipe();
+  await wipe();
+  await seed();
+}
+
+main()
   .then(() => process.exit(0))
   .catch((err: unknown) => {
     console.error(err);

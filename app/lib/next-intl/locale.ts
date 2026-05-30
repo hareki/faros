@@ -5,7 +5,7 @@ import { hasLocale } from 'next-intl';
 
 import { defaultLocale, locales, type Locale } from './config';
 
-const COOKIE_NAME = 'NEXT_LOCALE';
+const LOCALE_COOKIE = 'NEXT_LOCALE';
 
 const baseOf = (tag: string) => tag.toLowerCase().split('-')[0];
 
@@ -39,7 +39,7 @@ function detectFromHeaders(acceptLanguage: string | null): Locale {
 }
 
 export async function getUserLocale(): Promise<Locale> {
-  const stored = (await cookies()).get(COOKIE_NAME)?.value;
+  const stored = (await cookies()).get(LOCALE_COOKIE)?.value;
 
   if (hasLocale(locales, stored)) {
     return stored;
@@ -49,5 +49,5 @@ export async function getUserLocale(): Promise<Locale> {
 }
 
 export async function setUserLocale(locale: Locale) {
-  (await cookies()).set(COOKIE_NAME, locale);
+  (await cookies()).set(LOCALE_COOKIE, locale);
 }

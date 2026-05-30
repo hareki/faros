@@ -4,8 +4,8 @@ import Link from '@/app/components/ui/Link';
 import SignInForm from '@/app/features/auth/views/SignInFormView';
 
 export default async function SignIn() {
-  const t = await getTranslations('Auth');
-  const messages = (await getMessages()).ClientAuth;
+  const t = await getTranslations('Authentication');
+  const messages = (await getMessages()).ClientAuthentication;
 
   return (
     <SignInForm

@@ -1,25 +1,29 @@
 'use client';
 
-import { startTransition, useState, type ReactNode } from 'react';
+import { useState, useTransition, type ReactNode } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { IconArrowRight, IconMail } from '@tabler/icons-react';
+import { IconArrowRight } from '@tabler/icons-react';
 import LinkPrimitive from 'next/link';
 import { useTranslations, type Messages } from 'next-intl';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import Button from '@/app/components/ui/Button';
 import { FieldGroup } from '@/app/components/ui/Field';
+import { resendVerificationEmailAction } from '@/app/features/auth/actions/resendVerificationEmailAction';
+import { signUpAction } from '@/app/features/auth/actions/signUpAction';
 import { FormTextField } from '@/app/lib/form/components/FormTextField';
 import { useForm } from '@/app/lib/form/hooks/useForm';
 
 import AuthFormWrapperView, { type SocialProvider } from './AuthFormWrapperView';
+import CheckEmailView from './CheckEmailView';
 
 type SignUpFormProps = {
   title: ReactNode;
   subtitle: ReactNode;
   footer: ReactNode;
-  messages: Messages['ClientAuth'];
+  messages: Messages['ClientAuthentication'];
 };
 
 export default function SignUpFormView({ title, subtitle, footer, messages }: SignUpFormProps) {
@@ -32,9 +36,11 @@ export default function SignUpFormView({ title, subtitle, footer, messages }: Si
     password: z.string().min(1, t('required', { object: messages.password })),
   });
 
-  const [{ control, getValues }, Form] = useForm({
+  const [{ control }, Form] = useForm({
     resolver: zodResolver(schema),
   });
+
+  const [isPending, startTransition] = useTransition();
 
   // Once sign-up succeeds we swap to the "check your email" confirmation state.
   // `null` means we're still showing the form; a string holds the address we
@@ -42,8 +48,17 @@ export default function SignUpFormView({ title, subtitle, footer, messages }: Si
   const [sentToEmail, setSentToEmail] = useState<string | null>(null);
 
   const onSubmit = (values: z.infer<typeof schema>) => {
-    // TODO: replace with authClient.signUp.email({ email, password })
-    console.log('[mock] sign-up', values);
+    startTransition(async () => {
+      const result = await signUpAction(values);
+
+      if (result.status === 'error') {
+        toast.error(messages[result.errorKey]);
+
+        return;
+      }
+
+      setSentToEmail(values.email);
+    });
   };
 
   const onSocialSignIn = (provider: SocialProvider) => {
@@ -51,32 +66,37 @@ export default function SignUpFormView({ title, subtitle, footer, messages }: Si
     console.log('[mock] social sign-up', provider);
   };
 
-  // TEMP: no sign-up logic exists yet, so this bypasses validation and the
-  // backend call to jump straight to the confirmation state for testing.
-  // Remove once `onSubmit` actually creates the account.
-  const onBypassSubmit = () => {
-    const email = getValues('email') || messages.emailPlaceholder;
+  const onResend = () => {
+    if (!sentToEmail) {
+      return;
+    }
 
-    startTransition(() => {
-      setSentToEmail(email);
+    startTransition(async () => {
+      const result = await resendVerificationEmailAction({ email: sentToEmail });
+
+      if (result.status === 'error') {
+        toast.error(messages[result.errorKey]);
+
+        return;
+      }
+
+      toast.success(messages.resendEmailSuccess);
     });
   };
 
   if (sentToEmail) {
     return (
-      <AuthFormWrapperView
-        messages={messages}
-        icon={<IconMail className='size-12' stroke={1.5} />}
-        title={messages.checkEmailTitle}
-        subtitle={messages.checkEmailSubtitle.replace('{email}', sentToEmail)}
-      >
-        <div className='flex-center'>
+      <CheckEmailView messages={messages} email={sentToEmail}>
+        <div className='flex flex-col items-center gap-3'>
+          <Button variant='secondary' className='w-full' disabled={isPending} onClick={onResend}>
+            {messages.resendEmail}
+          </Button>
           <Button nativeButton={false} render={<LinkPrimitive href='/sign-in' />}>
             {messages.goToLogin}
             <IconArrowRight />
           </Button>
         </div>
-      </AuthFormWrapperView>
+      </CheckEmailView>
     );
   }
 
@@ -112,10 +132,7 @@ export default function SignUpFormView({ title, subtitle, footer, messages }: Si
             }}
           />
 
-          {/* TEMP: type='button' + onBypassSubmit short-circuits to the
-              confirmation state. Restore type='submit' (and drop onClick) once
-              real sign-up wiring lands in `onSubmit`. */}
-          <Button type='button' className='w-full' onClick={onBypassSubmit}>
+          <Button type='submit' className='w-full' disabled={isPending}>
             {messages.signUpSubmit}
           </Button>
         </FieldGroup>

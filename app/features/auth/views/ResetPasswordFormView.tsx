@@ -1,24 +1,27 @@
 'use client';
 
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, useState, useTransition, type ReactNode } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations, type Messages } from 'next-intl';
 import { parseAsString, useQueryState } from 'nuqs';
 import { useWatch } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import Button from '@/app/components/ui/Button';
 import { FieldGroup } from '@/app/components/ui/Field';
+import { requestPasswordResetAction } from '@/app/features/auth/actions/requestPasswordResetAction';
 import { FormTextField } from '@/app/lib/form/components/FormTextField';
 import { useForm } from '@/app/lib/form/hooks/useForm';
 
 import AuthFormWrapperView from './AuthFormWrapperView';
+import CheckEmailView from './CheckEmailView';
 
 type ResetPasswordFormProps = {
   title: ReactNode;
   subtitle: ReactNode;
-  messages: Messages['ClientAuth'];
+  messages: Messages['ClientAuthentication'];
 };
 
 export default function ResetPasswordFormView({
@@ -49,10 +52,28 @@ export default function ResetPasswordFormView({
     void setEmailParam(email);
   }, [email, setEmailParam]);
 
+  const [isPending, startTransition] = useTransition();
+
+  // Once the request is sent we swap to the "check your email" confirmation.
+  const [sentToEmail, setSentToEmail] = useState<string | null>(null);
+
   const onSubmit = (values: z.infer<typeof schema>) => {
-    // TODO: replace with authClient.forgetPassword({ email, redirectTo })
-    console.log('[mock] reset-password', values);
+    startTransition(async () => {
+      const result = await requestPasswordResetAction(values);
+
+      if (result.status === 'error') {
+        toast.error(messages[result.errorKey]);
+
+        return;
+      }
+
+      setSentToEmail(values.email);
+    });
   };
+
+  if (sentToEmail) {
+    return <CheckEmailView email={sentToEmail} messages={messages} />;
+  }
 
   return (
     <AuthFormWrapperView messages={messages} title={title} subtitle={subtitle}>
@@ -69,7 +90,7 @@ export default function ResetPasswordFormView({
             }}
           />
 
-          <Button type='submit' className='w-full'>
+          <Button type='submit' className='w-full' disabled={isPending}>
             {messages.resetPasswordSubmit}
           </Button>
         </FieldGroup>

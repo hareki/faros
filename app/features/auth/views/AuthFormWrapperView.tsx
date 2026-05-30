@@ -23,7 +23,7 @@ type AuthFormWrapperViewProps = PropsWithChildren<{
   icon?: ReactNode;
   // Omit to hide the social sign-in section (and its divider) entirely.
   onSocialClick?: (provider: SocialProvider) => void;
-  messages: Messages['ClientAuth'];
+  messages: Messages['ClientAuthentication'];
 }>;
 
 export default function AuthFormWrapperView({

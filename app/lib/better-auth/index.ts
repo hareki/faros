@@ -4,6 +4,7 @@ import { nextCookies } from 'better-auth/next-js';
 
 import { db } from '@/app/db/client';
 import * as schema from '@/app/db/schema';
+import { sendResetPasswordEmail, sendVerificationEmail } from '@/app/features/auth/utils/email';
 import { env } from '@/app/lib/t3-env';
 
 export const auth = betterAuth({
@@ -13,8 +14,22 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, { provider: 'pg', schema, usePlural: true }),
   // Let Postgres generate ids via gen_random_uuid() (our uuid PK defaults).
   advanced: { database: { generateId: 'uuid' } },
-  // Verification + reset flows are wired in later todos (D.41–42).
-  emailAndPassword: { enabled: true },
+  emailAndPassword: {
+    enabled: true,
+    requireEmailVerification: true,
+    revokeSessionsOnPasswordReset: true,
+    // `url` already has the reset token + callbackURL baked in; Resend sends it.
+    sendResetPassword: async ({ user, url }) => {
+      await sendResetPasswordEmail({ to: user.email, url });
+    },
+  },
+  emailVerification: {
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
+    sendVerificationEmail: async ({ user, url }) => {
+      await sendVerificationEmail({ to: user.email, url });
+    },
+  },
   socialProviders: {
     google: {
       clientId: env.GOOGLE_CLIENT_ID,
@@ -35,8 +50,6 @@ export const auth = betterAuth({
       strategy: 'compact', // signed (tamper-proof) but readable base64 JSON
     },
   },
-  // nextCookies() must be the last plugin — it lets server actions set
-  // the auth cookies that the upcoming auth flows rely on.
   plugins: [nextCookies()],
 });
 
