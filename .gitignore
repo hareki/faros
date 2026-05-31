@@ -18,6 +18,10 @@
 /.next/
 /out/
 
+# react-email package
+/packages/**/.next/
+/packages/**/.react-email/
+
 # production
 /build
 
