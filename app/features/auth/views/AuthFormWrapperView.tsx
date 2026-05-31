@@ -11,9 +11,8 @@ import Button from '@/app/components/ui/Button';
 import { Card, CardContent } from '@/app/components/ui/Card';
 import { Separator } from '@/app/components/ui/Separator';
 import { H3, Muted } from '@/app/components/ui/Typography';
+import { type SupportedSocialProvider } from '@/app/lib/better-auth/social';
 import { cn } from '@/app/lib/tailwind/utils';
-
-export type SocialProvider = 'google' | 'github';
 
 type AuthFormWrapperViewProps = PropsWithChildren<{
   title: ReactNode;
@@ -22,7 +21,7 @@ type AuthFormWrapperViewProps = PropsWithChildren<{
   // Defaults to the Faros logo; override to swap the icon shown above the heading.
   icon?: ReactNode;
   // Omit to hide the social sign-in section (and its divider) entirely.
-  onSocialClick?: (provider: SocialProvider) => void;
+  onSocialClick?: (provider: SupportedSocialProvider) => void;
   messages: Messages['ClientAuthentication'];
 }>;
 
@@ -54,7 +53,7 @@ export default function AuthFormWrapperView({
         />
         <Card className='relative'>
           <CardContent>
-            <div className='flex w-full max-w-sm flex-col gap-6'>
+            <div className='flex w-sm flex-col gap-6'>
               {/* Logo */}
               <div className='flex-center'>{icon}</div>
 

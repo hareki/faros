@@ -7,6 +7,8 @@ import * as schema from '@/app/db/schema';
 import { sendResetPasswordEmail, sendVerificationEmail } from '@/app/features/auth/utils/email';
 import { env } from '@/app/lib/t3-env';
 
+import { MIN_PASSWORD_LENGTH } from '../zod/constants';
+
 export const auth = betterAuth({
   baseURL: env.BETTER_AUTH_URL,
   secret: env.BETTER_AUTH_SECRET,
@@ -16,6 +18,7 @@ export const auth = betterAuth({
   advanced: { database: { generateId: 'uuid' } },
   emailAndPassword: {
     enabled: true,
+    minPasswordLength: MIN_PASSWORD_LENGTH,
     requireEmailVerification: true,
     revokeSessionsOnPasswordReset: true,
     // `url` already has the reset token + callbackURL baked in; Resend sends it.

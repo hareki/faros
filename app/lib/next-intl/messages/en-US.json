@@ -85,6 +85,7 @@
   },
   "GlobalValidation": {
     "required": "Please enter {object}",
+    "password": "At least {totalCharCount, plural, =1 {# character} other {# characters}} with {specialCharCount, plural, =1 {# special character} other {# special characters}}",
     "objectInvalid": "Invalid {object}",
     "min": {
       "character": "At least {count, plural, =1 {# character} other {# characters}}."

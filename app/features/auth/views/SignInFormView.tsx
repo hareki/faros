@@ -1,23 +1,17 @@
 'use client';
 
-import { useState, useTransition, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
-import { zodResolver } from '@hookform/resolvers/zod';
 import { IconArrowRight } from '@tabler/icons-react';
-import { useRouter } from 'next/navigation';
-import { useTranslations, type Messages } from 'next-intl';
-import { toast } from 'sonner';
-import { z } from 'zod';
+import { type Messages } from 'next-intl';
 
 import Button from '@/app/components/ui/Button';
 import { FieldGroup } from '@/app/components/ui/Field';
 import Link from '@/app/components/ui/Link';
-import { resendVerificationEmailAction } from '@/app/features/auth/actions/resendVerificationEmailAction';
-import { signInAction } from '@/app/features/auth/actions/signInAction';
+import { useSignInVM } from '@/app/features/auth/view-models/useSignInVM';
 import { FormTextField } from '@/app/lib/form/components/FormTextField';
-import { useForm } from '@/app/lib/form/hooks/useForm';
 
-import AuthFormWrapperView, { type SocialProvider } from './AuthFormWrapperView';
+import AuthFormWrapperView from './AuthFormWrapperView';
 import CheckEmailView from './CheckEmailView';
 
 type SignInFormProps = {
@@ -28,69 +22,8 @@ type SignInFormProps = {
 };
 
 export default function SignInForm({ title, subtitle, footer, messages }: SignInFormProps) {
-  const t = useTranslations('GlobalValidation');
-  const schema = z.object({
-    email: z
-      .string()
-      .min(1, t('required', { object: messages.email }))
-      .pipe(z.email(t('objectInvalid', { object: messages.email }))),
-    password: z.string().min(1, t('required', { object: messages.password })),
-  });
-
-  const [{ control }, Form] = useForm({
-    resolver: zodResolver(schema),
-  });
-
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-
-  // Set when sign-in is blocked because the email isn't verified yet; holds the
-  // address Better Auth just (re)sent the verification link to.
-  const [unverifiedEmail, setUnverifiedEmail] = useState<string | null>(null);
-
-  const onSubmit = (values: z.infer<typeof schema>) => {
-    startTransition(async () => {
-      const result = await signInAction(values);
-
-      if (result.status === 'needs-verification') {
-        setUnverifiedEmail(values.email);
-
-        return;
-      }
-
-      if (result.status === 'error') {
-        toast.error(messages[result.errorKey]);
-
-        return;
-      }
-
-      router.push('/');
-      router.refresh();
-    });
-  };
-
-  const onSocialSignIn = (provider: SocialProvider) => {
-    // TODO: replace with authClient.signIn.social({ provider })
-    console.log('[mock] social sign-in', provider);
-  };
-
-  const onResend = () => {
-    if (!unverifiedEmail) {
-      return;
-    }
-
-    startTransition(async () => {
-      const result = await resendVerificationEmailAction({ email: unverifiedEmail });
-
-      if (result.status === 'error') {
-        toast.error(messages[result.errorKey]);
-
-        return;
-      }
-
-      toast.success(messages.resendEmailSuccess);
-    });
-  };
+  const { control, Form, isPending, unverifiedEmail, onSubmit, onSocialSignIn, onResend } =
+    useSignInVM(messages);
 
   if (unverifiedEmail) {
     return (
