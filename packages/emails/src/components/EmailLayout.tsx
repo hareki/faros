@@ -27,7 +27,7 @@ export function EmailLayout({ previewText, children }: EmailLayoutProps) {
           >
             <Section className='text-center'>
               <Img
-                src={`${baseUrl}/static/favicon.png`}
+                src={`${baseUrl}/static/favicon.svg`}
                 width='32'
                 height='32'
                 alt="Faros's logo"
