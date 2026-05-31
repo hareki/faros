@@ -6,7 +6,7 @@ import { tailwindConfig } from '../theme';
 
 // Shared shell + Faros brand header for every email. Replaces the boilerplate that was
 // duplicated across templates. Centering is done with text-center (no flex/grid).
-const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '';
+const baseUrl = process.env.VERCEL_URL ? 'https://faros-iota.vercel.app' : '';
 
 export type EmailLayoutProps = {
   // Inbox preview snippet shown next to the subject line.
