@@ -5,21 +5,23 @@ import { useState, useTransition } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations, type Messages } from 'next-intl';
 import { toast } from 'sonner';
-import { z } from 'zod';
+import { type z } from 'zod';
 
 import { resendVerificationEmailAction } from '@/app/features/auth/actions/resendVerificationEmailAction';
 import { signUpAction } from '@/app/features/auth/actions/signUpAction';
+import { buildSignUpSchema } from '@/app/features/auth/schemas/signUp';
+import { resolveErrorMessage } from '@/app/features/auth/utils/resolveMessage';
 import { type SupportedSocialProvider, socialSignIn } from '@/app/lib/better-auth/social';
 import { useForm } from '@/app/lib/form/hooks/useForm';
-import { zEmail, zPassword } from '@/app/lib/zod/schemas/primitive';
+import { emailMessages, passwordMessages } from '@/app/lib/zod/utils/validationMessages';
 
 type SignUpMessages = Messages['ClientAuthentication'] & Messages['ClientSignUp'];
 
 export function useSignUpVM(messages: SignUpMessages) {
   const t = useTranslations('GlobalValidation');
-  const schema = z.object({
-    email: zEmail(t, messages.email),
-    password: zPassword(t, messages.password),
+  const schema = buildSignUpSchema({
+    email: emailMessages(t, messages.email),
+    password: passwordMessages(t, messages.password),
   });
 
   const [{ control }, Form] = useForm({
@@ -38,7 +40,7 @@ export function useSignUpVM(messages: SignUpMessages) {
       const result = await signUpAction(values);
 
       if (result.status === 'error') {
-        toast.error(messages[result.errorKey]);
+        toast.error(resolveErrorMessage(t, messages, result.errorKey));
 
         return;
       }
@@ -52,7 +54,7 @@ export function useSignUpVM(messages: SignUpMessages) {
       try {
         await socialSignIn(provider);
       } catch {
-        toast.error(messages.errorGeneric);
+        toast.error(t('errorGeneric'));
       }
     });
   };
@@ -66,7 +68,7 @@ export function useSignUpVM(messages: SignUpMessages) {
       const result = await resendVerificationEmailAction({ email: sentToEmail });
 
       if (result.status === 'error') {
-        toast.error(messages[result.errorKey]);
+        toast.error(resolveErrorMessage(t, messages, result.errorKey));
 
         return;
       }

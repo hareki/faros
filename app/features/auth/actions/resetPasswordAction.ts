@@ -1,7 +1,6 @@
 'use server';
 
 import { APIError } from 'better-auth/api';
-import { getTranslations } from 'next-intl/server';
 
 import { auth } from '@/app/lib/better-auth';
 import { zPassword } from '@/app/lib/zod/schemas/primitive';
@@ -21,12 +20,7 @@ export async function resetPasswordAction({
   token,
   newPassword,
 }: ResetPasswordInput): Promise<AuthActionResult> {
-  const [tValidation, tNewPassword] = await Promise.all([
-    getTranslations('GlobalValidation'),
-    getTranslations('ClientNewPassword'),
-  ]);
-
-  if (!zPassword(tValidation, tNewPassword('label')).safeParse(newPassword).success) {
+  if (!zPassword().safeParse(newPassword).success) {
     return { status: 'error', errorKey: 'errorGeneric' };
   }
 

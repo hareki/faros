@@ -45,7 +45,6 @@ export async function sendResetPasswordEmail({ to, url }: SendParams) {
         body={t('reset.body')}
         cta={t('reset.cta')}
         fallback={t('common.fallback')}
-        expiryNote={t('reset.expiryNote')}
         footer={t('common.footer')}
         url={url}
       />

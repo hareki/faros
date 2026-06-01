@@ -9,15 +9,17 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { requestPasswordResetAction } from '@/app/features/auth/actions/requestPasswordResetAction';
+import { resolveErrorMessage } from '@/app/features/auth/utils/resolveMessage';
 import { useForm } from '@/app/lib/form/hooks/useForm';
 import { zEmail } from '@/app/lib/zod/schemas/primitive';
+import { emailMessages } from '@/app/lib/zod/utils/validationMessages';
 
 type ResetPasswordMessages = Messages['ClientAuthentication'] & Messages['ClientForgotPassword'];
 
 export function useResetPasswordVM(messages: ResetPasswordMessages) {
   const t = useTranslations('GlobalValidation');
   const schema = z.object({
-    email: zEmail(t, messages.email),
+    email: zEmail(emailMessages(t, messages.email)),
   });
 
   const [sentToEmail, setSentToEmail] = useState<string | null>(null);
@@ -49,7 +51,7 @@ export function useResetPasswordVM(messages: ResetPasswordMessages) {
       const result = await requestPasswordResetAction(values);
 
       if (result.status === 'error') {
-        toast.error(messages[result.errorKey]);
+        toast.error(resolveErrorMessage(t, messages, result.errorKey));
 
         return;
       }

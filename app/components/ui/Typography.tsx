@@ -69,7 +69,7 @@ function P<T extends React.ElementType = 'p'>({ as, className, ...props }: Polym
       data-slot='typography-p'
       className={cn(
         `
-          leading-7
+          leading-6
           not-first:mt-6
         `,
         className,

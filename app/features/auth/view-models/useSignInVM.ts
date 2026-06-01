@@ -10,16 +10,18 @@ import { z } from 'zod';
 
 import { resendVerificationEmailAction } from '@/app/features/auth/actions/resendVerificationEmailAction';
 import { signInAction } from '@/app/features/auth/actions/signInAction';
+import { resolveErrorMessage } from '@/app/features/auth/utils/resolveMessage';
 import { type SupportedSocialProvider, socialSignIn } from '@/app/lib/better-auth/social';
 import { useForm } from '@/app/lib/form/hooks/useForm';
 import { zEmail } from '@/app/lib/zod/schemas/primitive';
+import { emailMessages } from '@/app/lib/zod/utils/validationMessages';
 
 type SignInMessages = Messages['ClientAuthentication'] & Messages['ClientSignIn'];
 
 export function useSignInVM(messages: SignInMessages) {
   const t = useTranslations('GlobalValidation');
   const schema = z.object({
-    email: zEmail(t, messages.email),
+    email: zEmail(emailMessages(t, messages.email)),
     password: z.string().min(1, t('required', { object: messages.password })),
   });
 
@@ -45,7 +47,7 @@ export function useSignInVM(messages: SignInMessages) {
       }
 
       if (result.status === 'error') {
-        toast.error(messages[result.errorKey]);
+        toast.error(resolveErrorMessage(t, messages, result.errorKey));
 
         return;
       }
@@ -60,7 +62,7 @@ export function useSignInVM(messages: SignInMessages) {
       try {
         await socialSignIn(provider);
       } catch {
-        toast.error(messages.errorGeneric);
+        toast.error(t('errorGeneric'));
       }
     });
   };
@@ -74,7 +76,7 @@ export function useSignInVM(messages: SignInMessages) {
       const result = await resendVerificationEmailAction({ email: unverifiedEmail });
 
       if (result.status === 'error') {
-        toast.error(messages[result.errorKey]);
+        toast.error(resolveErrorMessage(t, messages, result.errorKey));
 
         return;
       }

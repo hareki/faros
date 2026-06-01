@@ -40,10 +40,10 @@ BE config → flows → FE pages; the data model is dictated by Better Auth, so 
 - [x] [BE] `requireUser()` helper for server actions and `getUser()` for RSC reads
 - [x] [BE] Email verification flow (token write → email via Resend → confirm route)
 - [x] [BE] Password reset flow (request → email → reset form)
-- [ ] [FE] React Email templates for verification + reset
+- [x] [FE] React Email templates for verification + reset
 - [x] [FE] Comprehensive, scalable client form system
 - [x] [FE] Sign-in, sign-up (including email verification notice), and reset-password UI
-- [ ] [FE] Integrate OAuth/Sign In/Sign Up/Reset Password Flow
+- [x] [FE] Integrate OAuth/Sign In/Sign Up/Reset Password Flow
 
 ### E. App shell
 

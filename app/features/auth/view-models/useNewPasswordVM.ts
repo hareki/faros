@@ -9,8 +9,10 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { resetPasswordAction } from '@/app/features/auth/actions/resetPasswordAction';
+import { resolveErrorMessage } from '@/app/features/auth/utils/resolveMessage';
 import { useForm } from '@/app/lib/form/hooks/useForm';
 import { zPassword } from '@/app/lib/zod/schemas/primitive';
+import { passwordMessages } from '@/app/lib/zod/utils/validationMessages';
 
 type NewPasswordMessages = Messages['ClientAuthentication'] & Messages['ClientNewPassword'];
 
@@ -18,7 +20,7 @@ export function useNewPasswordVM(messages: NewPasswordMessages, token: string) {
   const t = useTranslations('GlobalValidation');
   const schema = z
     .object({
-      password: zPassword(t, messages.label),
+      password: zPassword(passwordMessages(t, messages.label)),
       confirmPassword: z.string().min(1, t('required', { object: messages.confirmLabel })),
     })
     .refine((values) => values.password === values.confirmPassword, {
@@ -38,7 +40,7 @@ export function useNewPasswordVM(messages: NewPasswordMessages, token: string) {
       const result = await resetPasswordAction({ token, newPassword: values.password });
 
       if (result.status === 'error') {
-        toast.error(messages[result.errorKey]);
+        toast.error(resolveErrorMessage(t, messages, result.errorKey));
 
         return;
       }

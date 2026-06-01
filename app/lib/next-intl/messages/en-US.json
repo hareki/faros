@@ -78,12 +78,15 @@
     "checkEmailSubtitle": "We just sent a verification link to {email}.",
     "resendEmail": "Resend email",
     "resendEmailSuccess": "Verification email sent.",
+
     "errorInvalidCredentials": "Invalid email or password.",
     "errorInvalidToken": "This reset link is invalid or has expired.",
-    "errorEmailInUse": "An account with this email already exists.",
-    "errorGeneric": "Something went wrong. Please try again."
+    "errorEmailInUse": "An account with this email already exists."
   },
   "GlobalValidation": {
+    "errorGeneric": "Something went wrong. Please try again.",
+    "errorValidation": "Validation failed.",
+
     "required": "Please enter {object}",
     "password": "At least {totalCharCount, plural, =1 {# character} other {# characters}} with {specialCharCount, plural, =1 {# special character} other {# special characters}}",
     "objectInvalid": "Invalid {object}",

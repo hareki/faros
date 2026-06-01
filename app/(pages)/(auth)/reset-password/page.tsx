@@ -28,11 +28,5 @@ export default async function ResetPassword({ searchParams }: ResetPasswordProps
   const t = await getTranslations('ForgotPassword');
   const messages = { ...allMessages.ClientAuthentication, ...allMessages.ClientForgotPassword };
 
-  return (
-    <ResetPasswordFormView
-      messages={messages}
-      title={t('title')}
-      subtitle={t('subtitle')}
-    />
-  );
+  return <ResetPasswordFormView messages={messages} title={t('title')} subtitle={t('subtitle')} />;
 }
