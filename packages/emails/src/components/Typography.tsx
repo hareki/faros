@@ -27,7 +27,7 @@ export function Heading({
   return (
     <HeadingPrimitive
       as={headingTags[level]}
-      className={cn(headingClasses[level], 'text-foreground', className)}
+      className={cn(headingClasses[level], 'm-0 text-foreground', className)}
       {...props}
     />
   );
@@ -35,12 +35,14 @@ export function Heading({
 
 // Mimics typography `P`.
 export function Text({ className, ...props }: ComponentProps<typeof TextPrimitive>) {
-  return <TextPrimitive className={cn('leading-7 text-foreground', className)} {...props} />;
+  return <TextPrimitive className={cn('m-0 leading-6 text-foreground', className)} {...props} />;
 }
 
 // Mimics typography `Muted`.
 export function Muted({ className, ...props }: ComponentProps<typeof TextPrimitive>) {
-  return <TextPrimitive className={cn('text-sm text-muted-foreground', className)} {...props} />;
+  return (
+    <TextPrimitive className={cn('m-0 text-sm text-muted-foreground', className)} {...props} />
+  );
 }
 
 // Mimics typography `Small`.
@@ -52,12 +54,17 @@ export function Small({ className, ...props }: ComponentProps<typeof TextPrimiti
 
 // Mimics typography `Lead`.
 export function Lead({ className, ...props }: ComponentProps<typeof TextPrimitive>) {
-  return <TextPrimitive className={cn('text-xl text-muted-foreground', className)} {...props} />;
+  return (
+    <TextPrimitive className={cn('m-0 text-xl text-muted-foreground', className)} {...props} />
+  );
 }
 
 // Mimics typography `Large`.
 export function Large({ className, ...props }: ComponentProps<typeof TextPrimitive>) {
   return (
-    <TextPrimitive className={cn('text-lg font-semibold text-foreground', className)} {...props} />
+    <TextPrimitive
+      className={cn('m-0 text-lg font-semibold text-foreground', className)}
+      {...props}
+    />
   );
 }
