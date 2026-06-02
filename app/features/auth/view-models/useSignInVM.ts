@@ -14,7 +14,7 @@ import { buildSignInSchema } from '@/app/features/auth/schemas/signIn';
 import { resolveErrorMessage } from '@/app/features/auth/utils/resolveMessage';
 import { type SupportedSocialProvider, socialSignIn } from '@/app/lib/better-auth/social';
 import { useForm } from '@/app/lib/form/hooks/useForm';
-import { emailMessages } from '@/app/lib/zod/utils/validationMessages';
+import { emailMessages } from '@/app/lib/zod/validationMessages';
 
 type SignInMessages = Messages['ClientAuthentication'] & Messages['ClientSignIn'];
 

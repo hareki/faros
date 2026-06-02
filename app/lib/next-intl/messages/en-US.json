@@ -2,6 +2,25 @@
   "Metadata": {
     "description": "Job Application Tracker"
   },
+  "GlobalValidation": {
+    "errorGeneric": "Something went wrong. Please try again.",
+    "errorValidation": "Validation failed.",
+
+    "required": "Please enter {object}",
+    "password": "At least {totalCharCount, plural, =1 {# character} other {# characters}} with {specialCharCount, plural, =1 {# special character} other {# special characters}}",
+    "objectInvalid": "Invalid {object}",
+    "min": {
+      "character": "At least {count, plural, =1 {# character} other {# characters}}."
+    },
+    "max": {
+      "character": "At most {count, plural, =1 {# character} other {# characters}}."
+    }
+  },
+  "GlobalErrorBoundary": {
+    "title": "Something went wrong",
+    "subtitle": "An unexpected error occurred. Please try again.",
+    "tryAgain": "Try again"
+  },
   "HomePage": {
     "title": "Hello world!",
     "toSignIn": "To Sign In Page"
@@ -82,19 +101,5 @@
     "errorInvalidCredentials": "Invalid email or password.",
     "errorInvalidToken": "This reset link is invalid or has expired.",
     "errorEmailInUse": "An account with this email already exists."
-  },
-  "GlobalValidation": {
-    "errorGeneric": "Something went wrong. Please try again.",
-    "errorValidation": "Validation failed.",
-
-    "required": "Please enter {object}",
-    "password": "At least {totalCharCount, plural, =1 {# character} other {# characters}} with {specialCharCount, plural, =1 {# special character} other {# special characters}}",
-    "objectInvalid": "Invalid {object}",
-    "min": {
-      "character": "At least {count, plural, =1 {# character} other {# characters}}."
-    },
-    "max": {
-      "character": "At most {count, plural, =1 {# character} other {# characters}}."
-    }
   }
 }

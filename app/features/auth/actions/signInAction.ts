@@ -5,14 +5,14 @@ import { headers } from 'next/headers';
 
 import { buildSignInSchema } from '@/app/features/auth/schemas/signIn';
 import { auth } from '@/app/lib/better-auth';
-import { createValidationPipe } from '@/app/lib/zod/utils/validationPipe';
+import { createServerAction } from '@/app/lib/next/createServerAction';
 
 import { type SignInResult } from './types';
 
 // Signs the user in with email + password. The `nextCookies()` plugin sets the session cookie on the response automatically.
-export const signInAction = createValidationPipe(
-  buildSignInSchema,
-  async ({ email, password }): Promise<SignInResult> => {
+export const signInAction = createServerAction({
+  schema: buildSignInSchema,
+  handler: async ({ email, password }): Promise<SignInResult> => {
     try {
       await auth.api.signInEmail({
         headers: await headers(),
@@ -31,7 +31,8 @@ export const signInAction = createValidationPipe(
         }
       }
 
-      return { status: 'error', errorKey: 'errorGeneric' };
+      // Unknown failure — let the wrapper log it and return errorGeneric.
+      throw error;
     }
   },
-);
+});

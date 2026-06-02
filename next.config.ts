@@ -1,4 +1,7 @@
-import './app/lib/t3-env';
+import './app/lib/t3-env/load-env';
+// Validate env variables at buildtime
+import './app/lib/t3-env/client';
+import './app/lib/t3-env/server';
 
 import { type NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';

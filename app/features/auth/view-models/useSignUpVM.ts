@@ -13,7 +13,7 @@ import { buildSignUpSchema } from '@/app/features/auth/schemas/signUp';
 import { resolveErrorMessage } from '@/app/features/auth/utils/resolveMessage';
 import { type SupportedSocialProvider, socialSignIn } from '@/app/lib/better-auth/social';
 import { useForm } from '@/app/lib/form/hooks/useForm';
-import { emailMessages, passwordMessages } from '@/app/lib/zod/utils/validationMessages';
+import { emailMessages, passwordMessages } from '@/app/lib/zod/validationMessages';
 
 type SignUpMessages = Messages['ClientAuthentication'] & Messages['ClientSignUp'];
 

@@ -12,7 +12,7 @@ import { requestPasswordResetAction } from '@/app/features/auth/actions/requestP
 import { resolveErrorMessage } from '@/app/features/auth/utils/resolveMessage';
 import { useForm } from '@/app/lib/form/hooks/useForm';
 import { zEmail } from '@/app/lib/zod/schemas/primitive';
-import { emailMessages } from '@/app/lib/zod/utils/validationMessages';
+import { emailMessages } from '@/app/lib/zod/validationMessages';
 
 type ResetPasswordMessages = Messages['ClientAuthentication'] & Messages['ClientForgotPassword'];
 

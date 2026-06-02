@@ -1,7 +1,7 @@
 import { type useTranslations } from 'next-intl';
 
-import { MIN_PASSWORD_LENGTH } from '../constants';
-import { type ValidationMessages } from '../schemas/primitive';
+import { MIN_PASSWORD_LENGTH } from './constants';
+import { type ValidationMessages } from './schemas/primitive';
 
 type GlobalValidationTranslator = ReturnType<typeof useTranslations<'GlobalValidation'>>;
 

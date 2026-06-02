@@ -5,13 +5,13 @@ import { nextCookies } from 'better-auth/next-js';
 import { db } from '@/app/db/client';
 import * as schema from '@/app/db/schema';
 import { sendResetPasswordEmail, sendVerificationEmail } from '@/app/features/auth/utils/email';
-import { env } from '@/app/lib/t3-env';
+import { serverEnv } from '@/app/lib/t3-env/server';
 
 import { MIN_PASSWORD_LENGTH } from '../zod/constants';
 
 export const auth = betterAuth({
-  baseURL: env.BETTER_AUTH_URL,
-  secret: env.BETTER_AUTH_SECRET,
+  baseURL: serverEnv.BETTER_AUTH_URL,
+  secret: serverEnv.BETTER_AUTH_SECRET,
   // https://better-auth.com/docs/adapters/drizzle#using-plural-table-names
   database: drizzleAdapter(db, { provider: 'pg', schema, usePlural: true }),
   // Let Postgres generate ids via gen_random_uuid() (our uuid PK defaults).
@@ -35,12 +35,12 @@ export const auth = betterAuth({
   },
   socialProviders: {
     google: {
-      clientId: env.GOOGLE_CLIENT_ID,
-      clientSecret: env.GOOGLE_CLIENT_SECRET,
+      clientId: serverEnv.GOOGLE_CLIENT_ID,
+      clientSecret: serverEnv.GOOGLE_CLIENT_SECRET,
     },
     github: {
-      clientId: env.GITHUB_CLIENT_ID,
-      clientSecret: env.GITHUB_CLIENT_SECRET,
+      clientId: serverEnv.GITHUB_CLIENT_ID,
+      clientSecret: serverEnv.GITHUB_CLIENT_SECRET,
     },
   },
   session: {

@@ -13,9 +13,9 @@ import { cn } from '@/app/lib/tailwind/utils';
 import Toaster from './components/ui/Sonner';
 import { rubik } from './fonts';
 import GlobalClientProvider from './lib/next-intl/components/GlobalClientProvider';
-import { env } from './lib/t3-env';
+import { serverEnv } from './lib/t3-env/server';
 
-import '../styles/globals.css';
+import './styles/globals.css';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('Metadata');
@@ -45,7 +45,7 @@ async function InnerRootLayout({ children }: RootLayoutProps) {
       suppressHydrationWarning
     >
       <head>
-        {env.STAGE === 'development' && (
+        {serverEnv.STAGE === 'development' && (
           <Script
             src='//unpkg.com/react-scan/dist/auto.global.js'
             crossOrigin='anonymous'

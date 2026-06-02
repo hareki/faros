@@ -2,10 +2,7 @@
   "mcpServers": {
     "next-devtools": {
       "command": "npx",
-      "args": [
-        "-y",
-        "next-devtools-mcp@latest"
-      ]
+      "args": ["-y", "next-devtools-mcp@latest"]
     },
     "better-auth": {
       "type": "http",
@@ -14,10 +11,7 @@
     "codegraph": {
       "type": "stdio",
       "command": "codegraph",
-      "args": [
-        "serve",
-        "--mcp"
-      ]
+      "args": ["serve", "--mcp"]
     }
   }
 }

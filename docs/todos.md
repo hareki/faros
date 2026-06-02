@@ -44,6 +44,7 @@ BE config → flows → FE pages; the data model is dictated by Better Auth, so 
 - [x] [FE] Comprehensive, scalable client form system
 - [x] [FE] Sign-in, sign-up (including email verification notice), and reset-password UI
 - [x] [FE] Integrate OAuth/Sign In/Sign Up/Reset Password Flow
+- [x] [FE/BE] Logger Service
 
 ### E. App shell
 

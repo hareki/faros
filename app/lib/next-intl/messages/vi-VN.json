@@ -2,6 +2,20 @@
   "Metadata": {
     "description": "Công cụ Theo dõi Xin việc"
   },
+  "GlobalValidation": {
+    "errorGeneric": "Đã có lỗi xảy ra. Vui lòng thử lại.",
+    "errorValidation": "Xác thực không thành công.",
+
+    "required": "Vui lòng nhập {object}",
+    "password": "Ít nhất {totalCharCount, plural, other {# ký tự}} với {specialCharCount, plural, other {# ký tự đặc biệt}}",
+    "objectInvalid": "{object} không hợp lệ",
+    "min": {
+      "character": "Tối thiểu {count, plural, other {# ký tự}}."
+    },
+    "max": {
+      "character": "Tối đa {count, plural, other {# ký tự}}."
+    }
+  },
   "HomePage": {
     "title": "Xin chào thế giới!",
     "toSignIn": "Đến trang Đăng nhập"
@@ -82,19 +96,5 @@
     "errorInvalidCredentials": "Email hoặc mật khẩu không đúng.",
     "errorInvalidToken": "Liên kết đặt lại này không hợp lệ hoặc đã hết hạn.",
     "errorEmailInUse": "Đã tồn tại tài khoản với email này."
-  },
-  "GlobalValidation": {
-    "errorGeneric": "Đã có lỗi xảy ra. Vui lòng thử lại.",
-    "errorValidation": "Xác thực không thành công.",
-
-    "required": "Vui lòng nhập {object}",
-    "password": "Ít nhất {totalCharCount, plural, other {# ký tự}} với {specialCharCount, plural, other {# ký tự đặc biệt}}",
-    "objectInvalid": "{object} không hợp lệ",
-    "min": {
-      "character": "Tối thiểu {count, plural, other {# ký tự}}."
-    },
-    "max": {
-      "character": "Tối đa {count, plural, other {# ký tự}}."
-    }
   }
 }

@@ -9,7 +9,12 @@ export default async function GlobalClientProvider({ children }: GlobalClientPro
   const messages = await getMessages();
 
   return (
-    <NextIntlClientProvider messages={{ GlobalValidation: messages.GlobalValidation }}>
+    <NextIntlClientProvider
+      messages={{
+        GlobalValidation: messages.GlobalValidation,
+        GlobalErrorBoundary: messages.GlobalErrorBoundary,
+      }}
+    >
       {children}
     </NextIntlClientProvider>
   );
