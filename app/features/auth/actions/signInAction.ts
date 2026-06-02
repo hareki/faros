@@ -3,35 +3,35 @@
 import { APIError } from 'better-auth/api';
 import { headers } from 'next/headers';
 
+import { buildSignInSchema } from '@/app/features/auth/schemas/signIn';
 import { auth } from '@/app/lib/better-auth';
+import { createValidationPipe } from '@/app/lib/zod/utils/validationPipe';
 
 import { type SignInResult } from './types';
 
-type SignInInput = {
-  email: string;
-  password: string;
-};
-
 // Signs the user in with email + password. The `nextCookies()` plugin sets the session cookie on the response automatically.
-export async function signInAction({ email, password }: SignInInput): Promise<SignInResult> {
-  try {
-    await auth.api.signInEmail({
-      headers: await headers(),
-      body: { email, password },
-    });
+export const signInAction = createValidationPipe(
+  buildSignInSchema,
+  async ({ email, password }): Promise<SignInResult> => {
+    try {
+      await auth.api.signInEmail({
+        headers: await headers(),
+        body: { email, password },
+      });
 
-    return { status: 'success' };
-  } catch (error) {
-    if (error instanceof APIError) {
-      if (error.body?.code === 'EMAIL_NOT_VERIFIED') {
-        return { status: 'needs-verification' };
+      return { status: 'success' };
+    } catch (error) {
+      if (error instanceof APIError) {
+        if (error.body?.code === 'EMAIL_NOT_VERIFIED') {
+          return { status: 'needs-verification' };
+        }
+
+        if (error.body?.code === 'INVALID_EMAIL_OR_PASSWORD') {
+          return { status: 'error', errorKey: 'errorInvalidCredentials' };
+        }
       }
 
-      if (error.body?.code === 'INVALID_EMAIL_OR_PASSWORD') {
-        return { status: 'error', errorKey: 'errorInvalidCredentials' };
-      }
+      return { status: 'error', errorKey: 'errorGeneric' };
     }
-
-    return { status: 'error', errorKey: 'errorGeneric' };
-  }
-}
+  },
+);
