@@ -16,9 +16,10 @@
       "character": "Tối đa {count, plural, other {# ký tự}}."
     }
   },
-  "HomePage": {
-    "title": "Xin chào thế giới!",
-    "toSignIn": "Đến trang Đăng nhập"
+  "Landing Page": {
+    "title": "Trang Đích (Luôn truy cập được)",
+    "toSignIn": "Đến trang Đăng nhập",
+    "toDashboard": "Đến bảng điều khiển"
   },
   "SignIn": {
     "title": "Đăng nhập vào Faros",
@@ -78,6 +79,13 @@
       "body": "Chúng tôi đã nhận được yêu cầu đặt lại mật khẩu Faros của bạn. Nhấp vào nút bên dưới để chọn mật khẩu mới.",
       "cta": "Đặt lại mật khẩu",
       "expiryNote": "Liên kết này sẽ hết hạn sau 1 giờ. Nếu bạn không yêu cầu đặt lại mật khẩu, bạn có thể bỏ qua email này một cách an toàn."
+    },
+    "existing": {
+      "subject": "Có người thử đăng nhập bằng email của bạn",
+      "preview": "Có người đã thử đăng ký bằng email Faros của bạn",
+      "heading": "Bạn đã có một tài khoản",
+      "body": "Vừa có người thử tạo tài khoản Faros bằng email này. Nếu đó là bạn, hãy đăng nhập. Nếu không, bạn có thể bỏ qua email này một cách an toàn.",
+      "cta": "Đến trang đăng nhập"
     }
   },
   "ClientAuthentication": {
@@ -94,7 +102,6 @@
     "resendEmailSuccess": "Đã gửi email xác minh.",
 
     "errorInvalidCredentials": "Email hoặc mật khẩu không đúng.",
-    "errorInvalidToken": "Liên kết đặt lại này không hợp lệ hoặc đã hết hạn.",
-    "errorEmailInUse": "Đã tồn tại tài khoản với email này."
+    "errorInvalidToken": "Liên kết đặt lại này không hợp lệ hoặc đã hết hạn."
   }
 }

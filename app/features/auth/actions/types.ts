@@ -4,7 +4,7 @@ import { type ActionResult } from '@/app/types/common';
 
 export type AuthErrorKey = Extract<
   keyof Messages['ClientAuthentication'],
-  'errorInvalidCredentials' | 'errorInvalidToken' | 'errorEmailInUse'
+  'errorInvalidCredentials' | 'errorInvalidToken'
 >;
 
 export type AuthActionResult = ActionResult<AuthErrorKey>;

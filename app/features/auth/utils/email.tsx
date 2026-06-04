@@ -1,9 +1,9 @@
-import 'server-only';
-import { ResetPasswordEmail, VerifyEmail } from '@faros/emails';
+import { ExistingAccountEmail, ResetPasswordEmail, VerifyEmail } from '@faros/emails';
 import { getTranslations } from 'next-intl/server';
 
 import { getUserLocale } from '@/app/lib/next-intl/locale';
 import { sendEmail } from '@/app/lib/resend';
+import { serverEnv } from '@/app/lib/t3-env/server';
 
 type SendParams = {
   to: string;
@@ -47,6 +47,27 @@ export async function sendResetPasswordEmail({ to, url }: SendParams) {
         fallback={t('common.fallback')}
         footer={t('common.footer')}
         url={url}
+      />
+    ),
+  });
+}
+
+export async function sendExistingAccountEmail({ to }: { to: string }) {
+  const locale = await getUserLocale();
+  const t = await getTranslations({ locale, namespace: 'Email' });
+
+  await sendEmail({
+    to,
+    subject: t('existing.subject'),
+    react: (
+      <ExistingAccountEmail
+        previewText={t('existing.preview')}
+        heading={t('existing.heading')}
+        body={t('existing.body')}
+        cta={t('existing.cta')}
+        fallback={t('common.fallback')}
+        footer={t('common.footer')}
+        url={`${serverEnv.BETTER_AUTH_URL}/sign-in`}
       />
     ),
   });

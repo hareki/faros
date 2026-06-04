@@ -21,9 +21,10 @@
     "subtitle": "An unexpected error occurred. Please try again.",
     "tryAgain": "Try again"
   },
-  "HomePage": {
-    "title": "Hello world!",
-    "toSignIn": "To Sign In Page"
+  "LandingPage": {
+    "title": "Landing Page (Always accessible)",
+    "toSignIn": "To Sign In Page",
+    "toDashboard": "To Dashboard Page"
   },
   "SignIn": {
     "title": "Log in to Faros",
@@ -83,6 +84,13 @@
       "body": "We received a request to reset your Faros password. Click the button below to choose a new one.",
       "cta": "Reset password",
       "expiryNote": "This link will expire in 1 hour. If you didn't request a password reset, you can safely ignore this email."
+    },
+    "existing": {
+      "subject": "Sign-in attempt with your email",
+      "preview": "Someone tried to sign up with your Faros email",
+      "heading": "You already have an account",
+      "body": "Someone just tried to create a Faros account with this email. If that was you, simply sign in. If not, you can safely ignore this email.",
+      "cta": "Go to sign in"
     }
   },
   "ClientAuthentication": {
@@ -99,7 +107,6 @@
     "resendEmailSuccess": "Verification email sent.",
 
     "errorInvalidCredentials": "Invalid email or password.",
-    "errorInvalidToken": "This reset link is invalid or has expired.",
-    "errorEmailInUse": "An account with this email already exists."
+    "errorInvalidToken": "This reset link is invalid or has expired."
   }
 }
