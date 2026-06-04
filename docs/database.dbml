@@ -65,7 +65,12 @@ Table users {
 //                   account_id  = provider's stable user id,
 //                   password    = NULL,
 //                   access_token / refresh_token / id_token / scope set
-// A single user can have multiple rows (linked Google + GitHub + credential).
+// A single user can have multiple rows (linked Google + GitHub + credential):
+// one account per email. Linking is by VERIFIED email — signing in with a
+// provider whose verified email matches an existing user adds a row to that
+// user instead of creating a second user. Verified-email only (no forced
+// trusted-provider linking). Configured via account.accountLinking in
+// app/lib/better-auth.
 Table accounts {
   id uuid [pk, default: `gen_random_uuid()`]
   user_id uuid [ref: > users.id, not null, note: 'ON DELETE CASCADE']
@@ -189,16 +194,26 @@ Enum working_model {
 }
 
 // User-configurable sub-stages (HR screen, tech screen, onsite, etc.)
+// Only the 'active' and 'final_stages' board stages have sub-stages. 'applied' is a
+// single waiting state and 'closed' is sub-classified by closed_outcome, so the
+// sub-stage CRUD UI offers only those two stages. (Enforced in app code; the enum
+// itself still permits any board_stage value.)
+//
+// The (id, stage) unique index below exists solely to back the composite FK from
+// applications(sub_stage_id, stage) -> sub_stages(id, stage), which guarantees a
+// card's sub-stage always belongs to the card's current board stage. See ADR-0001.
 Table sub_stages {
   id uuid [pk]
   user_id uuid [ref: > users.id, not null]
   name varchar [not null]
-  stage board_stage [not null, note: 'which board stage this sub-stage belongs to']
+  stage board_stage [not null, note: 'which board stage this sub-stage belongs to; only active | final_stages in practice']
   sort_order int [not null, default: 0]
   created_at timestamptz [not null, default: `now()`]
 
   indexes {
     (user_id, stage, name) [unique]
+    // Target of the composite FK on applications; enables (sub_stage_id, stage) matching.
+    (id, stage) [unique]
   }
 }
 
@@ -208,9 +223,15 @@ Table applications {
   company varchar [not null]
   role varchar [not null]
 
-  // Board position
+  // Board position.
+  // Integrity: a composite FK (sub_stage_id, stage) -> sub_stages(id, stage) forces the
+  // chosen sub-stage to belong to the current board stage. sub_stage_id is nullable, so
+  // under MATCH SIMPLE the FK is unchecked when it is NULL ("no sub-stage" is always
+  // legal). A stage move sets sub_stage_id = NULL; the user re-picks. See ADR-0001.
+  //   In raw SQL:
+  //   FOREIGN KEY (sub_stage_id, stage) REFERENCES sub_stages (id, stage)
   stage board_stage [not null, default: 'applied']
-  sub_stage_id uuid [ref: > sub_stages.id]
+  sub_stage_id uuid [ref: > sub_stages.id, note: 'part of composite FK with stage; cleared on stage move']
 
   // Optional metadata (all nullable on purpose)
   source application_source
@@ -291,6 +312,10 @@ Table resumes {
   file_size_bytes bigint
   mime_type varchar
   created_at timestamptz [not null, default: `now()`]
+  // Soft delete: deleting a library resume drops it from the picker but keeps the row
+  // and the applications.resume_id linkage so retro resume-performance attribution
+  // survives. The Blob object may be purged; this metadata row persists. See ADR-0003.
+  deleted_at timestamptz
 
   indexes {
     (user_id, scope)
@@ -345,11 +370,12 @@ Enum activity_type {
   stage_change
   sub_stage_change
   note_added
-  response_received
+  response_received // auto on first advance out of Applied or close-as-rejected; manual fallback. Never for ghosted.
   event_scheduled
   event_completed
   event_cancelled
   resume_changed
+  offer_received    // auto when an offer_deadline event is created or on close-as-accepted (backfill); manual too. Funnel "offer" node.
   closed
 }
 

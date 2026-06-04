@@ -29,6 +29,10 @@ Build-order roadmap derived from `high-level-design.md`, `database.dbml`, and `t
   - `CHECK` on `applications` enforcing `closed_outcome` and `closed_at` set iff `stage = 'closed'`
 - [x] [BE] Dev seed script (one user, one active job_hunt, a handful of apps across stages, sample resumes/events)
 - [x] [BE] Drizzle schemas with `drizzle-zod` for `applications`, `sub_stages`, `tags`, `application_tags`
+- [ ] [BE] Domain-hardening schema amendments (from grill session; see `CONTEXT.md` + `docs/adr/`):
+  - Composite `UNIQUE(id, stage)` on `sub_stages` + composite FK `applications(sub_stage_id, stage) → sub_stages(id, stage)` (ADR-0001)
+  - Add `offer_received` to the `activity_type` enum
+  - Add `deleted_at` to `resumes` (soft delete, ADR-0003)
 
 ### D. Auth
 
@@ -52,7 +56,7 @@ BE config → flows → FE pages; the data model is dictated by Better Auth, so 
 
 ### F. Shared primitives (the flexible base features reuse)
 
-- [ ] [BE] `logActivity()` helper — writes typed `activity_log` rows with `metadata` diff; invoked by every mutation
+- [ ] [BE] `logActivity()` helper — writes typed `activity_log` rows with `metadata` diff; invoked by every mutation. Activity log is the single source of truth for analytics (ADR-0002), so this is load-bearing. Must auto-write `response_received` (first advance out of Applied or close-as-rejected; never ghosted) and `offer_received` (offer_deadline event created or close-as-accepted; backfill), plus stamp `stage_change` for funnel milestones.
 - [ ] [BE] Server-action result convention — typed success/error envelope consumable by RHF + toasts
 - [ ] [FE] Form primitive: RHF + Zod resolver wiring + shared field components
 - [ ] [FE] Toast convention: Sonner helper hook around the server-action result envelope

@@ -14,6 +14,10 @@ The app's **primary lens is workflow driver**: it surfaces what the user needs t
 - Only **one hunt active at a time**.
 - Manually started and ended by the user. No automation around hunt lifecycle.
 - **Read-only after ending**, with an "unarchive" escape hatch for corrections.
+  Unarchive unlocks in-place editing of an ended hunt; it does **not** change status
+  back to active, so the single active-hunt slot is untouched and corrections never
+  require ending the live hunt. Read-only-after-ending is a soft, owner-toggleable
+  default, not a hard lock.
 - Each ended hunt has a Retro view.
 
 ### Application
@@ -41,7 +45,16 @@ The app's **primary lens is workflow driver**: it surfaces what the user needs t
 
 - Records what happened (status change, note added, response received).
 - Timestamped, optionally annotated.
-- Powers analytics and the retro view.
+- **Single source of truth** for analytics, the dashboard summary, and the notification
+  condition engine. No denormalized milestone columns — milestones are derived from the
+  log (see [ADR-0002](adr/0002-activity-log-single-source-of-truth.md)).
+- Two signals are load-bearing for the funnel and notifications:
+  - `response_received` — auto-logged once the first time an application advances out of
+    Applied (→ Active/Final) or is closed as `rejected`; never for `ghosted`. A manual
+    "log a response" action covers a recruiter acknowledgement while still in Applied.
+    The 14-day idle/ghost clock and source/resume response-rate read this.
+  - `offer_received` — auto-logged when an `offer_deadline` event is created or when
+    closing as `accepted` (backfilled if missing); also settable manually.
 
 ## Screens
 
@@ -58,13 +71,26 @@ Fixed, **action-oriented** columns:
 - **Applied**: waiting on them.
 - **Active**: actively interviewing (any sub-stage).
 - **Final Stages**: offer pending, post-onsite waiting.
-- **Closed**: rejected, withdrawn, or accepted.
+- **Closed**: rejected, withdrawn, accepted, or ghosted.
+
+`ghosted` is a terminal `closed_outcome` the **user** sets when closing an application
+that never received a response. The system never auto-closes: the "possibly ghosted
+after 14 days" notification only nudges; the user decides whether to close as ghosted or
+keep waiting. By definition a ghosted application has no recorded response.
+
+Sub-stages exist only for **Active** and **Final Stages**. **Applied** is a single
+waiting state and **Closed** is sub-classified by its outcome, so neither offers
+sub-stages. Moving a card between columns clears its sub-stage.
 
 Each card has a **configurable sub-stage tag** (HR screen, tech screen, onsite, etc.) indicating exact pipeline position within the column. Cards can also have additional tags/labels for filtering (frontend, remote, startup, etc.).
 
 ### Retro View (per ended hunt)
 
-- **Funnel**: Applied → first response → first interview → final round → offer. Both counts and conversion rates.
+- **Funnel**: Applied → first response → first interview → final round → offer. Both counts and conversion rates. Each milestone is derived from the activity log and events, never from current board state alone:
+  - _first response_ → earliest `response_received` activity.
+  - _first interview_ → earliest interview-type event (`hr_screen`/`tech_screen`/`onsite`) by `scheduled_at`; counts the invite even if later cancelled.
+  - _final round_ → first `stage_change` into `final_stages`.
+  - _offer received_ → earliest `offer_received` activity (offers received ≥ accepted, since declined/expired offers still count).
 - **Time stats**: median days to first response, apply-to-offer, total hunt length.
 - **Source breakdown**: response rate by source (LinkedIn, referral, direct, recruiter outreach).
 - **Resume performance**: response rate per library resume. One-offs bucketed as "Custom" since sample size of 1 is noise.
@@ -103,10 +129,15 @@ Two front doors, one engine room.
 
 - Email + password sign in/sign up.
 - OAuth providers: Google, GitHub.
+- **One account per email.** An email is a single user; password, Google, and GitHub are just different credentials on that one account — never separate accounts for the same address.
+- **Adding a sign-in method:**
+  - Provider → existing email: linked automatically on first sign-in when the provider reports the email as verified (Google and GitHub both do). Verified-email only — no forced/trusted-provider linking.
+  - Password → OAuth-only account: the user runs the "Forgot password" flow to set a password (which creates the credential method). Plain email/password sign-up of an already-registered email is rejected as "email in use".
+- **Planned (post-v1):** a logged-in **Connected-accounts** view to link/unlink Google & GitHub and set a password, backed by Better Auth's `linkSocial` / `unlinkAccount` / `listAccounts` / `setPassword`.
 
 ## V1 Feature Set
 
-- Auth (email + OAuth).
+- Auth (email + OAuth); one account per email, providers auto-linked by verified email.
 - Job Hunt CRUD; one active at a time.
 - Application CRUD with minimal required fields and optional metadata.
 - Kanban board with fixed columns + configurable sub-stage tags.
@@ -128,6 +159,7 @@ Two front doors, one engine room.
 - **Mobile-native app**.
 - **Multi-user / sharing**.
 - File attachments beyond resumes (e.g., cover letter library).
+- **Connected-accounts UI**: logged-in view to link/unlink OAuth providers and set a password. Linking by verified email already works at sign-in; this is the self-service management surface.
 
 ## Open / TBD (next design phases)
 
