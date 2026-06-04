@@ -1,3 +1,5 @@
+import '@/app/lib/t3-env/load-env';
+
 import { stdin as input, stdout as output } from 'node:process';
 import readline from 'node:readline/promises';
 
