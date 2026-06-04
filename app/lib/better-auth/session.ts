@@ -23,3 +23,11 @@ export async function requireUser() {
 
   return user;
 }
+
+export async function requireGuest() {
+  const user = await getUser();
+
+  if (user) {
+    redirect('/dashboard');
+  }
+}

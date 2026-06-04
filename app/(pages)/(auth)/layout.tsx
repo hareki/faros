@@ -1,6 +1,10 @@
 import { type PropsWithChildren } from 'react';
 
-export default function AuthLayout({ children }: PropsWithChildren) {
+import { requireGuest } from '@/app/lib/better-auth/session';
+
+export default async function AuthLayout({ children }: PropsWithChildren) {
+  await requireGuest();
+
   return (
     <div className='flex-center size-screen'>
       <main className='relative flex w-full justify-center px-4'>{children}</main>
