@@ -1,7 +1,7 @@
 # Faros
 
-Faros is a job-application tracker whose primary lens is *workflow driver* (surface
-what to act on next) and whose secondary lens is *self-improvement* (use past-hunt data
+Faros is a job-application tracker whose primary lens is _workflow driver_ (surface
+what to act on next) and whose secondary lens is _self-improvement_ (use past-hunt data
 to refine the next hunt). This glossary fixes the language used across the codebase and
 docs. It is a glossary only — no implementation detail.
 
@@ -42,7 +42,7 @@ the user, never by the system.
 _Avoid_: Result, status, disposition.
 
 **Active** (disambiguation):
-Two distinct senses — the *Active* board Stage (interviewing) and an *active* Job Hunt
+Two distinct senses — the _Active_ board Stage (interviewing) and an _active_ Job Hunt
 (the one open session). Always qualify which is meant.
 
 ## Resumes
