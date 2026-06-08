@@ -62,8 +62,10 @@ export const accounts = pgTable(
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
+    // hot path: listAccounts for a user + ON DELETE CASCADE lookups when a user is removed.
     index('accounts_user_id_idx').on(table.userId),
-    // Same provider identity cannot be linked to two different users.
+    // hot path: sign-in lookup of an identity by (provider, account_id). Also enforces that
+    // the same provider identity cannot be linked to two different users.
     uniqueIndex('accounts_provider_account_unique').on(table.providerId, table.accountId),
   ],
 );
@@ -84,19 +86,27 @@ export const sessions = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
+  // hot path: "revoke all sessions for a user" + list-sessions, and ON DELETE CASCADE
+  // lookups when a user is removed.
   (table) => [index('sessions_user_id_idx').on(table.userId)],
 );
 
 // Email verification, password reset, magic links. These tokens MUST
 // persist server-side; they cannot live in cookies. Better Auth
 // writes/reads this; app code does not touch it directly.
-export const verifications = pgTable('verifications', {
-  id: uuid().primaryKey().defaultRandom(),
-  // email or other identifier being verified
-  identifier: varchar().notNull(),
-  // token / code
-  value: varchar().notNull(),
-  expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
-});
+export const verifications = pgTable(
+  'verifications',
+  {
+    id: uuid().primaryKey().defaultRandom(),
+    // email or other identifier being verified
+    identifier: varchar().notNull(),
+    // token / code
+    value: varchar().notNull(),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  // hot path: Better Auth resolves an email-verification / password-reset token by
+  // `identifier` on every confirm; without this the short-lived table is seq-scanned.
+  (table) => [index('verifications_identifier_idx').on(table.identifier)],
+);

@@ -1,0 +1,2 @@
+CREATE INDEX "application_tags_tag_id_idx" ON "application_tags" USING btree ("tag_id");--> statement-breakpoint
+CREATE INDEX "verifications_identifier_idx" ON "verifications" USING btree ("identifier");

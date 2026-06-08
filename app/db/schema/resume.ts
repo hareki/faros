@@ -49,7 +49,11 @@ export const resumes = pgTable(
     deletedAt: timestamp('deleted_at', { withTimezone: true }),
   },
   (table) => [
+    // hot path: resume-library list — a user's library-scope resumes for the picker
+    // (WHERE user_id AND scope='library').
     index('resumes_user_scope_idx').on(table.userId, table.scope),
+    // hot path: one-off resumes scoped to an application + ON DELETE CASCADE when the
+    // application is removed.
     index('resumes_application_id_idx').on(table.applicationId),
     check(
       'resumes_scope_app_id',

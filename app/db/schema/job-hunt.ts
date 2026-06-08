@@ -21,6 +21,10 @@ export const jobHunts = pgTable(
   },
   (table) => [
     // Partial unique index enforces "one active job_hunt per user".
+    // hot path: doubles as the lookup for "get this user's active hunt" — the read behind
+    // the dashboard, board, and every shell load. No plain (user_id) index: the hunt
+    // switcher lists all of a user's hunts, but that set is tiny (a handful per user), so
+    // a seq scan is cheaper than carrying a second index.
     uniqueIndex('one_active_job_hunt_per_user')
       .on(table.userId)
       .where(sql`${table.status} = 'active'`),

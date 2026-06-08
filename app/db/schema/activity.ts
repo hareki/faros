@@ -32,6 +32,8 @@ export const activityLog = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
+    // hot path: an application's activity timeline ordered by time, and the funnel/analytics
+    // scan that derives milestones from the log (ADR-0002).
     index('activity_log_application_occurred_idx').on(table.applicationId, table.occurredAt),
   ],
 );

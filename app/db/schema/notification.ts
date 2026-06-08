@@ -49,6 +49,10 @@ export const notificationRules = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
+  // hot path: the engine fetches a user's rules filtered by kind (condition vs time_based)
+  // when evaluating each stream; also serves the settings rule list. `kind` is low-
+  // cardinality, so it buys little over a plain (user_id) index — kept for the engine's
+  // per-kind fetch, cheap to revisit if it never materializes.
   (table) => [index('notification_rules_user_kind_idx').on(table.userId, table.kind)],
 );
 
@@ -80,7 +84,11 @@ export const notifications = pgTable(
     readAt: timestamp('read_at', { withTimezone: true }),
   },
   (table) => [
+    // hot path: the in-app notifications feed and unread badge count
+    // (WHERE user_id AND status ORDER BY created_at).
     index('notifications_user_status_created_idx').on(table.userId, table.status, table.createdAt),
+    // hot path: the engine's upsert/no-op on re-fire keyed by (user_id, dedup_key) so a
+    // rule doesn't surface the same logical notification twice.
     uniqueIndex('notifications_user_dedup_key_unique').on(table.userId, table.dedupKey),
   ],
 );

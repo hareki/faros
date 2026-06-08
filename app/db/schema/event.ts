@@ -44,7 +44,13 @@ export const events = pgTable(
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
+    // hot path: events list in the application drawer + ON DELETE CASCADE when the
+    // application is removed.
     index('events_application_id_idx').on(table.applicationId),
+    // hot path: the global time-based reminder cron — "events scheduled in the next N days
+    // across all users". This serves the engine scan, NOT the hunt-scoped dashboard
+    // upcoming-events read (which filters via the application join); don't drop it on the
+    // assumption that the dashboard is its only reader.
     index('events_scheduled_at_idx').on(table.scheduledAt),
   ],
 );

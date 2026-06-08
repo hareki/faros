@@ -53,6 +53,8 @@ export const subStages = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
+    // hot path: settings "list a user's sub-stages" (leftmost user_id) + dedupes sub-stage
+    // names within a stage per user.
     uniqueIndex('sub_stages_user_stage_name_unique').on(table.userId, table.stage, table.name),
     // Target for the composite FK from applications(sub_stage_id, stage) — id alone is
     // already unique, but the FK must reference an exact unique constraint on (id, stage).
@@ -101,7 +103,10 @@ export const applications = pgTable(
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
+    // hot path: THE board query — fetch a hunt's applications grouped/filtered by Stage column.
     index('applications_job_hunt_stage_idx').on(table.jobHuntId, table.stage),
+    // hot path: ON DELETE SET NULL target lookup when a sub-stage is deleted (avoids
+    // scanning applications) + board "filter by sub-stage".
     index('applications_sub_stage_id_idx').on(table.subStageId),
     // Integrity FK (ADR-0001): a card's sub-stage must belong to its own stage. The
     // inline single-column FK above keeps onDelete='set null'; this one is NO ACTION and,
@@ -132,6 +137,7 @@ export const tags = pgTable(
     color: varchar(),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
+  // hot path: settings "list a user's tags" (leftmost user_id) + dedupes tag names per user.
   (table) => [uniqueIndex('tags_user_name_unique').on(table.userId, table.name)],
 );
 
@@ -145,5 +151,11 @@ export const applicationTags = pgTable(
       .notNull()
       .references(() => tags.id, { onDelete: 'cascade' }),
   },
-  (table) => [primaryKey({ columns: [table.applicationId, table.tagId] })],
+  (table) => [
+    // hot path: "tags for an application" (leftmost application_id) + join-row uniqueness.
+    primaryKey({ columns: [table.applicationId, table.tagId] }),
+    // hot path: the reverse direction the PK can't serve — board "filter by tag X"
+    // (tag_id → applications) and ON DELETE CASCADE lookups when a tag is deleted.
+    index('application_tags_tag_id_idx').on(table.tagId),
+  ],
 );
