@@ -8,6 +8,7 @@ export const activityType = pgEnum('activity_type', [
   'sub_stage_change',
   'note_added',
   'response_received',
+  'offer_received',
   'event_scheduled',
   'event_completed',
   'event_cancelled',

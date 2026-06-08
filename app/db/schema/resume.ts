@@ -44,6 +44,9 @@ export const resumes = pgTable(
     fileSizeBytes: bigint('file_size_bytes', { mode: 'number' }),
     mimeType: varchar('mime_type'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    // Soft delete (ADR-0003): NULL = live. Deleting a library resume removes it from the
+    // picker but keeps the row so applications.resume_id attribution survives.
+    deletedAt: timestamp('deleted_at', { withTimezone: true }),
   },
   (table) => [
     index('resumes_user_scope_idx').on(table.userId, table.scope),

@@ -2,6 +2,7 @@ import { sql } from 'drizzle-orm';
 import {
   type AnyPgColumn,
   check,
+  foreignKey,
   index,
   integer,
   pgEnum,
@@ -9,6 +10,7 @@ import {
   primaryKey,
   text,
   timestamp,
+  unique,
   uniqueIndex,
   uuid,
   varchar,
@@ -52,6 +54,9 @@ export const subStages = pgTable(
   },
   (table) => [
     uniqueIndex('sub_stages_user_stage_name_unique').on(table.userId, table.stage, table.name),
+    // Target for the composite FK from applications(sub_stage_id, stage) — id alone is
+    // already unique, but the FK must reference an exact unique constraint on (id, stage).
+    unique('sub_stages_id_stage_unique').on(table.id, table.stage),
   ],
 );
 
@@ -98,6 +103,15 @@ export const applications = pgTable(
   (table) => [
     index('applications_job_hunt_id_idx').on(table.jobHuntId),
     index('applications_job_hunt_stage_idx').on(table.jobHuntId, table.stage),
+    // Integrity FK (ADR-0001): a card's sub-stage must belong to its own stage. The
+    // inline single-column FK above keeps onDelete='set null'; this one is NO ACTION and,
+    // with MATCH SIMPLE, is skipped once sub_stage_id is nulled — so deleting a sub-stage
+    // still works while a cross-stage mismatch is rejected.
+    foreignKey({
+      columns: [table.subStageId, table.stage],
+      foreignColumns: [subStages.id, subStages.stage],
+      name: 'applications_sub_stage_stage_fk',
+    }),
     check(
       'applications_closed_state',
       sql`(${table.stage} = 'closed' AND ${table.closedOutcome} IS NOT NULL AND ${table.closedAt} IS NOT NULL)
