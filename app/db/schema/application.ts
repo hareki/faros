@@ -101,8 +101,8 @@ export const applications = pgTable(
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
-    index('applications_job_hunt_id_idx').on(table.jobHuntId),
     index('applications_job_hunt_stage_idx').on(table.jobHuntId, table.stage),
+    index('applications_sub_stage_id_idx').on(table.subStageId),
     // Integrity FK (ADR-0001): a card's sub-stage must belong to its own stage. The
     // inline single-column FK above keeps onDelete='set null'; this one is NO ACTION and,
     // with MATCH SIMPLE, is skipped once sub_stage_id is nulled — so deleting a sub-stage

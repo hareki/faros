@@ -1,0 +1,1 @@
+CREATE INDEX "applications_sub_stage_id_idx" ON "applications" USING btree ("sub_stage_id");

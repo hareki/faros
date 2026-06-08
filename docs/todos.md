@@ -2,6 +2,8 @@
 
 Build-order roadmap derived from `high-level-design.md`, `database.dbml`, and `tech-stack.md`. Grouped as **Foundation** (the flexible base everything sits on) then **Features** (dependency-ordered). Each item is tagged **[FE]** or **[BE]**. Within a feature the order follows: sketch static UI → build BE queries/server actions → wire FE to the real API. Mutations are **server actions**; the only HTTP routes are Better Auth handlers and Inngest functions.
 
+> **UI source of truth:** [`screens.md`](screens.md) is the canonical spec for every UI surface. FE items below link to their section via `→ screens.md: <Section>`. When UI scope changes, update `screens.md` first, then reconcile the todo.
+
 ## Foundation
 
 ### A. Tooling & dependencies
@@ -29,7 +31,7 @@ Build-order roadmap derived from `high-level-design.md`, `database.dbml`, and `t
   - `CHECK` on `applications` enforcing `closed_outcome` and `closed_at` set iff `stage = 'closed'`
 - [x] [BE] Dev seed script (one user, one active job_hunt, a handful of apps across stages, sample resumes/events)
 - [x] [BE] Drizzle schemas with `drizzle-zod` for `applications`, `sub_stages`, `tags`, `application_tags`
-- [ ] [BE] Domain-hardening schema amendments (from grill session; see `CONTEXT.md` + `docs/adr/`):
+- [x] [BE] Domain-hardening schema amendments (from grill session; see `CONTEXT.md` + `docs/adr/`):
   - Composite `UNIQUE(id, stage)` on `sub_stages` + composite FK `applications(sub_stage_id, stage) → sub_stages(id, stage)` (ADR-0001)
   - Add `offer_received` to the `activity_type` enum
   - Add `deleted_at` to `resumes` (soft delete, ADR-0003)
@@ -42,17 +44,17 @@ BE config → flows → FE pages; the data model is dictated by Better Auth, so 
 - [x] [BE] Enable DB-backed sessions with a short-lived signed cookie cache (`cookieCache`, `strategy: 'compact'`); `version` bump = global revocation
 - [x] [BE] Add Google + GitHub OAuth providers + Vercel env vars (provider blocks wired in `app/lib/auth`; pending real OAuth app credentials + Vercel env vars)
 - [x] [BE] `requireUser()` helper for server actions and `getUser()` for RSC reads
-- [x] [BE] Email verification flow (token write → email via Resend → confirm route)
-- [x] [BE] Password reset flow (request → email → reset form)
+- [x] [BE] Email verification flow (token write → email via Resend → confirm route) → screens.md: Email verification confirm
+- [x] [BE] Password reset flow (request → email → reset form) → screens.md: Reset Password
 - [x] [FE] React Email templates for verification + reset
 - [x] [FE] Comprehensive, scalable client form system
-- [x] [FE] Sign-in, sign-up (including email verification notice), and reset-password UI
-- [x] [FE] Integrate OAuth/Sign In/Sign Up/Reset Password Flow
+- [x] [FE] Sign-in, sign-up (including email verification notice), and reset-password UI → screens.md: Auth screens (Sign In, Sign Up, Reset Password)
+- [x] [FE] Integrate OAuth/Sign In/Sign Up/Reset Password Flow → screens.md: Auth screens
 - [x] [FE/BE] Logger Service
 
 ### E. App shell
 
-- [ ] [FE] App shell: header with nav + auth menu + active-hunt switcher slot
+- [ ] [FE] App shell: header with nav + auth menu + active-hunt switcher slot → screens.md: App shell (shared chrome)
 
 ### F. Shared primitives (the flexible base features reuse)
 
@@ -68,47 +70,47 @@ Dependency-ordered. Each feature: sketch static UI → build BE → wire FE.
 
 ### 1. Job Hunt
 
-- [ ] [FE] Sketch hunt switcher dropdown + first-run "Start your first hunt" empty state (static)
+- [ ] [FE] Sketch hunt switcher dropdown + first-run "Start your first hunt" empty state (static) → screens.md: App shell (Active-hunt switcher, First-run shell state) + Hunt switcher & lifecycle dialogs
 - [ ] [BE] Drizzle queries + server actions: `createHunt`, `endHunt`, `unarchiveHunt`, `renameHunt`
 - [ ] [BE] Rely on partial unique index for "one active"; surface a friendly conflict result for the UI
 - [ ] [FE] `<ActiveHuntProvider>` React Context exposing current hunt + setter
-- [ ] [FE] Wire hunt switcher (lists hunts, marks active, links to ended-hunt retros)
-- [ ] [FE] Wire first-run empty-state CTA
+- [ ] [FE] Wire hunt switcher (lists hunts, marks active, links to ended-hunt retros) → screens.md: App shell (Active-hunt switcher) + Hunt switcher & lifecycle dialogs
+- [ ] [FE] Wire first-run empty-state CTA → screens.md: App shell (First-run shell state)
 
 ### 2. Applications & board
 
-- [ ] [FE] Sketch board route: 4 fixed columns (Applied / Active / Final Stages / Closed) with static cards
-- [ ] [FE] Sketch card: company, role, sub-stage chip, tag chips, source icon
-- [ ] [FE] Sketch card detail drawer: all metadata, activity-log timeline, resume-picker slot, notes (Lexical), event-list slot
+- [ ] [FE] Sketch board route: 4 fixed columns (Applied / Active / Final Stages / Closed) with static cards → screens.md: Tracker Board (Kanban)
+- [ ] [FE] Sketch card: company, role, sub-stage chip, tag chips, source icon → screens.md: Tracker Board (Cards)
+- [ ] [FE] Sketch card detail drawer: all metadata, activity-log timeline, resume-picker slot, notes (Lexical), event-list slot → screens.md: Application Detail Drawer
 - [ ] [BE] Sub-stage CRUD per user per stage (settings screen)
 - [ ] [BE] Tag CRUD per user
 - [ ] [BE] Board read query (apps grouped by stage for the active hunt)
 - [ ] [BE] Server actions: `createApplication`, `updateApplication`, `moveStage`, `setSubStage`, `setTags`, `closeApplication` (writes `closed_outcome` + `closed_at`); each calls `logActivity()`
-- [ ] [FE] Wire board columns + cards to real data
-- [ ] [FE] Wire card detail drawer (metadata, activity-log timeline, notes via Lexical)
-- [ ] [FE] Sub-stage dropdown on card (writes `sub_stage_change` activity)
-- [ ] [FE] Tag filter UI backed by a Zustand store
-- [ ] [FE] dnd-kit: drag cards between columns (writes `stage_change`; opens closed-outcome prompt when dropping into Closed)
-- [ ] [FE] dnd-kit: reorder sub-stages in settings
+- [ ] [FE] Wire board columns + cards to real data → screens.md: Tracker Board (Kanban)
+- [ ] [FE] Wire card detail drawer (metadata, activity-log timeline, notes via Lexical) → screens.md: Application Detail Drawer
+- [ ] [FE] Sub-stage dropdown on card (writes `sub_stage_change` activity) → screens.md: Application Detail Drawer (Sub-stage picker)
+- [ ] [FE] Tag filter UI backed by a Zustand store → screens.md: Tracker Board (Filter bar)
+- [ ] [FE] dnd-kit: drag cards between columns (writes `stage_change`; opens closed-outcome prompt when dropping into Closed) → screens.md: Tracker Board (Drag & drop) + Close-outcome prompt
+- [ ] [FE] dnd-kit: reorder sub-stages in settings → screens.md: Settings (Sub-stages)
 
 > Note: the drawer's resume-picker and event-list slots are wired when features 3 and 4 land.
 
 ### 3. Resumes
 
-- [ ] [FE] Sketch resume library list + picker UI (static)
+- [ ] [FE] Sketch resume library list + picker UI (static) → screens.md: Resume Library + Resume picker dialog
 - [ ] [BE] Vercel Blob upload server action (PDF only, size cap, returns `file_url`)
 - [ ] [BE] Resume queries + `delete` and promote-to-library server actions (`scope='library'`, `application_id=NULL`)
-- [ ] [FE] Wire resume library list screen with delete
-- [ ] [FE] Wire resume picker (scope=`library`) into the application drawer
-- [ ] [FE] Application-scoped upload from drawer (scope=`application`, `application_id` set)
-- [ ] [FE] Promote-to-library action UI
+- [ ] [FE] Wire resume library list screen with delete → screens.md: Resume Library
+- [ ] [FE] Wire resume picker (scope=`library`) into the application drawer → screens.md: Resume picker dialog + Application Detail Drawer (Resume slot)
+- [ ] [FE] Application-scoped upload from drawer (scope=`application`, `application_id` set) → screens.md: Application Detail Drawer (Resume slot)
+- [ ] [FE] Promote-to-library action UI → screens.md: Resume picker dialog
 
 ### 4. Events
 
-- [ ] [FE] Sketch event form + upcoming-events list (static)
+- [ ] [FE] Sketch event form + upcoming-events list (static) → screens.md: Event form + Dashboard (Upcoming events)
 - [ ] [BE] Server actions: `createEvent`, `updateEvent`, `completeEvent`, `cancelEvent` (each calls `logActivity()`)
-- [ ] [FE] Wire event form (type, scheduled_at, duration, location, notes) inside the application drawer
-- [ ] [FE] Wire upcoming-events list component (reused on dashboard)
+- [ ] [FE] Wire event form (type, scheduled_at, duration, location, notes) inside the application drawer → screens.md: Event form + Application Detail Drawer (Events list + event form slot)
+- [ ] [FE] Wire upcoming-events list component (reused on dashboard) → screens.md: Dashboard (Upcoming events)
 
 ### 5. Notification engine
 
@@ -116,44 +118,44 @@ Lay the flexible schema/writer before rules, runners, and UI.
 
 - [ ] [BE] Discriminated-union Zod schemas for `trigger_config` (`condition` vs `time_based`) and `action_config`
 - [ ] [BE] Shared notification writer: builds deterministic `dedup_key`, upserts on `(user_id, dedup_key)` unique index
-- [ ] [FE] Sketch rule-CRUD settings, in-app feed dropdown, and prefs screen (static)
+- [ ] [FE] Sketch rule-CRUD settings, in-app feed dropdown, and prefs screen (static) → screens.md: Settings (Notification rules, Notification preferences) + Notifications feed (in-app)
 - [ ] [BE] Rule-CRUD server actions; `user_notification_prefs` queries + actions; notification read/snooze/dismiss actions
 - [ ] [BE] Inngest function: condition runner (cron) — scans applications, evaluates each enabled `condition` rule, calls the writer
 - [ ] [BE] Inngest function: time-based runner (cron) — scans events, evaluates each enabled `time_based` rule
-- [ ] [FE] Wire rule-CRUD UI in user settings
-- [ ] [FE] Wire in-app feed: header badge + dropdown list with mark-read / snooze / dismiss
-- [ ] [FE] Wire user notification preferences screen (`user_notification_prefs`)
+- [ ] [FE] Wire rule-CRUD UI in user settings → screens.md: Settings (Notification rules)
+- [ ] [FE] Wire in-app feed: header badge + dropdown list with mark-read / snooze / dismiss → screens.md: Notifications feed (in-app)
+- [ ] [FE] Wire user notification preferences screen (`user_notification_prefs`) → screens.md: Settings (Notification preferences)
 - [ ] [BE] Inngest function: email digest dispatcher honoring cadence + quiet hours + timezone
 - [ ] [FE] React Email digest template
 
 ### 6. Dashboard
 
-- [ ] [FE] Sketch dashboard: action-needed panel, upcoming-events panel, hunt summary, empty state (static)
+- [ ] [FE] Sketch dashboard: action-needed panel, upcoming-events panel, hunt summary, empty state (static) → screens.md: Dashboard
 - [ ] [BE] Queries: recent `unread` notifications from `condition` rules; next N events across the active hunt; hunt summary (count per stage, response rate, days active)
-- [ ] [FE] Wire action-needed panel
-- [ ] [FE] Wire upcoming-events panel (reuses the events list component)
-- [ ] [FE] Wire hunt summary
-- [ ] [FE] First-run / empty state with focused CTA (link to "add application")
+- [ ] [FE] Wire action-needed panel → screens.md: Dashboard (Action needed)
+- [ ] [FE] Wire upcoming-events panel (reuses the events list component) → screens.md: Dashboard (Upcoming events)
+- [ ] [FE] Wire hunt summary → screens.md: Dashboard (Hunt summary)
+- [ ] [FE] First-run / empty state with focused CTA (link to "add application") → screens.md: Dashboard (First-run / empty state)
 
 ### 7. Retro view (ended hunts)
 
-- [ ] [FE] Sketch retro view: funnel, time stats, source breakdown, resume performance, outcome cards, read-only toggle (static)
+- [ ] [FE] Sketch retro view: funnel, time stats, source breakdown, resume performance, outcome cards, read-only toggle (static) → screens.md: Retro
 - [ ] [BE] Analytics queries: funnel counts/rates; median times (first response, apply-to-offer, hunt length); source breakdown w/ response rate; resume performance (one-offs bucketed as "Custom"); outcome counts
-- [ ] [FE] Read-only mode toggle on ended hunts
-- [ ] [FE] Wire funnel chart (Recharts): applied → first response → first interview → final round → offer
-- [ ] [FE] Wire time-stats panel
-- [ ] [FE] Wire source-breakdown chart (response rate per `application_source`)
-- [ ] [FE] Wire resume-performance chart (response rate per library resume; one-offs bucketed as "Custom")
-- [ ] [FE] Wire outcome summary cards (offers received / accepted / ghosted / withdrawn)
-- [ ] [FE] Unarchive escape-hatch button (calls `unarchiveHunt` from feature 1)
+- [ ] [FE] Read-only mode toggle on ended hunts → screens.md: Retro (Read-only toggle)
+- [ ] [FE] Wire funnel chart (Recharts): applied → first response → first interview → final round → offer → screens.md: Retro (Funnel)
+- [ ] [FE] Wire time-stats panel → screens.md: Retro (Time stats)
+- [ ] [FE] Wire source-breakdown chart (response rate per `application_source`) → screens.md: Retro (Source breakdown)
+- [ ] [FE] Wire resume-performance chart (response rate per library resume; one-offs bucketed as "Custom") → screens.md: Retro (Resume performance)
+- [ ] [FE] Wire outcome summary cards (offers received / accepted / ghosted / withdrawn) → screens.md: Retro (Outcome summary)
+- [ ] [FE] Unarchive escape-hatch button (calls `unarchiveHunt` from feature 1) → screens.md: Retro + Hunt switcher & lifecycle dialogs (Unarchive)
 
 ## Cross-cutting polish (final pass)
 
 - [ ] [FE] Audit: Sonner toasts on every server-action result (success + error) — apply the Foundation toast convention everywhere
 - [ ] [FE] Audit: Suspense + error boundaries per route segment
-- [ ] [FE] Audit: empty states for every list view (board columns, resumes, events, notifications)
-- [ ] [FE] Keyboard shortcuts: quick-add application, board navigation
-- [ ] [FE] Mobile breakpoint pass on board + dashboard
+- [ ] [FE] Audit: empty states for every list view (board columns, resumes, events, notifications) → screens.md: Tracker Board, Resume Library, Dashboard (Upcoming events), Notifications feed (in-app)
+- [ ] [FE] Keyboard shortcuts: quick-add application, board navigation → screens.md: Tracker Board + Quick-add Application dialog
+- [ ] [FE] Mobile breakpoint pass on board + dashboard → screens.md: Tracker Board + Dashboard
 - [ ] [FE] Favicon + meta tags + opengraph image
 
 ## Explicitly deferred (post-v1)

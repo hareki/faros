@@ -1,0 +1,1 @@
+DROP INDEX "applications_job_hunt_id_idx";
