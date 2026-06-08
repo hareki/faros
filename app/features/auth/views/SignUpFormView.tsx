@@ -6,7 +6,7 @@ import { IconArrowRight } from '@tabler/icons-react';
 import LinkPrimitive from 'next/link';
 import { type Messages } from 'next-intl';
 
-import Button from '@/app/components/ui/Button';
+import { Button } from '@/app/components/ui/Button';
 import { FieldGroup } from '@/app/components/ui/Field';
 import { useSignUpVM } from '@/app/features/auth/view-models/useSignUpVM';
 import { FormTextField } from '@/app/lib/form/components/FormTextField';

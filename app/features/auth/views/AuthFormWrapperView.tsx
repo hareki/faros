@@ -7,7 +7,7 @@ import { type Messages } from 'next-intl';
 import FavIcon from '@/app/components/icons/FavIcon';
 import GitHubIcon from '@/app/components/icons/GitHubIcon';
 import GoogleIcon from '@/app/components/icons/GoogleIcon';
-import Button from '@/app/components/ui/Button';
+import { Button } from '@/app/components/ui/Button';
 import { Card, CardContent } from '@/app/components/ui/Card';
 import { Separator } from '@/app/components/ui/Separator';
 import { H3, Muted } from '@/app/components/ui/Typography';

@@ -33,20 +33,24 @@ repeated per route.
 ## Auth screens (public, minimal layout — no app shell)
 
 ### Sign In — `(auth)/sign-in`
+
 Email + password form; Google and GitHub OAuth buttons; links to Sign Up and Forgot
 Password. One account per email — OAuth auto-links to an existing verified email.
 
 ### Sign Up — `(auth)/sign-up`
+
 Name + email + password form; same OAuth buttons. On submit, shows an **email
 verification notice** state ("check your inbox"). Signing up with an already-registered
 email is rejected as "email in use".
 
 ### Reset Password — `(auth)/reset-password`
+
 Two states: (1) **request** — enter email to receive a reset link; (2) **reset form** —
 set a new password from the emailed token. Also the path an OAuth-only account uses to
 add a password credential.
 
 ### Email verification confirm — route
+
 Landing target for the verification link; confirms the token and routes the user into the
 app (or shows an expired/invalid token state).
 
@@ -55,7 +59,9 @@ app (or shows an expired/invalid token state).
 ## App routes (inside the shell)
 
 ### Dashboard — `(app)/dashboard`
+
 The workflow-driver home for the active hunt.
+
 - **Action needed** panel: condition-based prompts surfaced from unread `condition`
   notifications (e.g. "Applied 14 days, possibly ghosted"). Each item links to the
   application.
@@ -67,7 +73,9 @@ The workflow-driver home for the active hunt.
   add the first application.
 
 ### Tracker Board (Kanban) — board route
+
 The action-oriented board for the active hunt.
+
 - Four fixed **Stage** columns: **Applied** (waiting on them), **Active** (interviewing),
   **Final Stages** (offer pending / post-onsite), **Closed** (rejected / withdrawn /
   accepted / ghosted).
@@ -81,7 +89,9 @@ The action-oriented board for the active hunt.
 - Per-column empty states.
 
 ### Resume Library — resumes route
+
 Manages **library**-scope Resumes (the reusable ones in the picker).
+
 - List of library resumes: name, file metadata (size/type), upload date.
 - Upload a new library resume (PDF, size-capped → Vercel Blob).
 - Delete (soft delete — keeps attribution for Retro resume-performance).
@@ -89,7 +99,9 @@ Manages **library**-scope Resumes (the reusable ones in the picker).
   application drawer.
 
 ### Settings — settings route(s)
+
 User-level configuration, likely tabbed/sectioned:
+
 - **Sub-stages**: CRUD per Stage, restricted to **Active** and **Final Stages**;
   drag-reorder (dnd-kit) sets `sort_order`.
 - **Tags**: CRUD of free-form filter Tags (name + color).
@@ -99,8 +111,10 @@ User-level configuration, likely tabbed/sectioned:
   on/off + cadence (daily/weekly), quiet hours, timezone.
 
 ### Retro — per ended hunt
+
 The self-improvement review for an ended hunt (reached from the hunt switcher;
 read-only by default).
+
 - **Funnel** (Recharts): Applied → first response → first interview → final round → offer,
   with counts and conversion rates (milestones derived from the activity log/events).
 - **Time stats**: median days to first response, apply-to-offer, total hunt length.
@@ -119,7 +133,9 @@ These carry enough logic/state to warrant their own description and implementati
 appear over the routes above.
 
 ### Application Detail Drawer
+
 Opened from any board card; the primary editing surface for one application.
+
 - All metadata: company, role, source, JD url / JD text, location, working model, salary
   range, notes.
 - **Sub-stage** picker (writes `sub_stage_change` Activity).
@@ -132,21 +148,25 @@ Opened from any board card; the primary editing surface for one application.
   response/offer received, notes, events, closed).
 
 ### Quick-add Application dialog
+
 Minimal create form — only required fields (company, role); drops into Applied. Optional
 metadata can be filled later in the drawer. Reachable from the board and the dashboard
 empty state.
 
 ### Close-outcome prompt
+
 Triggered when an application enters **Closed** (drag-drop or action). Forces a
 `closed_outcome` choice — rejected / withdrawn / accepted / ghosted — and stamps
 `closed_at`. `ghosted` is only ever user-set.
 
 ### Event form
+
 Create/edit an Event inside the drawer: type (HR screen, tech screen, onsite, take-home
 due, offer deadline, other), scheduled time, duration, location/link, notes; plus
 complete/cancel actions. Creating an `offer_deadline` event auto-logs `offer_received`.
 
 ### Hunt switcher & lifecycle dialogs
+
 - **Start hunt** dialog (name the hunt; blocked if one is already active — friendly
   conflict message).
 - **End hunt** confirmation (makes it read-only, unlocks its Retro).
@@ -154,10 +174,12 @@ complete/cancel actions. Creating an `offer_deadline` event auto-logs `offer_rec
 - **Unarchive** confirmation on an ended hunt.
 
 ### Resume picker dialog
+
 Library-scope picker surfaced from the application drawer's Resume slot; plus the
 application-scoped upload and the promote-to-library action.
 
 ### Notifications feed (in-app)
+
 Header-bell dropdown listing recent notifications (both streams). Per-item mark-read /
 snooze / dismiss. Unread count badge on the bell.
 

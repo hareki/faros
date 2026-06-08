@@ -4,7 +4,7 @@ import { type ReactNode } from 'react';
 
 import { type Messages } from 'next-intl';
 
-import Button from '@/app/components/ui/Button';
+import { Button } from '@/app/components/ui/Button';
 import { FieldGroup } from '@/app/components/ui/Field';
 import { useResetPasswordVM } from '@/app/features/auth/view-models/useResetPasswordVM';
 import { FormTextField } from '@/app/lib/form/components/FormTextField';

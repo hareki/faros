@@ -5,7 +5,8 @@ import { useEffect } from 'react';
 import { type ErrorInfo } from 'next/error';
 import { useTranslations } from 'next-intl';
 
-import Button from './components/ui/Button';
+import { Button } from '@/app/components/ui/Button';
+
 import { H2, Muted } from './components/ui/Typography';
 import { clientLogger } from './lib/logger/client';
 

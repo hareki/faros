@@ -6,7 +6,7 @@ import { cn } from '@/app/lib/tailwind/utils';
 import { buttonVariants } from './variants';
 import { Spinner } from '../Spinner';
 
-export default function Button({
+function Button({
   className,
   variant = 'default',
   size = 'default',
@@ -29,3 +29,5 @@ export default function Button({
     </ButtonPrimitive>
   );
 }
+
+export { Button };

@@ -5,7 +5,7 @@ import { type ReactNode } from 'react';
 import { IconArrowRight } from '@tabler/icons-react';
 import { type Messages } from 'next-intl';
 
-import Button from '@/app/components/ui/Button';
+import { Button } from '@/app/components/ui/Button';
 import { FieldGroup } from '@/app/components/ui/Field';
 import Link from '@/app/components/ui/Link';
 import { useSignInVM } from '@/app/features/auth/view-models/useSignInVM';
