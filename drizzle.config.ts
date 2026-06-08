@@ -1,3 +1,5 @@
+import './app/lib/t3-env/load-env';
+
 import { defineConfig } from 'drizzle-kit';
 
 // Relative import (not the @/ alias) so drizzle-kit's config loader can resolve it.

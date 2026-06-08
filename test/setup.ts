@@ -1,4 +1,3 @@
-// Loads env/.env.test (NODE_ENV=test, so .env.development is NOT loaded).
 import '@/app/lib/t3-env/load-env';
 
 import { neonConfig } from '@neondatabase/serverless';
