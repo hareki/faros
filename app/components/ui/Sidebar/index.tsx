@@ -214,7 +214,7 @@ function Sidebar({
           'group-data-[collapsible=offcanvas]:w-0',
           'group-data-[side=right]:rotate-180',
           variant === 'floating' || variant === 'inset'
-            ? 'group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]'
+            ? 'group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(6)))]'
             : 'group-data-[collapsible=icon]:w-(--sidebar-width-icon)',
         )}
       />
@@ -234,8 +234,8 @@ function Sidebar({
           // Adjust the padding for floating and inset variants.
           variant === 'floating' || variant === 'inset'
             ? `
-              p-2
-              group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]
+              p-3
+              group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(6)))]
             `
             : `
               group-data-[collapsible=icon]:w-(--sidebar-width-icon)
@@ -269,8 +269,8 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
     <Button
       data-sidebar='trigger'
       data-slot='sidebar-trigger'
-      variant='ghost'
-      size='icon-sm'
+      variant='outline'
+      size='icon'
       className={cn(className)}
       onClick={(event) => {
         onClick?.(event);

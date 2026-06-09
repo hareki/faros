@@ -1,28 +1,23 @@
-import { NavUser } from './NavUser';
-import {
-  Sidebar,
-  SidebarHeader,
-  SidebarContent,
-  SidebarGroup,
-  SidebarFooter,
-} from '../../ui/Sidebar';
+import BrandButton from './BrandButton';
+import { JobHuntSwitcher } from './JobHuntSwitcher';
+import { NavMain } from './NavMain';
+import { Sidebar, SidebarContent, SidebarGroup, SidebarHeader } from '../../ui/Sidebar';
 
 export function AppSidebar() {
   return (
-    <Sidebar>
-      <SidebarHeader />
+    <Sidebar variant='floating' collapsible='icon' /* className='pr-0' */>
+      <SidebarHeader>
+        <BrandButton />
+      </SidebarHeader>
+
       <SidebarContent>
-        <SidebarGroup />
+        <SidebarGroup className='pb-0'>
+          <JobHuntSwitcher />
+        </SidebarGroup>
+        <SidebarGroup>
+          <NavMain />
+        </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser
-          user={{
-            name: 'shadcn',
-            email: 'm@example.com',
-            avatar: '/shadcn.jpg',
-          }}
-        />
-      </SidebarFooter>
     </Sidebar>
   );
 }

@@ -11,7 +11,7 @@ export const buttonVariants = cva(
     aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20
     dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40
     [&_svg]:pointer-events-none [&_svg]:shrink-0
-    [&_svg:not([class*='size-'])]:size-4
+    [&_svg:not([class*='size-'])]:size-5
   `,
   {
     variants: {
@@ -73,8 +73,14 @@ export const buttonVariants = cva(
           size-6
           [&_svg:not([class*='size-'])]:size-3
         `,
-        'icon-sm': 'size-8',
-        'icon-lg': 'size-10',
+        'icon-sm': `
+          size-8
+          [&_svg:not([class*='size-'])]:size-4
+        `,
+        'icon-lg': `
+          size-11
+          [&_svg:not([class*='size-'])]:size-6
+        `,
       },
     },
     defaultVariants: {

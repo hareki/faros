@@ -1,7 +1,8 @@
 import { type PropsWithChildren } from 'react';
 
+import { AppHeader } from '@/app/components/layout/AppHeader';
 import { AppSidebar } from '@/app/components/layout/AppSidebar';
-import { SidebarProvider } from '@/app/components/ui/Sidebar';
+import { SidebarInset, SidebarProvider } from '@/app/components/ui/Sidebar';
 import { requireUser } from '@/app/lib/better-auth/session';
 
 export default async function PrivateLayout({ children }: PropsWithChildren) {
@@ -10,7 +11,10 @@ export default async function PrivateLayout({ children }: PropsWithChildren) {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main>{children}</main>
+      <SidebarInset className='-ml-3'>
+        <AppHeader />
+        <main className='p-3'>{children}</main>
+      </SidebarInset>
     </SidebarProvider>
   );
 }

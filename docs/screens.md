@@ -14,16 +14,23 @@ connected-accounts, AI chatbot) are noted at the end as deferred.
 ## App shell (shared chrome)
 
 Every authenticated route renders inside one shell, so it is described here and not
-repeated per route.
+repeated per route. The shell is a sidebar + header layout.
 
-- **Header**: app logo/home link, primary nav, the **active-hunt switcher**, the
-  notifications bell (in-app feed trigger), and the auth/account menu (theme toggle, sign
-  out).
-- **Active-hunt switcher**: dropdown listing the user's hunts, marking the one active
-  hunt, and linking ended hunts to their Retro. Entry point for "Start a hunt" / "End
-  hunt". (See _Hunt switcher & lifecycle dialogs_ below.)
-- **Auth/account menu**: signed-in user (name/avatar from OAuth profile), theme toggle,
-  sign out.
+- **Header** (left → right): sidebar toggle, the **global Search** entry point, the
+  notifications bell (in-app feed trigger), and the **account menu**.
+  - **Global Search**: _scope TBD — to be defined in a later design pass._ Present as a
+    placeholder in the shell; not a built V1 feature yet (see _Deferred_).
+  - **Account menu**: signed-in user (name/avatar from OAuth profile), theme toggle, sign
+    out.
+- **Sidebar**:
+  - Header: app logo / home link ("Faros").
+  - Top: the **active Job Hunt switcher** — a dropdown showing the active hunt's name and
+    listing the user's Job Hunts, marking the one active hunt, and linking ended hunts to
+    their Retro. Entry point for "Start a hunt" / "End hunt". (See _Hunt switcher &
+    lifecycle dialogs_ below.)
+  - Nav: **Dashboard**, **Tracker Board**, **Resume Library**, and **Settings**
+    (expandable → Sub-stages, Tags, Notification — a single Notification page with
+    separate rules and preferences sections).
 - **First-run shell state**: when the user has **no active hunt**, the shell collapses
   navigation that depends on a hunt and surfaces a single focused CTA ("Start your first
   hunt").
@@ -192,3 +199,5 @@ snooze / dismiss. Unread count badge on the bell.
 - **CSV import** screen.
 - **AI chatbot** to analyze hunt progress (`docs/roadmap.md`).
 - Rich-text JD editor, browser extension, mobile-native app, multi-user/sharing.
+- **Global Search**: present as a header placeholder; its scope (what it searches, where
+  results land) is deferred to a later design pass and not part of the V1 feature set.

@@ -8,6 +8,7 @@ export const linkVariants = cva(
   {
     variants: {
       variant: {
+        unstyled: 'hover:text-inherit',
         default: 'underline underline-offset-3',
         action: 'font-semibold text-foreground no-underline',
       },
