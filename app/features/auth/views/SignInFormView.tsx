@@ -29,7 +29,7 @@ export default function SignInForm({ title, subtitle, footer, messages }: SignIn
     return (
       <CheckEmailView messages={messages} email={unverifiedEmail}>
         <div className='flex-center'>
-          <Button variant='secondary' disabled={isPending} onClick={onResend}>
+          <Button variant='secondary' loading={isPending} onClick={onResend}>
             {messages.resendEmail}
             <IconArrowRight />
           </Button>
@@ -75,7 +75,7 @@ export default function SignInForm({ title, subtitle, footer, messages }: SignIn
             }}
           />
 
-          <Button type='submit' className='w-full' disabled={isPending}>
+          <Button type='submit' className='w-full' loading={isPending}>
             {messages.submit}
           </Button>
         </FieldGroup>

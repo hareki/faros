@@ -29,7 +29,7 @@ export default function SignUpFormView({ title, subtitle, footer, messages }: Si
     return (
       <CheckEmailView messages={messages} email={sentToEmail}>
         <div className='flex flex-col items-center gap-3'>
-          <Button variant='secondary' className='w-full' disabled={isPending} onClick={onResend}>
+          <Button variant='secondary' className='w-full' loading={isPending} onClick={onResend}>
             {messages.resendEmail}
           </Button>
           <Button nativeButton={false} render={<LinkPrimitive href='/sign-in' />}>
@@ -73,7 +73,7 @@ export default function SignUpFormView({ title, subtitle, footer, messages }: Si
             }}
           />
 
-          <Button type='submit' className='w-full' disabled={isPending}>
+          <Button type='submit' className='w-full' loading={isPending}>
             {messages.submit}
           </Button>
         </FieldGroup>

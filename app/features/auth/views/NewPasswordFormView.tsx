@@ -53,7 +53,7 @@ export default function NewPasswordFormView({
             }}
           />
 
-          <Button type='submit' className='w-full' disabled={isPending}>
+          <Button type='submit' className='w-full' loading={isPending}>
             {messages.submit}
           </Button>
         </FieldGroup>
