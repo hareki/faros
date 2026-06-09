@@ -16,6 +16,28 @@
       "character": "Tối đa {count, plural, other {# ký tự}}."
     }
   },
+  "Layout": {
+    "search": "Tìm kiếm"
+  },
+  "ClientLayout": {
+    "nav": {
+      "dashboard": "Bảng điều khiển",
+      "trackerBoard": "Bảng theo dõi",
+      "resumeLibrary": "Thư viện hồ sơ",
+      "settings": "Cài đặt",
+      "tags": "Thẻ",
+      "subStages": "Giai đoạn phụ",
+      "notification": "Thông báo"
+    },
+    "jobHuntSwitcher": {
+      "activeJobHunt": "Đợt tìm việc hiện tại",
+      "jobHunts": "Các đợt tìm việc",
+      "startJobHunt": "Bắt đầu một đợt tìm việc"
+    },
+    "navUser": {
+      "signOut": "Đăng xuất"
+    }
+  },
   "Landing Page": {
     "title": "Trang Đích (Luôn truy cập được)",
     "toSignIn": "Đến trang Đăng nhập",

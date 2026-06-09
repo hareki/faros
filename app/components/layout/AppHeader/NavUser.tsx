@@ -1,6 +1,7 @@
 'use client';
 
 import { IconLogout, IconChevronDown } from '@tabler/icons-react';
+import { type Messages } from 'next-intl';
 
 import { useSignOut } from '@/app/features/auth/hooks/useSignOut';
 
@@ -18,12 +19,14 @@ import {
 
 export function NavUser({
   user,
+  messages,
 }: {
   user: {
     name: string;
     email: string;
     avatar: string;
   };
+  messages: Messages['ClientLayout']['navUser'];
 }) {
   const [signOut] = useSignOut();
 
@@ -68,7 +71,7 @@ export function NavUser({
         <DropdownMenuGroup>
           <DropdownMenuItem onClick={signOut}>
             <IconLogout />
-            Sign out
+            {messages.signOut}
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

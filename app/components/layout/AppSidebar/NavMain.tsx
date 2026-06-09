@@ -13,6 +13,7 @@ import {
 } from '@tabler/icons-react';
 import { type Route } from 'next';
 import { usePathname } from 'next/navigation';
+import { type Messages } from 'next-intl';
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../../ui/Collapsible';
 import Link from '../../ui/Link';
@@ -26,24 +27,24 @@ import {
 } from '../../ui/Sidebar';
 
 type NavLeaf = {
-  title: string;
+  key: keyof Messages['ClientLayout']['nav'];
   url: Route;
   icon: Icon;
 };
 
 const navItems: NavLeaf[] = [
-  { title: 'Dashboard', url: '/dashboard', icon: IconLayoutDashboard },
-  { title: 'Tracker Board', url: '/tracker-board', icon: IconLayoutKanban },
-  { title: 'Resume Library', url: '/resume-library', icon: IconFileText },
+  { key: 'dashboard', url: '/dashboard', icon: IconLayoutDashboard },
+  { key: 'trackerBoard', url: '/tracker-board', icon: IconLayoutKanban },
+  { key: 'resumeLibrary', url: '/resume-library', icon: IconFileText },
 ];
 
 const settingsItems: NavLeaf[] = [
-  { title: 'Tags', url: '/settings/tags', icon: IconTag },
-  { title: 'Sub-stages', url: '/settings/sub-stages', icon: IconListTree },
-  { title: 'Notification', url: '/settings/notification', icon: IconBell },
+  { key: 'tags', url: '/settings/tags', icon: IconTag },
+  { key: 'subStages', url: '/settings/sub-stages', icon: IconListTree },
+  { key: 'notification', url: '/settings/notification', icon: IconBell },
 ];
 
-export function NavMain() {
+export function NavMain({ messages }: { messages: Messages['ClientLayout']['nav'] }) {
   const pathname = usePathname();
 
   return (
@@ -55,7 +56,7 @@ export function NavMain() {
             render={<Link href={item.url} variant='unstyled' />}
           >
             <item.icon />
-            <span>{item.title}</span>
+            <span>{messages[item.key]}</span>
           </SidebarMenuButton>
         </SidebarMenuItem>
       ))}
@@ -65,7 +66,7 @@ export function NavMain() {
           render={
             <SidebarMenuButton>
               <IconSettings />
-              <span>Settings</span>
+              <span>{messages.settings}</span>
               <IconChevronRight
                 className={`
                   ml-auto transition-transform
@@ -84,7 +85,7 @@ export function NavMain() {
                   render={<Link href={item.url} variant='unstyled' />}
                 >
                   <item.icon />
-                  <span>{item.title}</span>
+                  <span>{messages[item.key]}</span>
                 </SidebarMenuSubButton>
               </SidebarMenuSubItem>
             ))}

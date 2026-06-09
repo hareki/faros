@@ -21,6 +21,28 @@
     "subtitle": "An unexpected error occurred. Please try again.",
     "tryAgain": "Try again"
   },
+  "Layout": {
+    "search": "Search"
+  },
+  "ClientLayout": {
+    "nav": {
+      "dashboard": "Dashboard",
+      "trackerBoard": "Tracker Board",
+      "resumeLibrary": "Resume Library",
+      "settings": "Settings",
+      "tags": "Tags",
+      "subStages": "Sub-stages",
+      "notification": "Notification"
+    },
+    "jobHuntSwitcher": {
+      "activeJobHunt": "Active hunt",
+      "jobHunts": "Job Hunts",
+      "startJobHunt": "Start a hunt"
+    },
+    "navUser": {
+      "signOut": "Sign out"
+    }
+  },
   "LandingPage": {
     "title": "Landing Page (Always accessible)",
     "toSignIn": "To Sign In Page",

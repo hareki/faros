@@ -1,6 +1,7 @@
 'use client';
 
 import { IconBriefcase, IconCheck, IconSelector, IconPlus } from '@tabler/icons-react';
+import { type Messages } from 'next-intl';
 
 import {
   DropdownMenu,
@@ -18,7 +19,11 @@ const hunts = [
   { name: '2024 New Grad Hunt', active: false },
 ];
 
-export function JobHuntSwitcher() {
+export function JobHuntSwitcher({
+  messages,
+}: {
+  messages: Messages['ClientLayout']['jobHuntSwitcher'];
+}) {
   const activeHunt = hunts.find((hunt) => hunt.active) ?? hunts[0];
 
   return (
@@ -43,7 +48,9 @@ export function JobHuntSwitcher() {
                   <IconBriefcase />
                 </div>
                 <div className='grid flex-1 text-left text-sm/tight'>
-                  <span className='truncate text-xs text-sidebar-foreground/70'>Active hunt</span>
+                  <span className='truncate text-xs text-sidebar-foreground/70'>
+                    {messages.activeJobHunt}
+                  </span>
                   <span className='truncate font-medium'>{activeHunt.name}</span>
                 </div>
                 <IconSelector className='ml-auto' />
@@ -54,7 +61,7 @@ export function JobHuntSwitcher() {
           <DropdownMenuContent align='start' className='min-w-56'>
             <DropdownMenuGroup>
               <DropdownMenuLabel className='text-xs text-muted-foreground'>
-                Job Hunts
+                {messages.jobHunts}
               </DropdownMenuLabel>
             </DropdownMenuGroup>
 
@@ -71,7 +78,7 @@ export function JobHuntSwitcher() {
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <IconPlus />
-                Start a hunt
+                {messages.startJobHunt}
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
