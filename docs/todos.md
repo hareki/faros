@@ -54,7 +54,7 @@ BE config → flows → FE pages; the data model is dictated by Better Auth, so 
 
 ### E. App shell
 
-- [ ] [FE] App shell: header with nav + auth menu + active-hunt switcher slot → screens.md: App shell (shared chrome)
+- [x] [FE] App shell: header with nav + auth menu + active-hunt switcher slot → screens.md: App shell (shared chrome)
 
 ### F. Shared primitives (the flexible base features reuse)
 
