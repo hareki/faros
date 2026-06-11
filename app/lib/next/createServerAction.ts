@@ -8,15 +8,17 @@ import { type ActionResult } from '@/app/types/common';
 
 type GenericErrorResponse = Extract<ActionResult<never>, { status: 'error' }>;
 
-// Validated overload: the action is called with the schema's *input* and the
-// handler receives the parsed *output*.
+/**
+ * Validated overload: the action is called with the schema's *input* and the
+ * handler receives the parsed *output*.
+ */
 export function createServerAction<Schema extends ZodType, Result>(config: {
   name?: string;
   schema: () => Schema | Promise<Schema>;
   handler: (data: z.output<Schema>) => Promise<Result>;
 }): (input: z.input<Schema>) => Promise<Result | GenericErrorResponse>;
 
-// Unvalidated overload: the handler receives the input as-is.
+/** Unvalidated overload: the handler receives the input as-is. */
 export function createServerAction<Input, Result>(config: {
   name?: string;
   handler: (input: Input) => Promise<Result>;

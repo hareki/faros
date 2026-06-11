@@ -20,7 +20,7 @@ import { users } from '@/app/db/schema/auth';
 import { jobHunts } from '@/app/db/schema/job-hunt';
 import { resumes } from '@/app/db/schema/resume';
 
-// Top-level board stages. Rendered as columns in the UI, but they are stages.
+/** Top-level board stages. Rendered as columns in the UI, but they are stages. */
 export const boardStage = pgEnum('board_stage', ['applied', 'active', 'final_stages', 'closed']);
 export const closedOutcome = pgEnum('closed_outcome', [
   'rejected',
@@ -38,7 +38,7 @@ export const applicationSource = pgEnum('application_source', [
 ]);
 export const workingModel = pgEnum('working_model', ['remote', 'hybrid', 'onsite']);
 
-// User-configurable sub-stages (HR screen, tech screen, onsite, etc.)
+/** User-configurable sub-stages (HR screen, tech screen, onsite, etc.) */
 export const subStages = pgTable(
   'sub_stages',
   {
@@ -125,7 +125,7 @@ export const applications = pgTable(
   ],
 );
 
-// Free-form filter tags (frontend, remote, startup, etc.) - user-owned, reusable
+/** Free-form filter tags (frontend, remote, startup, etc.) - user-owned, reusable */
 export const tags = pgTable(
   'tags',
   {
@@ -155,7 +155,7 @@ export const applicationTags = pgTable(
     // hot path: "tags for an application" (leftmost application_id) + join-row uniqueness.
     primaryKey({ columns: [table.applicationId, table.tagId] }),
     // hot path: the reverse direction the PK can't serve — board "filter by tag X"
-    // (tag_id → applications) and ON DELETE CASCADE lookups when a tag is deleted.
+    // (tag_id => applications) and ON DELETE CASCADE lookups when a tag is deleted.
     index('application_tags_tag_id_idx').on(table.tagId),
   ],
 );

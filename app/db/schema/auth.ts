@@ -33,8 +33,10 @@ export const users = pgTable('users', {
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 });
 
-// One row per auth method per user. A single user can have multiple
-// rows (linked Google + GitHub + credential).
+/**
+ * One row per auth method per user. A single user can have multiple
+ * rows (linked Google + GitHub + credential).
+ */
 export const accounts = pgTable(
   'accounts',
   {
@@ -91,9 +93,11 @@ export const sessions = pgTable(
   (table) => [index('sessions_user_id_idx').on(table.userId)],
 );
 
-// Email verification, password reset, magic links. These tokens MUST
-// persist server-side; they cannot live in cookies. Better Auth
-// writes/reads this; app code does not touch it directly.
+/**
+ * Email verification, password reset, magic links. These tokens MUST
+ * persist server-side; they cannot live in cookies. Better Auth
+ * writes/reads this; app code does not touch it directly.
+ */
 export const verifications = pgTable(
   'verifications',
   {

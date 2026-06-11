@@ -13,7 +13,9 @@ const pool = remember(
 
 export const db = drizzle(pool, { schema });
 
-// The `db` singleton or a transaction handle from `db.transaction(...)`. Helpers that
-// write activity rows take this so a mutation can compose the state change and its
-// activity log entry in one transaction (ADR-0002).
+/**
+ * The `db` singleton or a transaction handle from `db.transaction(...)`. Helpers that
+ * write activity rows take this so a mutation can compose the state change and its
+ * activity log entry in one transaction (ADR-0002).
+ */
 export type DbExecutor = typeof db | Parameters<Parameters<typeof db.transaction>[0]>[0];

@@ -6,7 +6,7 @@ const LEVEL_LABEL: Record<LogLevel, string> = {
   info: 'INFO',
 };
 
-// Turn an unknown thrown value into a structured, serializable shape.
+/** Turn an unknown thrown value into a structured, serializable shape. */
 export function normalizeError(error: unknown): NormalizedError | undefined {
   if (error === undefined || error === null) {
     return undefined;
@@ -35,8 +35,10 @@ function indent(text: string): string {
     .join('\n');
 }
 
-// `pretty` → human-readable multi-line block (dev). Otherwise → single-line JSON
-// (prod, aggregator/Sentry friendly).
+/**
+ * `pretty` => human-readable multi-line block (dev). Otherwise => single-line JSON
+ * (prod, aggregator/Sentry friendly).
+ */
 export function formatEntry(entry: LogEntry, pretty: boolean): string {
   if (!pretty) {
     return JSON.stringify(entry);

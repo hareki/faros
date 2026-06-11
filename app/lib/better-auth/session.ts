@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 
 import { auth } from '@/app/lib/better-auth';
 
-// Multiple calls within a  single request/render dedupe to one read
+/** Multiple calls within a  single request/render dedupe to one read */
 export const getSession = cache(async () => auth.api.getSession({ headers: await headers() }));
 
 export async function getUser() {

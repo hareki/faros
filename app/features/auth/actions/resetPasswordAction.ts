@@ -14,9 +14,11 @@ type ResetPasswordInput = {
   newPassword: string;
 };
 
-// Consumes a reset token and sets the new password. Tokens are single-use and
-// time-limited; an invalid/expired one throws and is mapped to `errorInvalidToken`.
-// With `revokeSessionsOnPasswordReset`, all of the user's sessions are cleared.
+/**
+ * Consumes a reset token and sets the new password. Tokens are single-use and
+ * time-limited; an invalid/expired one throws and is mapped to `errorInvalidToken`.
+ * With `revokeSessionsOnPasswordReset`, all of the user's sessions are cleared.
+ */
 export const resetPasswordAction = createServerAction({
   handler: async ({ token, newPassword }: ResetPasswordInput): Promise<AuthActionResult> => {
     if (!zPassword().safeParse(newPassword).success) {

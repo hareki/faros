@@ -3,7 +3,7 @@ export type LogSource = 'server-action' | 'error-boundary';
 export type LogRuntime = 'server' | 'client';
 export type LogContext = Record<string, unknown>;
 
-// What callers pass to the logger.
+/** What callers pass to the logger. */
 export type LogInput = {
   message: string;
   source: LogSource;
@@ -18,7 +18,7 @@ export type NormalizedError = {
   stack?: string;
 };
 
-// The fully-resolved record that gets formatted and emitted.
+/** The fully-resolved record that gets formatted and emitted. */
 export type LogEntry = {
   level: LogLevel;
   message: string;

@@ -39,9 +39,11 @@ type LogActivityParams = {
   occurredAt?: Date;
 } & ActivityInput;
 
-// The primitive writer. Inserts exactly one typed activity_log row. Callers pass a
-// transaction handle (or the db singleton) so the row commits atomically with the
-// state change that produced it.
+/**
+ * The primitive writer. Inserts exactly one typed activity_log row. Callers pass a
+ * transaction handle (or the db singleton) so the row commits atomically with the
+ * state change that produced it.
+ */
 export async function logActivity(executor: DbExecutor, params: LogActivityParams) {
   const { applicationId, description, occurredAt, type } = params;
 
@@ -65,8 +67,10 @@ async function hasActivity(executor: DbExecutor, applicationId: string, type: Ac
   return row !== undefined;
 }
 
-// Writes `response_received` only if the application has none yet — the "first response"
-// the funnel and ghost clock read (ADR-0002). Returns whether a new row was written.
+/**
+ * Writes `response_received` only if the application has none yet — the "first response"
+ * the funnel and ghost clock read (ADR-0002). Returns whether a new row was written.
+ */
 export async function ensureResponseReceived(
   executor: DbExecutor,
   params: { applicationId: string; trigger: ResponseTrigger; occurredAt?: Date },
@@ -85,8 +89,10 @@ export async function ensureResponseReceived(
   return true;
 }
 
-// Writes `offer_received` only if the application has none yet (backfill-safe). Returns
-// whether a new row was written.
+/**
+ * Writes `offer_received` only if the application has none yet (backfill-safe). Returns
+ * whether a new row was written.
+ */
 export async function ensureOfferReceived(
   executor: DbExecutor,
   params: { applicationId: string; trigger: OfferTrigger; occurredAt?: Date },
@@ -105,9 +111,11 @@ export async function ensureOfferReceived(
   return true;
 }
 
-// Stamps a `stage_change` and auto-derives the first `response_received` the first time an
-// application advances out of Applied (=> Active/Final Stages). Closing goes through
-// recordClose, not here.
+/**
+ * Stamps a `stage_change` and auto-derives the first `response_received` the first time an
+ * application advances out of Applied (=> Active/Final Stages). Closing goes through
+ * recordClose, not here.
+ */
 export async function recordStageChange(
   executor: DbExecutor,
   params: { applicationId: string; from: BoardStage; to: BoardStage; occurredAt?: Date },
@@ -126,9 +134,11 @@ export async function recordStageChange(
   }
 }
 
-// Writes the `closed` row and derives the milestones its outcome implies: a rejection is a
-// (first) response; an acceptance is a (backfilled) offer. `ghosted`/`withdrawn` imply
-// neither — by definition a ghosted application never received a response.
+/**
+ * Writes the `closed` row and derives the milestones its outcome implies: a rejection is a
+ * (first) response; an acceptance is a (backfilled) offer. `ghosted`/`withdrawn` imply
+ * neither — by definition a ghosted application never received a response.
+ */
 export async function recordClose(
   executor: DbExecutor,
   params: { applicationId: string; outcome: ClosedOutcome; occurredAt?: Date },

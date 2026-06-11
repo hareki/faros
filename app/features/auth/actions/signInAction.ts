@@ -9,7 +9,7 @@ import { createServerAction } from '@/app/lib/next/createServerAction';
 
 import { type SignInResult } from './types';
 
-// Signs the user in with email + password. The `nextCookies()` plugin sets the session cookie on the response automatically.
+/** Signs the user in with email + password. The `nextCookies()` plugin sets the session cookie on the response automatically. */
 export const signInAction = createServerAction({
   schema: buildSignInSchema,
   handler: async ({ email, password }): Promise<SignInResult> => {

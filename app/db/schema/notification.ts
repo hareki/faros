@@ -56,8 +56,10 @@ export const notificationRules = pgTable(
   (table) => [index('notification_rules_user_kind_idx').on(table.userId, table.kind)],
 );
 
-// dedup_key prevents the same logical notification from firing repeatedly.
-// The engine relies on (user_id, dedup_key) for upsert/no-op on re-fire.
+/**
+ * dedup_key prevents the same logical notification from firing repeatedly.
+ * The engine relies on (user_id, dedup_key) for upsert/no-op on re-fire.
+ */
 export const notifications = pgTable(
   'notifications',
   {
