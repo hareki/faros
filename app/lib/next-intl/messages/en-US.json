@@ -21,6 +21,9 @@
     "subtitle": "An unexpected error occurred. Please try again.",
     "tryAgain": "Try again"
   },
+  "GlobalCommon": {
+    "noData": "Nothing here yet"
+  },
   "Layout": {
     "search": "Search"
   },

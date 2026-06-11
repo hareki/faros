@@ -16,6 +16,9 @@
       "character": "Tối đa {count, plural, other {# ký tự}}."
     }
   },
+  "GlobalCommon": {
+    "noData": "Không có dữ liệu"
+  },
   "Layout": {
     "search": "Tìm kiếm"
   },

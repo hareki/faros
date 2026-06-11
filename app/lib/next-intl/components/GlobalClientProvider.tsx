@@ -13,6 +13,7 @@ export default async function GlobalClientProvider({ children }: GlobalClientPro
       messages={{
         GlobalValidation: messages.GlobalValidation,
         GlobalErrorBoundary: messages.GlobalErrorBoundary,
+        GlobalCommon: messages.GlobalCommon,
       }}
     >
       {children}
