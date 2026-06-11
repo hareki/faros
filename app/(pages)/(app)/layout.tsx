@@ -15,7 +15,7 @@ export default async function PrivateLayout({ children }: PropsWithChildren) {
          since the padding is used to compute collapsed state with */}
       <SidebarInset className='-ml-3'>
         <AppHeader />
-        <main className='p-3'>{children}</main>
+        <main className='flex-1 p-3'>{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );
