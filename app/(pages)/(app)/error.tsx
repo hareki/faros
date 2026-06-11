@@ -4,6 +4,6 @@ import { type ErrorInfo } from 'next/error';
 
 import { RouteErrorFallback } from '@/app/components/layout/RouteErrorFallback';
 
-export default function RouteError(props: ErrorInfo) {
-  return <RouteErrorFallback {...props} scope='page' />;
+export default function AppError(props: ErrorInfo) {
+  return <RouteErrorFallback {...props} scope='app' />;
 }
