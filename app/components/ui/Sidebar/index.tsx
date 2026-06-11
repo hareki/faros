@@ -17,7 +17,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@/app/components/ui/Sheet';
-import { Skeleton } from '@/app/components/ui/skeleton';
+import { Skeleton } from '@/app/components/ui/Skeleton';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/app/components/ui/Tooltip';
 import { useIsMobile } from '@/app/hooks/useMobile';
 import { cn } from '@/app/lib/tailwind/utils';
