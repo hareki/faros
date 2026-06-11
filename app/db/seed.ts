@@ -222,7 +222,7 @@ async function seed() {
     {
       applicationId: active.id,
       type: 'stage_change',
-      description: 'Moved Applied → Active',
+      description: 'Moved Applied => Active',
       metadata: { from: 'applied', to: 'active' },
     },
     { applicationId: active.id, type: 'sub_stage_change', metadata: { to: 'Tech Screen' } },
