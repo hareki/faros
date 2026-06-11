@@ -10,6 +10,11 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 - Use pnpm instead of bun to execute package.json scripts
 
+## Code conventions
+
+- Exported functions, variables, and types that carry a dedicated explanatory comment must use JSDoc (`/** */`) so IDE hover tooltips show the description without jumping to the definition. Internal (non-exported) module-scoped symbols keep plain `//` comments.
+- The React Compiler is enabled, so do not use `useMemo`, `useCallback`, or `memo` unless there is a very good reason to.
+
 ## Agent skills
 
 ### Issue tracker
