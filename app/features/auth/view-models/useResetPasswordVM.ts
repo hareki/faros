@@ -5,12 +5,12 @@ import { useEffect, useState, useTransition } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations, type Messages } from 'next-intl';
 import { parseAsString, useQueryState } from 'nuqs';
-import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { requestPasswordResetAction } from '@/app/features/auth/actions/requestPasswordResetAction';
 import { resolveErrorMessage } from '@/app/features/auth/utils/resolveMessage';
 import { useForm } from '@/app/lib/form/hooks/useForm';
+import { toast } from '@/app/lib/sonner/toast';
 import { zEmail } from '@/app/lib/zod/schemas/primitive';
 import { emailMessages } from '@/app/lib/zod/validationMessages';
 

@@ -5,12 +5,12 @@ import { useTransition } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useTranslations, type Messages } from 'next-intl';
-import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { resetPasswordAction } from '@/app/features/auth/actions/resetPasswordAction';
 import { resolveErrorMessage } from '@/app/features/auth/utils/resolveMessage';
 import { useForm } from '@/app/lib/form/hooks/useForm';
+import { toast } from '@/app/lib/sonner/toast';
 import { zPassword } from '@/app/lib/zod/schemas/primitive';
 import { passwordMessages } from '@/app/lib/zod/validationMessages';
 

@@ -4,7 +4,6 @@ import { useState, useTransition } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations, type Messages } from 'next-intl';
-import { toast } from 'sonner';
 import { type z } from 'zod';
 
 import { resendVerificationEmailAction } from '@/app/features/auth/actions/resendVerificationEmailAction';
@@ -13,6 +12,7 @@ import { buildSignUpSchema } from '@/app/features/auth/schemas/signUp';
 import { resolveErrorMessage } from '@/app/features/auth/utils/resolveMessage';
 import { type SupportedSocialProvider, socialSignIn } from '@/app/lib/better-auth/social';
 import { useForm } from '@/app/lib/form/hooks/useForm';
+import { toast } from '@/app/lib/sonner/toast';
 import { emailMessages, passwordMessages } from '@/app/lib/zod/validationMessages';
 
 type SignUpMessages = Messages['ClientAuthentication'] & Messages['ClientSignUp'];

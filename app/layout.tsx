@@ -10,9 +10,9 @@ import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 import { cn } from '@/app/lib/tailwind/utils';
 
-import Toaster from './components/ui/Sonner';
 import { rubik } from './fonts';
 import GlobalClientProvider from './lib/next-intl/components/GlobalClientProvider';
+import Toaster from './lib/sonner/components/Sonner';
 import { serverEnv } from './lib/t3-env/server';
 
 import './styles/globals.css';
@@ -60,7 +60,7 @@ async function InnerRootLayout({ children }: RootLayoutProps) {
               <GlobalClientProvider>{children}</GlobalClientProvider>
             </NuqsAdapter>
           </Suspense>
-          <Toaster position='top-center' toastOptions={{ className: 'font-sans' }} />
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

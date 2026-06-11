@@ -1,0 +1,9 @@
+/* Slide toasts in from / out to the right edge (matches the top-right position). */
+[data-sonner-toaster] [data-sonner-toast][data-y-position='top']:not([data-mounted='true']) {
+  --y: translateX(100%);
+}
+
+[data-sonner-toaster]
+  [data-sonner-toast][data-removed='true'][data-front='true'][data-swipe-out='false'] {
+  --y: translateX(100%);
+}
