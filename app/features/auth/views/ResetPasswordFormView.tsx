@@ -6,7 +6,7 @@ import { Button } from '@/app/components/ui/Button';
 import { FieldGroup } from '@/app/components/ui/Field';
 import { useResetPasswordVM } from '@/app/features/auth/view-models/useResetPasswordVM';
 import { FormTextField } from '@/app/lib/form/components/FormTextField';
-import { type ClientMessages } from '@/app/lib/next-intl/clientMessages';
+import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
 
 import AuthFormWrapperView from './AuthFormWrapperView';
 import CheckEmailView from './CheckEmailView';

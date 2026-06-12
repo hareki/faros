@@ -2,7 +2,7 @@ import { getTranslations } from 'next-intl/server';
 
 import Link from '@/app/components/ui/Link';
 import SignInForm from '@/app/features/auth/views/SignInFormView';
-import { getClientMessages } from '@/app/lib/next-intl/getClientMessages';
+import { getClientMessages } from '@/app/lib/next-intl/utils/getClientMessages';
 
 export default async function SignIn() {
   const t = await getTranslations('auth.signIn');

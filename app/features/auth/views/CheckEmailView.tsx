@@ -4,7 +4,7 @@ import { type PropsWithChildren } from 'react';
 
 import { IconMail } from '@tabler/icons-react';
 
-import { type ClientMessages } from '@/app/lib/next-intl/clientMessages';
+import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
 
 import AuthFormWrapperView from './AuthFormWrapperView';
 

@@ -1,7 +1,7 @@
 import { IconBell, IconSearch } from '@tabler/icons-react';
 import { getTranslations } from 'next-intl/server';
 
-import { getClientMessages } from '@/app/lib/next-intl/getClientMessages';
+import { getClientMessages } from '@/app/lib/next-intl/utils/getClientMessages';
 
 import { NavUser } from './NavUser';
 import { Button } from '../../ui/Button';

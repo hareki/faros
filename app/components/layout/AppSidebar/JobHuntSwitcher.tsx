@@ -2,7 +2,7 @@
 
 import { IconBriefcase, IconCheck, IconSelector, IconPlus } from '@tabler/icons-react';
 
-import { type ClientMessages } from '@/app/lib/next-intl/clientMessages';
+import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
 
 import {
   DropdownMenu,

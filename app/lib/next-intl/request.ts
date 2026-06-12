@@ -1,7 +1,7 @@
 import { getRequestConfig } from 'next-intl/server';
 
-import { getUserLocale } from './locale';
-import { mergeMessages } from './mergeMessages';
+import { getUserLocale } from './utils/locale';
+import { mergeMessages } from './utils/mergeMessages';
 
 const requestConfig = getRequestConfig(async () => {
   const locale = await getUserLocale();

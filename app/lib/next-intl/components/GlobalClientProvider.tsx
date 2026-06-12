@@ -2,8 +2,8 @@ import { type PropsWithChildren } from 'react';
 
 import { NextIntlClientProvider } from 'next-intl';
 
-import { GLOBAL_CLIENT_NAMESPACES, pickNamespaces } from '../clientMessages';
-import { getClientMessages } from '../getClientMessages';
+import { GLOBAL_CLIENT_NAMESPACES, pickNamespaces } from '../utils/clientMessages';
+import { getClientMessages } from '../utils/getClientMessages';
 
 type GlobalClientProviderProps = PropsWithChildren;
 

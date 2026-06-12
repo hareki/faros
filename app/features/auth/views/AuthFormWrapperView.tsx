@@ -10,7 +10,7 @@ import { Card, CardContent } from '@/app/components/ui/Card';
 import { Separator } from '@/app/components/ui/Separator';
 import { H3, Muted } from '@/app/components/ui/Typography';
 import { type SupportedSocialProvider } from '@/app/lib/better-auth/social';
-import { type ClientMessages } from '@/app/lib/next-intl/clientMessages';
+import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
 import { cn } from '@/app/lib/tailwind/utils';
 
 type AuthFormWrapperViewProps = PropsWithChildren<{

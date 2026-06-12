@@ -1,4 +1,4 @@
-import type clientMessages from './messages/en-US/client.json';
+import type clientMessages from '../messages/en-US/client.json';
 
 /**
  * Shape of the messages allowed to reach the browser (`messages/{locale}/client.json`).

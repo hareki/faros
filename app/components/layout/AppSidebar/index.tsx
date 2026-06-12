@@ -1,4 +1,4 @@
-import { getClientMessages } from '@/app/lib/next-intl/getClientMessages';
+import { getClientMessages } from '@/app/lib/next-intl/utils/getClientMessages';
 
 import BrandButton from './BrandButton';
 import { JobHuntSwitcher } from './JobHuntSwitcher';

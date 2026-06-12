@@ -10,7 +10,7 @@ import { z } from 'zod';
 import { requestPasswordResetAction } from '@/app/features/auth/actions/requestPasswordResetAction';
 import { resolveErrorMessage } from '@/app/features/auth/utils/resolveMessage';
 import { useForm } from '@/app/lib/form/hooks/useForm';
-import { type ClientMessages } from '@/app/lib/next-intl/clientMessages';
+import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
 import { toast } from '@/app/lib/sonner/toast';
 import { zEmail } from '@/app/lib/zod/schemas/primitive';
 import { emailMessages } from '@/app/lib/zod/validationMessages';

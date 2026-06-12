@@ -3,7 +3,7 @@ import { type Messages } from 'next-intl';
 import {
   resolveErrorMessage as resolveErrorMessagePrimitive,
   type ValidationTranslator,
-} from '@/app/lib/next-intl/resolveErrorMessage';
+} from '@/app/lib/next-intl/utils/resolveErrorMessage';
 import { type GlobalErrorKey } from '@/app/types/common';
 
 import { type AuthErrorKey } from '../actions/types';

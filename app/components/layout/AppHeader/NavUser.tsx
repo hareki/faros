@@ -3,7 +3,7 @@
 import { IconLogout, IconChevronDown } from '@tabler/icons-react';
 
 import { useSignOut } from '@/app/features/auth/hooks/useSignOut';
-import { type ClientMessages } from '@/app/lib/next-intl/clientMessages';
+import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
 
 import { Avatar, AvatarImage, AvatarFallback, AvatarBadge } from '../../ui/Avatar';
 import { Button } from '../../ui/Button';
