@@ -8,6 +8,7 @@ import Script from 'next/script';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
+import { ConfirmDialog } from '@/app/lib/confirm/components/ConfirmDialog';
 import { cn } from '@/app/lib/tailwind/utils';
 
 import { rubik } from './fonts';
@@ -57,10 +58,13 @@ async function InnerRootLayout({ children }: RootLayoutProps) {
         <ThemeProvider attribute='data-theme'>
           <Suspense>
             <NuqsAdapter>
-              <GlobalClientProvider>{children}</GlobalClientProvider>
+              <GlobalClientProvider>
+                <ConfirmDialog />
+                <Toaster />
+                {children}
+              </GlobalClientProvider>
             </NuqsAdapter>
           </Suspense>
-          <Toaster />
         </ThemeProvider>
       </body>
     </html>

@@ -57,7 +57,11 @@ export async function logActivity(executor: DbExecutor, params: LogActivityParam
   });
 }
 
-async function hasActivity(executor: DbExecutor, applicationId: string, type: ActivityInput['type']) {
+async function hasActivity(
+  executor: DbExecutor,
+  applicationId: string,
+  type: ActivityInput['type'],
+) {
   const [row] = await executor
     .select({ id: activityLog.id })
     .from(activityLog)
@@ -153,7 +157,11 @@ export async function recordClose(
   });
 
   if (outcome === 'rejected') {
-    await ensureResponseReceived(executor, { applicationId, trigger: 'closed_rejected', occurredAt });
+    await ensureResponseReceived(executor, {
+      applicationId,
+      trigger: 'closed_rejected',
+      occurredAt,
+    });
   } else if (outcome === 'accepted') {
     await ensureOfferReceived(executor, { applicationId, trigger: 'closed_accepted', occurredAt });
   }

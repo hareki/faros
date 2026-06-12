@@ -13,7 +13,10 @@ import { activityLog } from '@/app/db/schema';
 
 import { createApplication } from '../helpers/db';
 
-function activitiesOfType(applicationId: string, type: (typeof activityLog.type.enumValues)[number]) {
+function activitiesOfType(
+  applicationId: string,
+  type: (typeof activityLog.type.enumValues)[number],
+) {
   return db
     .select()
     .from(activityLog)

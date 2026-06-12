@@ -56,7 +56,8 @@ export function Toast({
         onClick={() => sonnerToast.dismiss(id)}
         className={`
           absolute -top-2.5 -left-2.5 rounded-full opacity-0 shadow-sm transition-opacity
-          group-hover:opacity-100 group-focus-within:opacity-100
+          group-focus-within:opacity-100
+          group-hover:opacity-100
           focus-visible:opacity-100
         `}
       >

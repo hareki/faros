@@ -14,7 +14,6 @@ export default function Toaster() {
       position='top-right'
       swipeDirections={['right']}
       className='group'
-      duration={100_000}
       icons={toastIcons}
       style={
         {

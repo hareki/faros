@@ -22,7 +22,13 @@
     "tryAgain": "Try again"
   },
   "GlobalCommon": {
-    "noData": "Nothing here yet"
+    "noData": "Nothing here yet",
+    "confirm": {
+      "title": "Are you sure?",
+      "content": "This action cannot be undone",
+      "confirmText": "Confirm",
+      "cancelText": "Cancel"
+    }
   },
   "Layout": {
     "search": "Search"

@@ -17,7 +17,13 @@
     }
   },
   "GlobalCommon": {
-    "noData": "Không có dữ liệu"
+    "noData": "Không có dữ liệu",
+    "confirm": {
+      "title": "Bạn có chắc chắn không?",
+      "content": "Hành động này không thể hoàn tác",
+      "confirmText": "Xác nhận",
+      "cancelText": "Hủy"
+    }
   },
   "Layout": {
     "search": "Tìm kiếm"
