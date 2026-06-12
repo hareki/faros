@@ -7,6 +7,7 @@ import { Toast, type ToastAction, type ToastType } from './components/Toast';
 type ToastOptions = {
   description?: ReactNode;
   action?: ToastAction;
+  closeLabel?: string;
 };
 
 function emit(type: ToastType, title: ReactNode, options?: ToastOptions) {
@@ -17,6 +18,7 @@ function emit(type: ToastType, title: ReactNode, options?: ToastOptions) {
       title={title}
       description={options?.description}
       action={options?.action}
+      closeLabel={options?.closeLabel}
     />
   ));
 }
