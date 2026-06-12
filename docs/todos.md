@@ -61,8 +61,8 @@ BE config → flows → FE pages; the data model is dictated by Better Auth, so 
 - [x] [BE] `logActivity()` helper — writes typed `activity_log` rows with `metadata` diff; invoked by every mutation. Activity log is the single source of truth for analytics (ADR-0002), so this is load-bearing. Must auto-write `response_received` (first advance out of Applied or close-as-rejected; never ghosted) and `offer_received` (offer_deadline event created or close-as-accepted; backfill), plus stamp `stage_change` for funnel milestones.
 - [x] [BE] Server-action result convention — typed success/error envelope consumable by FE (RHF, Toast, etc)
 - [x] [FE] Form primitive: RHF + Zod resolver wiring + shared field components
-- [ ] [FE] Toast convention: Sonner helper hook around the server-action result envelope
-- [ ] [FE] Reusable empty-state component + per-segment Suspense/error-boundary layout conventions
+- [x] [FE] Toast convention: Sonner helper hook around the server-action result envelope
+- [x] [FE] Reusable empty-state component + per-segment Suspense/error-boundary layout conventions
 
 ## Features
 
