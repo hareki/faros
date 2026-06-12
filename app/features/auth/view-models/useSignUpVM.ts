@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslations, type Messages } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { type z } from 'zod';
 
 import { resendVerificationEmailAction } from '@/app/features/auth/actions/resendVerificationEmailAction';
@@ -12,13 +12,14 @@ import { buildSignUpSchema } from '@/app/features/auth/schemas/signUp';
 import { resolveErrorMessage } from '@/app/features/auth/utils/resolveMessage';
 import { type SupportedSocialProvider, socialSignIn } from '@/app/lib/better-auth/social';
 import { useForm } from '@/app/lib/form/hooks/useForm';
+import { type ClientMessages } from '@/app/lib/next-intl/clientMessages';
 import { toast } from '@/app/lib/sonner/toast';
 import { emailMessages, passwordMessages } from '@/app/lib/zod/validationMessages';
 
-type SignUpMessages = Messages['ClientAuthentication'] & Messages['ClientSignUp'];
+type SignUpMessages = ClientMessages['auth']['shared'] & ClientMessages['auth']['signUp'];
 
 export function useSignUpVM(messages: SignUpMessages) {
-  const t = useTranslations('GlobalValidation');
+  const t = useTranslations('validation');
   const schema = buildSignUpSchema({
     email: emailMessages(t, messages.email),
     password: passwordMessages(t, messages.password),

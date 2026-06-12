@@ -22,14 +22,14 @@ export function ConfirmDialog() {
   const open = useConfirmStore((state) => state.open);
   const config = useConfirmStore((state) => state.config);
   const [loading, setLoading] = useState(false);
-  const t = useTranslations('GlobalCommon');
+  const t = useTranslations('components.confirmDialog');
 
   const destructive = config?.variant === 'destructive';
   const icon = config?.icon ?? null;
-  const title = config?.title ?? t('confirm.title');
-  const content = config?.content ?? t('confirm.content');
-  const confirmText = config?.confirmText ?? t('confirm.confirmText');
-  const cancelText = config?.cancelText ?? t('confirm.cancelText');
+  const title = config?.title ?? t('title');
+  const content = config?.content ?? t('content');
+  const confirmText = config?.confirmText ?? t('confirmText');
+  const cancelText = config?.cancelText ?? t('cancelText');
   const size = config?.size ?? 'sm';
 
   const handleConfirm = async () => {

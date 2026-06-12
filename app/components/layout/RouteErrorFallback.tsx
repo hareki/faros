@@ -15,7 +15,7 @@ type RouteErrorFallbackProps = ErrorInfo & {
 };
 
 export function RouteErrorFallback({ error, unstable_retry, scope }: RouteErrorFallbackProps) {
-  const t = useTranslations('GlobalErrorBoundary');
+  const t = useTranslations('errorBoundary');
 
   useEffect(() => {
     clientLogger.error({

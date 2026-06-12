@@ -1,4 +1,4 @@
-import { getMessages } from 'next-intl/server';
+import { getClientMessages } from '@/app/lib/next-intl/getClientMessages';
 
 import BrandButton from './BrandButton';
 import { JobHuntSwitcher } from './JobHuntSwitcher';
@@ -6,7 +6,7 @@ import { NavMain } from './NavMain';
 import { Sidebar, SidebarContent, SidebarGroup, SidebarHeader } from '../../ui/Sidebar';
 
 export async function AppSidebar() {
-  const messages = await getMessages();
+  const clientMessages = await getClientMessages();
 
   return (
     <Sidebar variant='floating' collapsible='icon'>
@@ -16,10 +16,10 @@ export async function AppSidebar() {
 
       <SidebarContent>
         <SidebarGroup className='pb-0'>
-          <JobHuntSwitcher messages={messages.ClientLayout.jobHuntSwitcher} />
+          <JobHuntSwitcher messages={clientMessages.layout.jobHuntSwitcher} />
         </SidebarGroup>
         <SidebarGroup>
-          <NavMain messages={messages.ClientLayout.nav} />
+          <NavMain messages={clientMessages.layout.nav} />
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>

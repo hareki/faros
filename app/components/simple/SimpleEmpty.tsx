@@ -22,7 +22,7 @@ type SimpleEmptyProps = {
 };
 
 export function SimpleEmpty({ media, className, title, description, content }: SimpleEmptyProps) {
-  const t = useTranslations('GlobalCommon');
+  const t = useTranslations('components.simpleEmpty');
   const computedTitle = title ?? t('noData');
   const computedMedia = media ?? (
     <EmptyMedia variant='icon' className={cn(!description && 'mb-0')}>

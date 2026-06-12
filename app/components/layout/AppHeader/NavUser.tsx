@@ -1,9 +1,9 @@
 'use client';
 
 import { IconLogout, IconChevronDown } from '@tabler/icons-react';
-import { type Messages } from 'next-intl';
 
 import { useSignOut } from '@/app/features/auth/hooks/useSignOut';
+import { type ClientMessages } from '@/app/lib/next-intl/clientMessages';
 
 import { Avatar, AvatarImage, AvatarFallback, AvatarBadge } from '../../ui/Avatar';
 import { Button } from '../../ui/Button';
@@ -26,7 +26,7 @@ export function NavUser({
     email: string;
     avatar: string;
   };
-  messages: Messages['ClientLayout']['navUser'];
+  messages: ClientMessages['layout']['navUser'];
 }) {
   const [signOut] = useSignOut();
 

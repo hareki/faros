@@ -4,12 +4,12 @@ import { type ReactNode } from 'react';
 
 import { IconArrowRight } from '@tabler/icons-react';
 import LinkPrimitive from 'next/link';
-import { type Messages } from 'next-intl';
 
 import { Button } from '@/app/components/ui/Button';
 import { FieldGroup } from '@/app/components/ui/Field';
 import { useSignUpVM } from '@/app/features/auth/view-models/useSignUpVM';
 import { FormTextField } from '@/app/lib/form/components/FormTextField';
+import { type ClientMessages } from '@/app/lib/next-intl/clientMessages';
 
 import AuthFormWrapperView from './AuthFormWrapperView';
 import CheckEmailView from './CheckEmailView';
@@ -18,7 +18,7 @@ type SignUpFormProps = {
   title: ReactNode;
   subtitle: ReactNode;
   footer: ReactNode;
-  messages: Messages['ClientAuthentication'] & Messages['ClientSignUp'];
+  messages: ClientMessages['auth']['shared'] & ClientMessages['auth']['signUp'];
 };
 
 export default function SignUpFormView({ title, subtitle, footer, messages }: SignUpFormProps) {

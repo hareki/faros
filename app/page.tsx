@@ -7,7 +7,7 @@ import Link from './components/ui/Link';
 import LocaleSwitcher from './lib/next-intl/components/LocaleSwitcher';
 
 export default async function LandingPage() {
-  const t = await getTranslations('LandingPage');
+  const t = await getTranslations('landingPage');
   const user = await getUser();
 
   return (

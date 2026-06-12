@@ -13,7 +13,8 @@ import {
 } from '@tabler/icons-react';
 import { type Route } from 'next';
 import { usePathname } from 'next/navigation';
-import { type Messages } from 'next-intl';
+
+import { type ClientMessages } from '@/app/lib/next-intl/clientMessages';
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../../ui/Collapsible';
 import Link from '../../ui/Link';
@@ -27,7 +28,7 @@ import {
 } from '../../ui/Sidebar';
 
 type NavLeaf = {
-  key: keyof Messages['ClientLayout']['nav'];
+  key: keyof ClientMessages['layout']['nav'];
   url: Route;
   icon: Icon;
 };
@@ -44,7 +45,7 @@ const settingsItems: NavLeaf[] = [
   { key: 'notification', url: '/settings/notification', icon: IconBell },
 ];
 
-export function NavMain({ messages }: { messages: Messages['ClientLayout']['nav'] }) {
+export function NavMain({ messages }: { messages: ClientMessages['layout']['nav'] }) {
   const pathname = usePathname();
 
   return (

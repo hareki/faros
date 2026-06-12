@@ -1,0 +1,61 @@
+{
+  "metadata": {
+    "description": "Job Application Tracker"
+  },
+  "layout": {
+    "search": "Search"
+  },
+  "landingPage": {
+    "title": "Landing Page (Always accessible)",
+    "toSignIn": "To Sign In Page",
+    "toDashboard": "To Dashboard Page"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Log in to Faros",
+      "subtitle": "Don't have an account? <link>Sign up</link>.",
+      "footer": "By signing in, you agree to our <terms>Terms</terms> and <privacy>Privacy Policy</privacy>."
+    },
+    "signUp": {
+      "title": "Create a Faros account",
+      "subtitle": "Already have an account? <link>Log in</link>.",
+      "footer": "By signing up, you agree to our <terms>Terms</terms>, <acceptableUse>Acceptable Use</acceptableUse>, and <privacy>Privacy Policy</privacy>."
+    },
+    "resetPassword": {
+      "title": "Reset password",
+      "subtitle": "Include the email address associated with your account and we'll send you an email with instructions to reset your password."
+    },
+    "newPassword": {
+      "title": "Set a new password",
+      "subtitle": "Choose a new password for your account."
+    }
+  },
+  "email": {
+    "common": {
+      "fallback": "or copy and paste this URL into your browser:",
+      "footer": "If you didn't request this email, you can safely ignore it."
+    },
+    "verify": {
+      "subject": "Verify your email address",
+      "preview": "Verify your email to finish setting up your Faros account",
+      "heading": "Verify your email",
+      "body": "Thanks for signing up for Faros. Click the button below to verify your email address and activate your account.",
+      "cta": "Verify email"
+    },
+    "reset": {
+      "subject": "Reset your password",
+      "preview": "Reset the password for your Faros account",
+      "heading": "Reset your password",
+      "body": "We received a request to reset your Faros password. Click the button below to choose a new one.",
+      "cta": "Reset password",
+      "expiryNote": "This link will expire in 1 hour. If you didn't request a password reset, you can safely ignore this email."
+    },
+    "existing": {
+      "subject": "Sign-in attempt with your email",
+      "preview": "Someone tried to sign up with your Faros email",
+      "heading": "You already have an account",
+      "body": "Someone just tried to create a Faros account with this email. If that was you, simply sign in. If not, you can safely ignore this email.",
+      "cta": "Go to sign in"
+    }
+  }
+}

@@ -1,7 +1,8 @@
-import { getMessages, getTranslations } from 'next-intl/server';
+import { getTranslations } from 'next-intl/server';
 
 import NewPasswordFormView from '@/app/features/auth/views/NewPasswordFormView';
 import ResetPasswordFormView from '@/app/features/auth/views/ResetPasswordFormView';
+import { getClientMessages } from '@/app/lib/next-intl/getClientMessages';
 
 type ResetPasswordProps = {
   searchParams: Promise<{ token?: string }>;
@@ -9,11 +10,11 @@ type ResetPasswordProps = {
 
 export default async function ResetPassword({ searchParams }: ResetPasswordProps) {
   const { token } = await searchParams;
-  const allMessages = await getMessages();
+  const clientMessages = await getClientMessages();
 
   if (token) {
-    const t = await getTranslations('NewPassword');
-    const messages = { ...allMessages.ClientAuthentication, ...allMessages.ClientNewPassword };
+    const t = await getTranslations('auth.newPassword');
+    const messages = { ...clientMessages.auth.shared, ...clientMessages.auth.newPassword };
 
     return (
       <NewPasswordFormView
@@ -25,8 +26,8 @@ export default async function ResetPassword({ searchParams }: ResetPasswordProps
     );
   }
 
-  const t = await getTranslations('ForgotPassword');
-  const messages = { ...allMessages.ClientAuthentication, ...allMessages.ClientForgotPassword };
+  const t = await getTranslations('auth.resetPassword');
+  const messages = { ...clientMessages.auth.shared, ...clientMessages.auth.resetPassword };
 
   return <ResetPasswordFormView messages={messages} title={t('title')} subtitle={t('subtitle')} />;
 }

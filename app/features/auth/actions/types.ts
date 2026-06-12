@@ -3,7 +3,7 @@ import { type Messages } from 'next-intl';
 import { type ActionResult } from '@/app/types/common';
 
 export type AuthErrorKey = Extract<
-  keyof Messages['ClientAuthentication'],
+  keyof Messages['auth']['shared'],
   'errorInvalidCredentials' | 'errorInvalidToken'
 >;
 

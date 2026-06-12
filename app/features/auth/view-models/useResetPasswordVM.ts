@@ -3,21 +3,23 @@
 import { useEffect, useState, useTransition } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslations, type Messages } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { parseAsString, useQueryState } from 'nuqs';
 import { z } from 'zod';
 
 import { requestPasswordResetAction } from '@/app/features/auth/actions/requestPasswordResetAction';
 import { resolveErrorMessage } from '@/app/features/auth/utils/resolveMessage';
 import { useForm } from '@/app/lib/form/hooks/useForm';
+import { type ClientMessages } from '@/app/lib/next-intl/clientMessages';
 import { toast } from '@/app/lib/sonner/toast';
 import { zEmail } from '@/app/lib/zod/schemas/primitive';
 import { emailMessages } from '@/app/lib/zod/validationMessages';
 
-type ResetPasswordMessages = Messages['ClientAuthentication'] & Messages['ClientForgotPassword'];
+type ResetPasswordMessages = ClientMessages['auth']['shared'] &
+  ClientMessages['auth']['resetPassword'];
 
 export function useResetPasswordVM(messages: ResetPasswordMessages) {
-  const t = useTranslations('GlobalValidation');
+  const t = useTranslations('validation');
   const schema = z.object({
     email: zEmail(emailMessages(t, messages.email)),
   });

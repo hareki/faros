@@ -7,7 +7,7 @@ import type Link from 'next/link';
 export type NextRoute = ComponentProps<typeof Link>['href'];
 
 export type GlobalErrorKey = Extract<
-  keyof Messages['GlobalValidation'],
+  keyof Messages['validation'],
   'errorGeneric' | 'errorValidation'
 >;
 

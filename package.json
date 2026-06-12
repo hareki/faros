@@ -24,7 +24,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "i18n:generate": "NODE_ENV=production bun scripts/generateNextIntlTypes.ts",
-    "i18n:check": "i18n-check -l app/lib/next-intl/messages --source en-US --format next-intl",
+    "i18n:check": "i18n-check -l app/lib/next-intl/messages --source en-US --format next-intl && bun scripts/checkMessageStructure.ts",
     "email:dev": "pnpm --filter @faros/emails dev --port 3002"
   },
   "dependencies": {

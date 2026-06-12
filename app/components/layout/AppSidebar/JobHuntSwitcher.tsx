@@ -1,7 +1,8 @@
 'use client';
 
 import { IconBriefcase, IconCheck, IconSelector, IconPlus } from '@tabler/icons-react';
-import { type Messages } from 'next-intl';
+
+import { type ClientMessages } from '@/app/lib/next-intl/clientMessages';
 
 import {
   DropdownMenu,
@@ -22,7 +23,7 @@ const hunts = [
 export function JobHuntSwitcher({
   messages,
 }: {
-  messages: Messages['ClientLayout']['jobHuntSwitcher'];
+  messages: ClientMessages['layout']['jobHuntSwitcher'];
 }) {
   const activeHunt = hunts.find((hunt) => hunt.active) ?? hunts[0];
 

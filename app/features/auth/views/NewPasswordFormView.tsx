@@ -2,19 +2,18 @@
 
 import { type ReactNode } from 'react';
 
-import { type Messages } from 'next-intl';
-
 import { Button } from '@/app/components/ui/Button';
 import { FieldGroup } from '@/app/components/ui/Field';
 import { useNewPasswordVM } from '@/app/features/auth/view-models/useNewPasswordVM';
 import { FormTextField } from '@/app/lib/form/components/FormTextField';
+import { type ClientMessages } from '@/app/lib/next-intl/clientMessages';
 
 import AuthFormWrapperView from './AuthFormWrapperView';
 
 type NewPasswordFormProps = {
   title: ReactNode;
   subtitle: ReactNode;
-  messages: Messages['ClientAuthentication'] & Messages['ClientNewPassword'];
+  messages: ClientMessages['auth']['shared'] & ClientMessages['auth']['newPassword'];
   // Reset token lifted from the `?token=` query param by the page.
   token: string;
 };

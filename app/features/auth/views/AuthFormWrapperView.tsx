@@ -2,8 +2,6 @@
 
 import { Fragment, type PropsWithChildren, type ReactNode, ViewTransition } from 'react';
 
-import { type Messages } from 'next-intl';
-
 import FavIcon from '@/app/components/icons/FavIcon';
 import GitHubIcon from '@/app/components/icons/GitHubIcon';
 import GoogleIcon from '@/app/components/icons/GoogleIcon';
@@ -12,6 +10,7 @@ import { Card, CardContent } from '@/app/components/ui/Card';
 import { Separator } from '@/app/components/ui/Separator';
 import { H3, Muted } from '@/app/components/ui/Typography';
 import { type SupportedSocialProvider } from '@/app/lib/better-auth/social';
+import { type ClientMessages } from '@/app/lib/next-intl/clientMessages';
 import { cn } from '@/app/lib/tailwind/utils';
 
 type AuthFormWrapperViewProps = PropsWithChildren<{
@@ -22,7 +21,7 @@ type AuthFormWrapperViewProps = PropsWithChildren<{
   icon?: ReactNode;
   // Omit to hide the social sign-in section (and its divider) entirely.
   onSocialClick?: (provider: SupportedSocialProvider) => void;
-  messages: Messages['ClientAuthentication'];
+  messages: ClientMessages['auth']['shared'];
 }>;
 
 export default function AuthFormWrapperView({

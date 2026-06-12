@@ -1,5 +1,7 @@
 import { IconBell, IconSearch } from '@tabler/icons-react';
-import { getMessages } from 'next-intl/server';
+import { getTranslations } from 'next-intl/server';
+
+import { getClientMessages } from '@/app/lib/next-intl/getClientMessages';
 
 import { NavUser } from './NavUser';
 import { Button } from '../../ui/Button';
@@ -7,13 +9,14 @@ import { Input } from '../../ui/Input';
 import { SidebarTrigger } from '../../ui/Sidebar';
 
 export async function AppHeader() {
-  const messages = await getMessages();
+  const t = await getTranslations('layout');
+  const clientMessages = await getClientMessages();
 
   return (
     <header className='flex shrink-0 items-center justify-between gap-2 border-b p-3'>
       <div className='flex gap-2'>
         <SidebarTrigger />
-        <Input placeholder={messages.Layout.search} variant='outline' icon={<IconSearch />} />
+        <Input placeholder={t('search')} variant='outline' icon={<IconSearch />} />
       </div>
 
       <div className='flex gap-2'>
@@ -21,7 +24,7 @@ export async function AppHeader() {
           <IconBell />
         </Button>
         <NavUser
-          messages={messages.ClientLayout.navUser}
+          messages={clientMessages.layout.navUser}
           user={{
             name: 'shadcn',
             email: 'm@example.com',

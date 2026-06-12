@@ -3,12 +3,13 @@
 import { type PropsWithChildren } from 'react';
 
 import { IconMail } from '@tabler/icons-react';
-import { type Messages } from 'next-intl';
+
+import { type ClientMessages } from '@/app/lib/next-intl/clientMessages';
 
 import AuthFormWrapperView from './AuthFormWrapperView';
 
 type CheckEmailViewProps = PropsWithChildren<{
-  messages: Messages['ClientAuthentication'];
+  messages: ClientMessages['auth']['shared'];
   email: string;
 }>;
 

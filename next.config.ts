@@ -6,7 +6,10 @@ import './app/lib/t3-env/server';
 import { type NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
 
-export const MESSAGE_PATH = './app/lib/next-intl/messages/en-US.json';
+export const MESSAGE_PATHS = [
+  './app/lib/next-intl/messages/en-US/client.json',
+  './app/lib/next-intl/messages/en-US/server.json',
+];
 
 const nextConfig: NextConfig = {
   typedRoutes: true,
@@ -24,7 +27,7 @@ const withNextIntl = createNextIntlPlugin({
   experimental: {
     // Not using a `src` folder
     srcPath: './',
-    createMessagesDeclaration: MESSAGE_PATH,
+    createMessagesDeclaration: MESSAGE_PATHS,
   },
 });
 

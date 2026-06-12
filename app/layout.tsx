@@ -19,7 +19,7 @@ import { serverEnv } from './lib/t3-env/server';
 import './styles/globals.css';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('Metadata');
+  const t = await getTranslations('metadata');
 
   return {
     title: 'Faros',

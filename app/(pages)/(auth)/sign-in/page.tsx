@@ -1,12 +1,13 @@
-import { getMessages, getTranslations } from 'next-intl/server';
+import { getTranslations } from 'next-intl/server';
 
 import Link from '@/app/components/ui/Link';
 import SignInForm from '@/app/features/auth/views/SignInFormView';
+import { getClientMessages } from '@/app/lib/next-intl/getClientMessages';
 
 export default async function SignIn() {
-  const t = await getTranslations('SignIn');
-  const allMessages = await getMessages();
-  const messages = { ...allMessages.ClientAuthentication, ...allMessages.ClientSignIn };
+  const t = await getTranslations('auth.signIn');
+  const clientMessages = await getClientMessages();
+  const messages = { ...clientMessages.auth.shared, ...clientMessages.auth.signIn };
 
   return (
     <SignInForm

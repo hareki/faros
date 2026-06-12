@@ -4,20 +4,21 @@ import { useTransition } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { useTranslations, type Messages } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { z } from 'zod';
 
 import { resetPasswordAction } from '@/app/features/auth/actions/resetPasswordAction';
 import { resolveErrorMessage } from '@/app/features/auth/utils/resolveMessage';
 import { useForm } from '@/app/lib/form/hooks/useForm';
+import { type ClientMessages } from '@/app/lib/next-intl/clientMessages';
 import { toast } from '@/app/lib/sonner/toast';
 import { zPassword } from '@/app/lib/zod/schemas/primitive';
 import { passwordMessages } from '@/app/lib/zod/validationMessages';
 
-type NewPasswordMessages = Messages['ClientAuthentication'] & Messages['ClientNewPassword'];
+type NewPasswordMessages = ClientMessages['auth']['shared'] & ClientMessages['auth']['newPassword'];
 
 export function useNewPasswordVM(messages: NewPasswordMessages, token: string) {
-  const t = useTranslations('GlobalValidation');
+  const t = useTranslations('validation');
   const schema = z
     .object({
       password: zPassword(passwordMessages(t, messages.label)),

@@ -3,13 +3,13 @@
 import { type ReactNode } from 'react';
 
 import { IconArrowRight } from '@tabler/icons-react';
-import { type Messages } from 'next-intl';
 
 import { Button } from '@/app/components/ui/Button';
 import { FieldGroup } from '@/app/components/ui/Field';
 import Link from '@/app/components/ui/Link';
 import { useSignInVM } from '@/app/features/auth/view-models/useSignInVM';
 import { FormTextField } from '@/app/lib/form/components/FormTextField';
+import { type ClientMessages } from '@/app/lib/next-intl/clientMessages';
 
 import AuthFormWrapperView from './AuthFormWrapperView';
 import CheckEmailView from './CheckEmailView';
@@ -18,7 +18,7 @@ type SignInFormProps = {
   title: ReactNode;
   subtitle: ReactNode;
   footer: ReactNode;
-  messages: Messages['ClientAuthentication'] & Messages['ClientSignIn'];
+  messages: ClientMessages['auth']['shared'] & ClientMessages['auth']['signIn'];
 };
 
 export default function SignInForm({ title, subtitle, footer, messages }: SignInFormProps) {

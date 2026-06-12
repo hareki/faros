@@ -12,7 +12,7 @@ type SendParams = {
 
 export async function sendVerificationEmail({ to, url }: SendParams) {
   const locale = await getUserLocale();
-  const t = await getTranslations({ locale, namespace: 'Email' });
+  const t = await getTranslations({ locale, namespace: 'email' });
 
   await sendEmail({
     to,
@@ -33,7 +33,7 @@ export async function sendVerificationEmail({ to, url }: SendParams) {
 
 export async function sendResetPasswordEmail({ to, url }: SendParams) {
   const locale = await getUserLocale();
-  const t = await getTranslations({ locale, namespace: 'Email' });
+  const t = await getTranslations({ locale, namespace: 'email' });
 
   await sendEmail({
     to,
@@ -54,7 +54,7 @@ export async function sendResetPasswordEmail({ to, url }: SendParams) {
 
 export async function sendExistingAccountEmail({ to }: { to: string }) {
   const locale = await getUserLocale();
-  const t = await getTranslations({ locale, namespace: 'Email' });
+  const t = await getTranslations({ locale, namespace: 'email' });
 
   await sendEmail({
     to,

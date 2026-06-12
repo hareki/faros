@@ -1,0 +1,90 @@
+{
+  "validation": {
+    "errorGeneric": "Đã có lỗi xảy ra. Vui lòng thử lại.",
+    "errorValidation": "Xác thực không thành công.",
+
+    "required": "Vui lòng nhập {object}",
+    "password": "Ít nhất {totalCharCount, plural, other {# ký tự}} với {specialCharCount, plural, other {# ký tự đặc biệt}}",
+    "objectInvalid": "{object} không hợp lệ",
+    "min": {
+      "character": "Tối thiểu {count, plural, other {# ký tự}}."
+    },
+    "max": {
+      "character": "Tối đa {count, plural, other {# ký tự}}."
+    }
+  },
+  "errorBoundary": {
+    "title": "Đã có lỗi xảy ra",
+    "subtitle": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.",
+    "tryAgain": "Thử lại"
+  },
+  "components": {
+    "simpleEmpty": {
+      "noData": "Không có dữ liệu"
+    },
+    "confirmDialog": {
+      "title": "Bạn có chắc chắn không?",
+      "content": "Hành động này không thể hoàn tác",
+      "confirmText": "Xác nhận",
+      "cancelText": "Hủy"
+    }
+  },
+  "layout": {
+    "nav": {
+      "dashboard": "Bảng điều khiển",
+      "trackerBoard": "Bảng theo dõi",
+      "resumeLibrary": "Thư viện hồ sơ",
+      "settings": "Cài đặt",
+      "tags": "Thẻ",
+      "subStages": "Giai đoạn phụ",
+      "notification": "Thông báo"
+    },
+    "jobHuntSwitcher": {
+      "activeJobHunt": "Đợt tìm việc hiện tại",
+      "jobHunts": "Các đợt tìm việc",
+      "startJobHunt": "Bắt đầu một đợt tìm việc"
+    },
+    "navUser": {
+      "signOut": "Đăng xuất"
+    }
+  },
+  "auth": {
+    "shared": {
+      "email": "Email",
+      "emailPlaceholder": "ten@example.com",
+      "password": "Mật khẩu",
+      "passwordPlaceholder": "Nhập mật khẩu của bạn",
+      "google": "Đăng nhập với Google",
+      "github": "Đăng nhập với GitHub",
+      "or": "hoặc",
+      "checkEmailTitle": "Kiểm tra email của bạn",
+      "checkEmailSubtitle": "Chúng tôi vừa gửi liên kết xác minh đến {email}.",
+      "resendEmail": "Gửi lại email",
+      "resendEmailSuccess": "Đã gửi email xác minh.",
+
+      "errorInvalidCredentials": "Email hoặc mật khẩu không đúng.",
+      "errorInvalidToken": "Liên kết đặt lại này không hợp lệ hoặc đã hết hạn."
+    },
+    "signIn": {
+      "submit": "Đăng nhập"
+    },
+    "signUp": {
+      "submit": "Tạo tài khoản",
+      "goToLogin": "Đến trang đăng nhập"
+    },
+    "resetPassword": {
+      "submit": "Gửi hướng dẫn đặt lại",
+      "resetCheckEmailTitle": "Kiểm tra email của bạn",
+      "resetCheckEmailSubtitle": "Nếu tồn tại tài khoản cho {email}, chúng tôi đã gửi hướng dẫn đặt lại mật khẩu."
+    },
+    "newPassword": {
+      "label": "Mật khẩu mới",
+      "placeholder": "Nhập mật khẩu mới",
+      "confirmLabel": "Xác nhận mật khẩu",
+      "confirmPlaceholder": "Nhập lại mật khẩu mới của bạn",
+      "submit": "Đặt lại mật khẩu",
+      "passwordsMustMatch": "Mật khẩu không khớp",
+      "resetSuccess": "Mật khẩu của bạn đã được đặt lại. Vui lòng đăng nhập."
+    }
+  }
+}
