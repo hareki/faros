@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+handle_error() {
+  echo "\033[0;31m\ncommit-msg hook failed\n\033[0m"
+}
+trap 'handle_error' ERR
+
+echo "\033[0;34m\ncommit-msg hook started\n\033[0m"
+npm run commitlint ${1}
+echo "\033[0;32m\ncommit-msg hook passed\n\033[0m"
