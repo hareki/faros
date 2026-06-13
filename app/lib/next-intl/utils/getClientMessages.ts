@@ -13,5 +13,5 @@ import { type ClientMessages } from './clientMessages';
 export async function getClientMessages(): Promise<ClientMessages> {
   const locale = await getLocale();
 
-  return (await import(`./messages/${locale}/client.json`)).default;
+  return (await import(`@/app/lib/next-intl/messages/${locale}/client.json`)).default;
 }
