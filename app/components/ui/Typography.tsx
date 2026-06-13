@@ -1,14 +1,11 @@
-import * as React from 'react';
+import { type ComponentPropsWithoutRef, type ElementType } from 'react';
 
 import { cn } from '@/app/lib/tailwind/utils';
 
-type PolymorphicProps<T extends React.ElementType> = { as?: T } & Omit<
-  React.ComponentPropsWithoutRef<T>,
-  'as'
->;
+type PolymorphicProps<T extends ElementType> = { as?: T } & Omit<ComponentPropsWithoutRef<T>, 'as'>;
 
-function H1<T extends React.ElementType = 'h1'>({ as, className, ...props }: PolymorphicProps<T>) {
-  const Comp: React.ElementType = as ?? 'h1';
+function H1<T extends ElementType = 'h1'>({ as, className, ...props }: PolymorphicProps<T>) {
+  const Comp: ElementType = as ?? 'h1';
 
   return (
     <Comp
@@ -19,8 +16,8 @@ function H1<T extends React.ElementType = 'h1'>({ as, className, ...props }: Pol
   );
 }
 
-function H2<T extends React.ElementType = 'h2'>({ as, className, ...props }: PolymorphicProps<T>) {
-  const Comp: React.ElementType = as ?? 'h2';
+function H2<T extends ElementType = 'h2'>({ as, className, ...props }: PolymorphicProps<T>) {
+  const Comp: ElementType = as ?? 'h2';
 
   return (
     <Comp
@@ -37,8 +34,8 @@ function H2<T extends React.ElementType = 'h2'>({ as, className, ...props }: Pol
   );
 }
 
-function H3<T extends React.ElementType = 'h3'>({ as, className, ...props }: PolymorphicProps<T>) {
-  const Comp: React.ElementType = as ?? 'h3';
+function H3<T extends ElementType = 'h3'>({ as, className, ...props }: PolymorphicProps<T>) {
+  const Comp: ElementType = as ?? 'h3';
 
   return (
     <Comp
@@ -49,8 +46,8 @@ function H3<T extends React.ElementType = 'h3'>({ as, className, ...props }: Pol
   );
 }
 
-function H4<T extends React.ElementType = 'h4'>({ as, className, ...props }: PolymorphicProps<T>) {
-  const Comp: React.ElementType = as ?? 'h4';
+function H4<T extends ElementType = 'h4'>({ as, className, ...props }: PolymorphicProps<T>) {
+  const Comp: ElementType = as ?? 'h4';
 
   return (
     <Comp
@@ -61,8 +58,8 @@ function H4<T extends React.ElementType = 'h4'>({ as, className, ...props }: Pol
   );
 }
 
-function P<T extends React.ElementType = 'p'>({ as, className, ...props }: PolymorphicProps<T>) {
-  const Comp: React.ElementType = as ?? 'p';
+function P<T extends ElementType = 'p'>({ as, className, ...props }: PolymorphicProps<T>) {
+  const Comp: ElementType = as ?? 'p';
 
   return (
     <Comp
@@ -79,12 +76,12 @@ function P<T extends React.ElementType = 'p'>({ as, className, ...props }: Polym
   );
 }
 
-function Blockquote<T extends React.ElementType = 'blockquote'>({
+function Blockquote<T extends ElementType = 'blockquote'>({
   as,
   className,
   ...props
 }: PolymorphicProps<T>) {
-  const Comp: React.ElementType = as ?? 'blockquote';
+  const Comp: ElementType = as ?? 'blockquote';
 
   return (
     <Comp
@@ -95,12 +92,8 @@ function Blockquote<T extends React.ElementType = 'blockquote'>({
   );
 }
 
-function List<T extends React.ElementType = 'ul'>({
-  as,
-  className,
-  ...props
-}: PolymorphicProps<T>) {
-  const Comp: React.ElementType = as ?? 'ul';
+function List<T extends ElementType = 'ul'>({ as, className, ...props }: PolymorphicProps<T>) {
+  const Comp: ElementType = as ?? 'ul';
 
   return (
     <Comp
@@ -117,12 +110,12 @@ function List<T extends React.ElementType = 'ul'>({
   );
 }
 
-function InlineCode<T extends React.ElementType = 'code'>({
+function InlineCode<T extends ElementType = 'code'>({
   as,
   className,
   ...props
 }: PolymorphicProps<T>) {
-  const Comp: React.ElementType = as ?? 'code';
+  const Comp: ElementType = as ?? 'code';
 
   return (
     <Comp
@@ -136,8 +129,8 @@ function InlineCode<T extends React.ElementType = 'code'>({
   );
 }
 
-function Lead<T extends React.ElementType = 'p'>({ as, className, ...props }: PolymorphicProps<T>) {
-  const Comp: React.ElementType = as ?? 'p';
+function Lead<T extends ElementType = 'p'>({ as, className, ...props }: PolymorphicProps<T>) {
+  const Comp: ElementType = as ?? 'p';
 
   return (
     <Comp
@@ -148,12 +141,8 @@ function Lead<T extends React.ElementType = 'p'>({ as, className, ...props }: Po
   );
 }
 
-function Large<T extends React.ElementType = 'div'>({
-  as,
-  className,
-  ...props
-}: PolymorphicProps<T>) {
-  const Comp: React.ElementType = as ?? 'div';
+function Large<T extends ElementType = 'div'>({ as, className, ...props }: PolymorphicProps<T>) {
+  const Comp: ElementType = as ?? 'div';
 
   return (
     <Comp
@@ -164,12 +153,8 @@ function Large<T extends React.ElementType = 'div'>({
   );
 }
 
-function Small<T extends React.ElementType = 'small'>({
-  as,
-  className,
-  ...props
-}: PolymorphicProps<T>) {
-  const Comp: React.ElementType = as ?? 'small';
+function Small<T extends ElementType = 'small'>({ as, className, ...props }: PolymorphicProps<T>) {
+  const Comp: ElementType = as ?? 'small';
 
   return (
     <Comp
@@ -180,12 +165,8 @@ function Small<T extends React.ElementType = 'small'>({
   );
 }
 
-function Muted<T extends React.ElementType = 'p'>({
-  as,
-  className,
-  ...props
-}: PolymorphicProps<T>) {
-  const Comp: React.ElementType = as ?? 'p';
+function Muted<T extends ElementType = 'p'>({ as, className, ...props }: PolymorphicProps<T>) {
+  const Comp: ElementType = as ?? 'p';
 
   return (
     <Comp

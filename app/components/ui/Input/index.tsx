@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { type ComponentProps, type ReactNode } from 'react';
 
 import { Input as InputPrimitive } from '@base-ui/react/input';
 import { type VariantProps } from 'class-variance-authority';
@@ -13,9 +13,9 @@ function Input({
   variant = 'default',
   icon,
   ...props
-}: React.ComponentProps<'input'> &
+}: ComponentProps<'input'> &
   VariantProps<typeof inputVariants> & {
-    icon?: React.ReactNode;
+    icon?: ReactNode;
   }) {
   const input = (
     <InputPrimitive

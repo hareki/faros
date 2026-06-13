@@ -1,10 +1,10 @@
 'use client';
 
-import * as React from 'react';
+import { type ComponentProps } from 'react';
 
 import { cn } from '@/app/lib/tailwind/utils';
 
-type LabelProps = React.ComponentProps<'label'>;
+type LabelProps = ComponentProps<'label'>;
 
 function Label({
   className,
