@@ -140,6 +140,7 @@
         "always",
         [
           "feat",
+          "impr",
           "fix",
           "docs",
           "style",
