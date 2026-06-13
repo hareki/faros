@@ -399,6 +399,7 @@ export default defineConfig({
     'import/no-duplicates': 'warn',
     'import/no-cycle': 'error',
     'import/no-anonymous-default-export': 'error',
+    'import/no-default-export': 'error',
     'import-x-js/order': [
       'error',
       {
@@ -525,6 +526,30 @@ export default defineConfig({
       files: ['**/declaration.ts'],
       rules: {
         'typescript/consistent-type-definitions': 'off',
+      },
+    },
+    {
+      // Next.js App Router convention requires default exports for routing segments;
+      // config files are consumed by tools that expect a default export.
+      files: [
+        '**/page.tsx',
+        '**/layout.tsx',
+        '**/error.tsx',
+        '**/loading.tsx',
+        '**/not-found.tsx',
+        '**/template.tsx',
+        '**/default.tsx',
+        '**/route.ts',
+        '**/route.tsx',
+        '*.config.ts',
+        '*.config.js',
+        '*.config.mjs',
+        // next-intl reads this file by convention and expects a default export
+        'app/lib/next-intl/request.ts',
+        'packages/emails/emails/**',
+      ],
+      rules: {
+        'import/no-default-export': 'off',
       },
     },
   ],

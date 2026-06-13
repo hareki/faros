@@ -1,6 +1,6 @@
-import createIcon from './utils/createIcon';
+import { createIcon } from './utils/createIcon';
 
-const EmptyIcon = createIcon(function EmptyIconIcon(props) {
+export const EmptyIcon = createIcon(function EmptyIconIcon(props) {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -18,5 +18,3 @@ const EmptyIcon = createIcon(function EmptyIconIcon(props) {
     </svg>
   );
 });
-
-export default EmptyIcon;

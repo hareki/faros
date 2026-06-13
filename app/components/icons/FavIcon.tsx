@@ -1,6 +1,6 @@
-import createIcon from './utils/createIcon';
+import { createIcon } from './utils/createIcon';
 
-const FavIcon = createIcon(function FavIcon(props) {
+export const FavIcon = createIcon(function FavIcon(props) {
   return (
     <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 548.207' {...props}>
       <g fill='none' fillRule='evenodd'>
@@ -81,5 +81,3 @@ const FavIcon = createIcon(function FavIcon(props) {
     </svg>
   );
 });
-
-export default FavIcon;

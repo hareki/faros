@@ -1,9 +1,9 @@
-import FavIcon from '../../icons/FavIcon';
-import Link from '../../ui/Link';
+import { FavIcon } from '../../icons/FavIcon';
+import { Link } from '../../ui/Link';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '../../ui/Sidebar';
 import { H3 } from '../../ui/Typography';
 
-export default function BrandButton() {
+export function BrandButton() {
   return (
     <SidebarMenu>
       <SidebarMenuItem>

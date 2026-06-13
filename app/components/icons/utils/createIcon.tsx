@@ -3,7 +3,7 @@ import { type SVGProps, type ReactNode } from 'react';
 type IconProps = SVGProps<SVGSVGElement>;
 type IconComp = (props: IconProps) => ReactNode;
 
-export default function createIcon(Comp: IconComp): IconComp {
+export function createIcon(Comp: IconComp): IconComp {
   function Icon({ className, ...props }: IconProps) {
     return (
       <Comp

@@ -1,6 +1,6 @@
-import createIcon from './utils/createIcon';
+import { createIcon } from './utils/createIcon';
 
-const GitHubIcon = createIcon(function GitHubIcon(props) {
+export const GitHubIcon = createIcon(function GitHubIcon(props) {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -16,5 +16,3 @@ const GitHubIcon = createIcon(function GitHubIcon(props) {
     </svg>
   );
 });
-
-export default GitHubIcon;

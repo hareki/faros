@@ -11,7 +11,7 @@ import {
 } from '@/app/components/ui/Empty';
 import { cn } from '@/app/lib/tailwind/utils';
 
-import EmptyIcon from '../icons/EmptyIcon';
+import { EmptyIcon } from '../icons/EmptyIcon';
 
 type SimpleEmptyProps = {
   className?: string;

@@ -5,7 +5,7 @@ import { Toaster, type ToasterProps } from 'sonner';
 
 import { toastIcons } from '../icons';
 
-export default function Sonner() {
+export function Sonner() {
   const { theme } = useTheme();
 
   return (

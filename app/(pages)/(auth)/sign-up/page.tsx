@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 
-import Link from '@/app/components/ui/Link';
-import SignUpFormView from '@/app/features/auth/views/SignUpFormView';
+import { Link } from '@/app/components/ui/Link';
+import { SignUpFormView } from '@/app/features/auth/views/SignUpFormView';
 import { getClientMessages } from '@/app/lib/next-intl/utils/getClientMessages';
 
 export default async function SignUp() {

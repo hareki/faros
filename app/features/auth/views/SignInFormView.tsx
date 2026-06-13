@@ -6,13 +6,13 @@ import { IconArrowRight } from '@tabler/icons-react';
 
 import { Button } from '@/app/components/ui/Button';
 import { FieldGroup } from '@/app/components/ui/Field';
-import Link from '@/app/components/ui/Link';
+import { Link } from '@/app/components/ui/Link';
 import { useSignInVM } from '@/app/features/auth/view-models/useSignInVM';
 import { FormTextField } from '@/app/lib/form/components/FormTextField';
 import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
 
-import AuthFormWrapperView from './AuthFormWrapperView';
-import CheckEmailView from './CheckEmailView';
+import { AuthFormWrapperView } from './AuthFormWrapperView';
+import { CheckEmailView } from './CheckEmailView';
 
 type SignInFormProps = {
   title: ReactNode;
@@ -21,7 +21,7 @@ type SignInFormProps = {
   messages: ClientMessages['auth']['shared'] & ClientMessages['auth']['signIn'];
 };
 
-export default function SignInForm({ title, subtitle, footer, messages }: SignInFormProps) {
+export function SignInForm({ title, subtitle, footer, messages }: SignInFormProps) {
   const { control, Form, isPending, unverifiedEmail, onSubmit, onSocialSignIn, onResend } =
     useSignInVM(messages);
 

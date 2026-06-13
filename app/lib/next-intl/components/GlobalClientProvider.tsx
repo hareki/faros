@@ -7,7 +7,7 @@ import { getClientMessages } from '../utils/getClientMessages';
 
 type GlobalClientProviderProps = PropsWithChildren;
 
-export default async function GlobalClientProvider({ children }: GlobalClientProviderProps) {
+export async function GlobalClientProvider({ children }: GlobalClientProviderProps) {
   const clientMessages = await getClientMessages();
 
   return (

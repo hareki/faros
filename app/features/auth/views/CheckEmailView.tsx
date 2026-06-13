@@ -6,14 +6,14 @@ import { IconMail } from '@tabler/icons-react';
 
 import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
 
-import AuthFormWrapperView from './AuthFormWrapperView';
+import { AuthFormWrapperView } from './AuthFormWrapperView';
 
 type CheckEmailViewProps = PropsWithChildren<{
   messages: ClientMessages['auth']['shared'];
   email: string;
 }>;
 
-export default function CheckEmailView({ messages, email, children }: CheckEmailViewProps) {
+export function CheckEmailView({ messages, email, children }: CheckEmailViewProps) {
   return (
     <AuthFormWrapperView
       messages={messages}

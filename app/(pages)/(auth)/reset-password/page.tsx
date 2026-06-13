@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 
-import NewPasswordFormView from '@/app/features/auth/views/NewPasswordFormView';
-import ResetPasswordFormView from '@/app/features/auth/views/ResetPasswordFormView';
+import { NewPasswordFormView } from '@/app/features/auth/views/NewPasswordFormView';
+import { ResetPasswordFormView } from '@/app/features/auth/views/ResetPasswordFormView';
 import { getClientMessages } from '@/app/lib/next-intl/utils/getClientMessages';
 
 type ResetPasswordProps = {

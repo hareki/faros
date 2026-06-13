@@ -8,7 +8,7 @@ import { useLocale } from 'next-intl';
 import { locales, type Locale } from '@/app/lib/next-intl/config';
 import { setUserLocale } from '@/app/lib/next-intl/utils/locale';
 
-export default function LocaleSwitcher() {
+export function LocaleSwitcher() {
   const activeLocale = useLocale();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();

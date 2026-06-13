@@ -17,7 +17,7 @@ import { usePathname } from 'next/navigation';
 import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../../ui/Collapsible';
-import Link from '../../ui/Link';
+import { Link } from '../../ui/Link';
 import {
   SidebarMenu,
   SidebarMenuButton,

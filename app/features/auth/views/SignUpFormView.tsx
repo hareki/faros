@@ -11,8 +11,8 @@ import { useSignUpVM } from '@/app/features/auth/view-models/useSignUpVM';
 import { FormTextField } from '@/app/lib/form/components/FormTextField';
 import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
 
-import AuthFormWrapperView from './AuthFormWrapperView';
-import CheckEmailView from './CheckEmailView';
+import { AuthFormWrapperView } from './AuthFormWrapperView';
+import { CheckEmailView } from './CheckEmailView';
 
 type SignUpFormProps = {
   title: ReactNode;
@@ -21,7 +21,7 @@ type SignUpFormProps = {
   messages: ClientMessages['auth']['shared'] & ClientMessages['auth']['signUp'];
 };
 
-export default function SignUpFormView({ title, subtitle, footer, messages }: SignUpFormProps) {
+export function SignUpFormView({ title, subtitle, footer, messages }: SignUpFormProps) {
   const { control, Form, isPending, sentToEmail, onSubmit, onSocialSignIn, onResend } =
     useSignUpVM(messages);
 

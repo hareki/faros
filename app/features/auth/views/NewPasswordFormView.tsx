@@ -8,7 +8,7 @@ import { useNewPasswordVM } from '@/app/features/auth/view-models/useNewPassword
 import { FormTextField } from '@/app/lib/form/components/FormTextField';
 import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
 
-import AuthFormWrapperView from './AuthFormWrapperView';
+import { AuthFormWrapperView } from './AuthFormWrapperView';
 
 type NewPasswordFormProps = {
   title: ReactNode;
@@ -18,12 +18,7 @@ type NewPasswordFormProps = {
   token: string;
 };
 
-export default function NewPasswordFormView({
-  title,
-  subtitle,
-  messages,
-  token,
-}: NewPasswordFormProps) {
+export function NewPasswordFormView({ title, subtitle, messages, token }: NewPasswordFormProps) {
   const { control, Form, isPending, onSubmit } = useNewPasswordVM(messages, token);
 
   return (

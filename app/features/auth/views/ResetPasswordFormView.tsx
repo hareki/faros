@@ -8,8 +8,8 @@ import { useResetPasswordVM } from '@/app/features/auth/view-models/useResetPass
 import { FormTextField } from '@/app/lib/form/components/FormTextField';
 import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
 
-import AuthFormWrapperView from './AuthFormWrapperView';
-import CheckEmailView from './CheckEmailView';
+import { AuthFormWrapperView } from './AuthFormWrapperView';
+import { CheckEmailView } from './CheckEmailView';
 
 type ResetPasswordFormProps = {
   title: ReactNode;
@@ -17,11 +17,7 @@ type ResetPasswordFormProps = {
   messages: ClientMessages['auth']['shared'] & ClientMessages['auth']['resetPassword'];
 };
 
-export default function ResetPasswordFormView({
-  title,
-  subtitle,
-  messages,
-}: ResetPasswordFormProps) {
+export function ResetPasswordFormView({ title, subtitle, messages }: ResetPasswordFormProps) {
   const { control, Form, isPending, sentToEmail, onSubmit } = useResetPasswordVM(messages);
 
   if (sentToEmail) {

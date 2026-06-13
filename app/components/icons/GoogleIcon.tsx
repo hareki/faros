@@ -1,6 +1,6 @@
-import createIcon from './utils/createIcon';
+import { createIcon } from './utils/createIcon';
 
-const GoogleIcon = createIcon(function GoogleIcon(props) {
+export const GoogleIcon = createIcon(function GoogleIcon(props) {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -242,5 +242,3 @@ const GoogleIcon = createIcon(function GoogleIcon(props) {
     </svg>
   );
 });
-
-export default GoogleIcon;

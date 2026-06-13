@@ -7,7 +7,7 @@ import { cn } from '@/app/lib/tailwind/utils';
 
 import { linkVariants } from './variants';
 
-export default function Link({
+export function Link({
   className,
   variant = 'default',
   size = 'default',

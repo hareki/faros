@@ -12,8 +12,8 @@ import { ConfirmDialog } from '@/app/lib/confirm/components/ConfirmDialog';
 import { cn } from '@/app/lib/tailwind/utils';
 
 import { rubik } from './fonts';
-import GlobalClientProvider from './lib/next-intl/components/GlobalClientProvider';
-import Sonner from './lib/sonner/components/Sonner';
+import { GlobalClientProvider } from './lib/next-intl/components/GlobalClientProvider';
+import { Sonner } from './lib/sonner/components/Sonner';
 import { serverEnv } from './lib/t3-env/server';
 
 import './styles/globals.css';

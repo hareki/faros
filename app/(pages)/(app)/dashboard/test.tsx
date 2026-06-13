@@ -3,7 +3,7 @@
 import { Button } from '@/app/components/ui/Button';
 import { confirm } from '@/app/lib/confirm/confirm';
 
-export default function Test() {
+export function Test() {
   return (
     <Button
       onClick={() => {

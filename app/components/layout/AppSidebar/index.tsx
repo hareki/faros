@@ -2,7 +2,7 @@ import { JobHuntSwitcher } from '@/app/features/job-hunt/components/JobHuntSwitc
 import { activeSketchJobHunt } from '@/app/features/job-hunt/components/sketchData';
 import { getClientMessages } from '@/app/lib/next-intl/utils/getClientMessages';
 
-import BrandButton from './BrandButton';
+import { BrandButton } from './BrandButton';
 import { NavMain } from './NavMain';
 import { Sidebar, SidebarHeader, SidebarContent, SidebarGroup } from '../../ui/Sidebar';
 
