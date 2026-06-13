@@ -53,7 +53,7 @@ export function useSignInVM(messages: SignInMessages) {
         return;
       }
 
-      router.push('/');
+      router.push('/dashboard');
       router.refresh();
     });
   };

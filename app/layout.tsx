@@ -13,7 +13,7 @@ import { cn } from '@/app/lib/tailwind/utils';
 
 import { rubik } from './fonts';
 import GlobalClientProvider from './lib/next-intl/components/GlobalClientProvider';
-import Toaster from './lib/sonner/components/Sonner';
+import Sonner from './lib/sonner/components/Sonner';
 import { serverEnv } from './lib/t3-env/server';
 
 import './styles/globals.css';
@@ -60,7 +60,7 @@ async function InnerRootLayout({ children }: RootLayoutProps) {
             <NuqsAdapter>
               <GlobalClientProvider>
                 <ConfirmDialog />
-                <Toaster />
+                <Sonner />
                 {children}
               </GlobalClientProvider>
             </NuqsAdapter>

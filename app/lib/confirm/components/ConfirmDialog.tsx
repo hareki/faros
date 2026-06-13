@@ -30,7 +30,7 @@ export function ConfirmDialog() {
   const content = config?.content ?? t('content');
   const confirmText = config?.confirmText ?? t('confirmText');
   const cancelText = config?.cancelText ?? t('cancelText');
-  const size = config?.size ?? 'sm';
+  const size = config?.size ?? 'default';
 
   const handleConfirm = async () => {
     if (!config) {

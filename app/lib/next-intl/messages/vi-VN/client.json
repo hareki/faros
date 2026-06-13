@@ -42,7 +42,47 @@
     "jobHuntSwitcher": {
       "activeJobHunt": "Đợt tìm việc hiện tại",
       "jobHunts": "Các đợt tìm việc",
-      "startJobHunt": "Bắt đầu một đợt tìm việc"
+      "endedJobHunts": "Đợt đã kết thúc",
+      "startJobHunt": "Bắt đầu một đợt tìm việc",
+      "renameJobHunt": "Đổi tên đợt",
+      "endJobHunt": "Kết thúc đợt",
+      "unarchiveJobHunt": "Mở lại",
+      "viewRetro": "Xem tổng kết"
+    },
+    "jobHuntFirstRun": {
+      "title": "Bắt đầu đợt tìm việc đầu tiên",
+      "description": "Nhóm các đơn ứng tuyển vào một đợt để bắt đầu theo dõi quá trình tìm việc của bạn.",
+      "cta": "Bắt đầu một đợt tìm việc"
+    },
+    "jobHuntDialogs": {
+      "start": {
+        "title": "Bắt đầu một đợt tìm việc",
+        "description": "Đặt tên cho đợt này để nhóm các đơn ứng tuyển bạn gửi trong lần tìm việc này.",
+        "nameLabel": "Tên đợt",
+        "namePlaceholder": "ví dụ: Đợt FE Senior 2026",
+        "confirm": "Bắt đầu đợt",
+        "cancel": "Hủy"
+      },
+      "rename": {
+        "title": "Đổi tên đợt",
+        "description": "Đặt tên mới cho đợt này.",
+        "nameLabel": "Tên đợt",
+        "namePlaceholder": "ví dụ: Đợt FE Senior 2026",
+        "confirm": "Lưu",
+        "cancel": "Hủy"
+      },
+      "end": {
+        "title": "Kết thúc đợt này?",
+        "description": "Kết thúc sẽ chuyển đợt sang chỉ đọc và mở khóa phần Tổng kết. Bạn có thể mở lại sau để chỉnh sửa.",
+        "confirm": "Kết thúc đợt",
+        "cancel": "Hủy"
+      },
+      "unarchive": {
+        "title": "Mở lại đợt này?",
+        "description": "Mở lại cho phép chỉnh sửa trực tiếp một đợt đã kết thúc. Đợt vẫn ở trạng thái đã kết thúc và không trở lại hoạt động.",
+        "confirm": "Mở lại",
+        "cancel": "Hủy"
+      }
     },
     "navUser": {
       "signOut": "Đăng xuất"

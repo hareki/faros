@@ -45,22 +45,30 @@ const settingsItems: NavLeaf[] = [
   { key: 'notification', url: '/settings/notification', icon: IconBell },
 ];
 
-export function NavMain({ messages }: { messages: ClientMessages['layout']['nav'] }) {
+export function NavMain({
+  messages,
+  hasActiveJobHunt,
+}: {
+  messages: ClientMessages['layout']['nav'];
+  hasActiveJobHunt: boolean;
+}) {
   const pathname = usePathname();
 
   return (
     <SidebarMenu>
-      {navItems.map((item) => (
-        <SidebarMenuItem key={item.url}>
-          <SidebarMenuButton
-            isActive={pathname === item.url}
-            render={<Link href={item.url} variant='unstyled' />}
-          >
-            <item.icon />
-            <span>{messages[item.key]}</span>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
-      ))}
+      {/* Dashboard / Board / Resume depend on an active hunt — hidden in the first-run shell. */}
+      {hasActiveJobHunt &&
+        navItems.map((item) => (
+          <SidebarMenuItem key={item.url}>
+            <SidebarMenuButton
+              isActive={pathname === item.url}
+              render={<Link href={item.url} variant='unstyled' />}
+            >
+              <item.icon />
+              <span>{messages[item.key]}</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        ))}
 
       <Collapsible defaultOpen render={<SidebarMenuItem />}>
         <CollapsibleTrigger

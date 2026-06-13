@@ -42,7 +42,47 @@
     "jobHuntSwitcher": {
       "activeJobHunt": "Active hunt",
       "jobHunts": "Job Hunts",
-      "startJobHunt": "Start a hunt"
+      "endedJobHunts": "Ended hunts",
+      "startJobHunt": "Start a hunt",
+      "renameJobHunt": "Rename hunt",
+      "endJobHunt": "End hunt",
+      "unarchiveJobHunt": "Unarchive",
+      "viewRetro": "View Retro"
+    },
+    "jobHuntFirstRun": {
+      "title": "Start your first hunt",
+      "description": "Group your applications into a hunt to start tracking your search.",
+      "cta": "Start a hunt"
+    },
+    "jobHuntDialogs": {
+      "start": {
+        "title": "Start a hunt",
+        "description": "Name this hunt to group the applications you send during this search.",
+        "nameLabel": "Hunt name",
+        "namePlaceholder": "e.g. 2026 Senior FE Hunt",
+        "confirm": "Start hunt",
+        "cancel": "Cancel"
+      },
+      "rename": {
+        "title": "Rename hunt",
+        "description": "Give this hunt a new name.",
+        "nameLabel": "Hunt name",
+        "namePlaceholder": "e.g. 2026 Senior FE Hunt",
+        "confirm": "Save",
+        "cancel": "Cancel"
+      },
+      "end": {
+        "title": "End this hunt?",
+        "description": "Ending makes the hunt read-only and unlocks its Retro. You can unarchive it later to make corrections.",
+        "confirm": "End hunt",
+        "cancel": "Cancel"
+      },
+      "unarchive": {
+        "title": "Unarchive this hunt?",
+        "description": "Unarchiving unlocks in-place editing of an ended hunt. It stays ended and does not become active again.",
+        "confirm": "Unarchive",
+        "cancel": "Cancel"
+      }
     },
     "navUser": {
       "signOut": "Sign out"

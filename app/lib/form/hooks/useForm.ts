@@ -28,7 +28,7 @@ export function useForm<
 ): UseFormReturnWithForm<TFieldValues, TContext, TTransformedValues> {
   const id = useId();
   const form = useReactHookForm<TFieldValues, TContext, TTransformedValues>({
-    mode: 'onTouched',
+    mode: 'onSubmit',
     ...props,
   });
   const Form = createForm(form.handleSubmit, id);

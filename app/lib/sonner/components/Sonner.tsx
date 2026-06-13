@@ -1,15 +1,15 @@
 'use client';
 
 import { useTheme } from '@teispace/next-themes';
-import { Toaster as Sonner, type ToasterProps } from 'sonner';
+import { Toaster, type ToasterProps } from 'sonner';
 
 import { toastIcons } from '../icons';
 
-export default function Toaster() {
+export default function Sonner() {
   const { theme } = useTheme();
 
   return (
-    <Sonner
+    <Toaster
       theme={theme as ToasterProps['theme']}
       position='top-right'
       swipeDirections={['right']}
