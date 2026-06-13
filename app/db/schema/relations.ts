@@ -1,16 +1,21 @@
 import { relations } from 'drizzle-orm';
 
-import { activityLog } from '@/app/db/schema/activity';
-import { applicationTags, applications, subStages, tags } from '@/app/db/schema/application';
-import { accounts, sessions, users } from '@/app/db/schema/auth';
-import { events } from '@/app/db/schema/event';
-import { jobHunts } from '@/app/db/schema/job-hunt';
+import { activityLog } from '@/app/features/activity/db/schema';
+import {
+  applicationTags,
+  applications,
+  subStages,
+  tags,
+} from '@/app/features/application/db/schema';
+import { accounts, sessions, users } from '@/app/features/auth/db/schema';
+import { events } from '@/app/features/event/db/schema';
+import { jobHunts } from '@/app/features/job-hunt/db/schema';
 import {
   notificationRules,
   notifications,
   userNotificationPrefs,
-} from '@/app/db/schema/notification';
-import { resumes } from '@/app/db/schema/resume';
+} from '@/app/features/notification/db/schema';
+import { resumes } from '@/app/features/resume/db/schema';
 
 export const usersRelations = relations(users, ({ many, one }) => ({
   accounts: many(accounts),

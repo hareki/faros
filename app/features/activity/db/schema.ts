@@ -1,6 +1,6 @@
 import { index, jsonb, pgEnum, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
-import { applications } from '@/app/db/schema/application';
+import { applications } from '@/app/features/application/db/schema';
 
 export const activityType = pgEnum('activity_type', [
   'created',

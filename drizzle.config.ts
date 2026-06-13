@@ -7,7 +7,7 @@ import { serverEnv } from './app/lib/t3-env/server';
 
 export default defineConfig({
   dialect: 'postgresql',
-  schema: './app/db/schema',
+  schema: './app/features/*/db/schema.ts',
   out: './app/db/migrations',
   dbCredentials: { url: serverEnv.DB_CONNECTION_STRING },
 });

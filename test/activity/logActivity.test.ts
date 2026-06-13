@@ -1,15 +1,15 @@
 import { and, eq } from 'drizzle-orm';
 import { describe, expect, it } from 'vitest';
 
+import { db } from '@/app/db/client';
+import { activityLog } from '@/app/db/schema';
 import {
   ensureOfferReceived,
   ensureResponseReceived,
   logActivity,
   recordClose,
   recordStageChange,
-} from '@/app/db/activity';
-import { db } from '@/app/db/client';
-import { activityLog } from '@/app/db/schema';
+} from '@/app/features/activity/db/mutations';
 
 import { createApplication } from '../helpers/db';
 

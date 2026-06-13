@@ -11,8 +11,11 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core';
 
-import { applications } from '@/app/db/schema/application';
-import { users } from '@/app/db/schema/auth';
+// Type cycles are broken via AnyPgColumn, and the FK
+// references are lazy callbacks resolved after all modules load.
+// eslint-disable-next-line import/no-cycle
+import { applications } from '@/app/features/application/db/schema';
+import { users } from '@/app/features/auth/db/schema';
 
 // ============================================================
 // RESUME

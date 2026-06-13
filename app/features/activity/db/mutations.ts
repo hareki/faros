@@ -3,9 +3,9 @@ import 'server-only';
 import { and, eq } from 'drizzle-orm';
 
 import { type DbExecutor } from '@/app/db/client';
-import { activityLog } from '@/app/db/schema/activity';
-import { type boardStage, type closedOutcome } from '@/app/db/schema/application';
-import { type eventType } from '@/app/db/schema/event';
+import { activityLog } from '@/app/features/activity/db/schema';
+import { type boardStage, type closedOutcome } from '@/app/features/application/db/schema';
+import { type eventType } from '@/app/features/event/db/schema';
 
 type BoardStage = (typeof boardStage.enumValues)[number];
 type ClosedOutcome = (typeof closedOutcome.enumValues)[number];

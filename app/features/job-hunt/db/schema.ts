@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { pgEnum, pgTable, timestamp, uniqueIndex, uuid, varchar } from 'drizzle-orm/pg-core';
 
-import { users } from '@/app/db/schema/auth';
+import { users } from '@/app/features/auth/db/schema';
 
 export const jobHuntStatus = pgEnum('job_hunt_status', ['active', 'ended']);
 

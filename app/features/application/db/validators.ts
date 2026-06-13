@@ -1,7 +1,12 @@
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod';
 import * as z from 'zod';
 
-import { applicationTags, applications, subStages, tags } from '@/app/db/schema';
+import {
+  applicationTags,
+  applications,
+  subStages,
+  tags,
+} from '@/app/features/application/db/schema';
 
 // Cross-field invariants (closed-state, resume scope) live in the DB CHECK constraints and
 // the mutation actions that own those transitions.

@@ -12,9 +12,9 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core';
 
-import { applications } from '@/app/db/schema/application';
-import { users } from '@/app/db/schema/auth';
-import { events } from '@/app/db/schema/event';
+import { applications } from '@/app/features/application/db/schema';
+import { users } from '@/app/features/auth/db/schema';
+import { events } from '@/app/features/event/db/schema';
 
 // ============================================================
 // NOTIFICATION ENGINE (shared for action-needed + time-based)
