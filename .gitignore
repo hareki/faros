@@ -46,7 +46,7 @@ yarn-error.log*
 next-env.d.ts
 
 # next-intl
-app/lib/next-intl/messages/en-US.d.json.ts
+app/lib/next-intl/messages/en-US/*.d.json.ts
 app/lib/next-intl/messages/locales/en-US.po
 
 # codegraph
