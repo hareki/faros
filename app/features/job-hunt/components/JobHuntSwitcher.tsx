@@ -23,6 +23,7 @@ import {
   DropdownMenuTrigger,
 } from '@/app/components/ui/DropdownMenu';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/app/components/ui/Sidebar';
+import { Small, Muted } from '@/app/components/ui/Typography';
 import { confirm } from '@/app/lib/confirm/confirm';
 import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
 
@@ -108,7 +109,9 @@ export function JobHuntSwitcher({ messages, dialogMessages }: JobHuntSwitcherPro
             >
               <IconPlus />
             </div>
-            <span className='truncate font-medium'>{messages.startJobHunt}</span>
+            <Small as='span' className='truncate'>
+              {messages.startJobHunt}
+            </Small>
           </SidebarMenuButton>
         </SidebarMenuItem>
         {dialogs}
@@ -140,10 +143,12 @@ export function JobHuntSwitcher({ messages, dialogMessages }: JobHuntSwitcherPro
                   <IconBriefcase />
                 </div>
                 <div className='grid flex-1 text-left text-sm/tight'>
-                  <span className='truncate text-xs text-sidebar-foreground/70'>
+                  <Muted as='span' className='truncate text-xs text-sidebar-foreground/70'>
                     {messages.activeJobHunt}
-                  </span>
-                  <span className='truncate font-medium'>{activeJobHunt.name}</span>
+                  </Muted>
+                  <Small as='span' className='truncate'>
+                    {activeJobHunt.name}
+                  </Small>
                 </div>
                 <IconSelector className='ml-auto' />
               </SidebarMenuButton>

@@ -91,9 +91,9 @@ export function AuthFormWrapperView({
                   </div>
 
                   {/* Divider */}
-                  <div className='flex items-center gap-3 text-sm text-muted-foreground'>
+                  <div className='flex items-center gap-3'>
                     <Separator className='flex-1' />
-                    <span>{messages.or}</span>
+                    <Muted as='span'>{messages.or}</Muted>
                     <Separator className='flex-1' />
                   </div>
                 </Fragment>

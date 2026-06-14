@@ -15,6 +15,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - Exported functions, variables, and types that carry a dedicated explanatory comment must use JSDoc (`/** */`) so IDE hover tooltips show the description without jumping to the definition. Internal (non-exported) module-scoped symbols keep plain `//` comments.
 - The React Compiler is enabled, so do not use `useMemo`, `useCallback`, or `memo` unless there is a very good reason to.
 - Define a named `XxxProps` type for component props instead of inlining the object type literal in the parameter list (e.g. `SimpleEmptyProps`).
+- Render text through the typography primitives in `app/components/ui/Typography.tsx` (`H1`–`H4`, `P`, `Lead`, `Large`, `Small`, `Muted`, `Blockquote`, `List`, `InlineCode`) instead of hand-styling raw `<h1>`–`<h4>`/`<p>`/`<span>`/`<small>` with text size/weight/color classes. Use the polymorphic `as` prop to change the rendered element (e.g. `<Small as='span'>`) and `className` to fine-tune. Exception: base UI primitives in `app/components/ui/` that wrap third-party primitives (e.g. `DialogTitle`, `SheetDescription`) keep their own elements.
 
 ## Agent skills
 

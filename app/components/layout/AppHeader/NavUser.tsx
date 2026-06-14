@@ -16,6 +16,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuSeparator,
 } from '../../ui/DropdownMenu';
+import { Small, Muted } from '../../ui/Typography';
 
 export function NavUser({
   user,
@@ -60,8 +61,12 @@ export function NavUser({
                 <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
               </Avatar>
               <div className='grid flex-1 text-left text-sm/tight'>
-                <span className='truncate font-medium'>{user.name}</span>
-                <span className='truncate text-xs'>{user.email}</span>
+                <Small as='span' className='truncate'>
+                  {user.name}
+                </Small>
+                <Muted as='span' className='truncate text-xs'>
+                  {user.email}
+                </Muted>
               </div>
             </div>
           </DropdownMenuLabel>
