@@ -10,6 +10,10 @@
     "toSignIn": "Đến trang Đăng nhập",
     "toDashboard": "Đến bảng điều khiển"
   },
+  "retro": {
+    "comingSoonTitle": "Retro sắp ra mắt",
+    "comingSoonDescription": "Retro cho đợt tìm việc này — phễu chuyển đổi, thống kê thời gian, hiệu suất theo nguồn và theo CV — sẽ sớm có mặt."
+  },
   "auth": {
     "signIn": {
       "title": "Đăng nhập vào Faros",

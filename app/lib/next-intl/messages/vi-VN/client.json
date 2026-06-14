@@ -48,8 +48,8 @@
       "endJobHunt": "Kết thúc đợt",
       "viewRetro": "Xem tổng kết"
     },
-    "jobHuntFirstRun": {
-      "title": "Bắt đầu đợt tìm việc đầu tiên",
+    "jobHuntEmpty": {
+      "title": "Không có đợt tìm việc đang hoạt động nào",
       "description": "Nhóm các đơn ứng tuyển vào một đợt để bắt đầu theo dõi quá trình tìm việc của bạn.",
       "cta": "Bắt đầu một đợt tìm việc"
     },

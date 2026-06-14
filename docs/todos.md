@@ -70,12 +70,12 @@ Dependency-ordered. Each feature: sketch static UI → build BE → wire FE.
 
 ### 1. Job Hunt
 
-- [x] [FE] Sketch hunt switcher dropdown + first-run "Start your first hunt" empty state (static) → screens.md: App shell (Active-hunt switcher, First-run shell state) + Hunt switcher & lifecycle dialogs
+- [x] [FE] Sketch hunt switcher dropdown + first-run "No active hunt" empty state (static) → screens.md: App shell (Active-hunt switcher, First-run shell state) + Hunt switcher & lifecycle dialogs
 - [x] [BE] Drizzle queries + server actions: `startJobHunt`, `endJobHunt`, `renameJobHunt`
 - [x] [BE] Rely on partial unique index for "one active"; surface a friendly conflict result for the UI
-- [ ] [FE] `<ActiveHuntProvider>` React Context exposing current hunt + setter
-- [ ] [FE] Wire hunt switcher (lists hunts, marks active, links to ended-hunt retros) → screens.md: App shell (Active-hunt switcher) + Hunt switcher & lifecycle dialogs
-- [ ] [FE] Wire first-run empty-state CTA → screens.md: App shell (First-run shell state)
+- [x] [FE] `<ActiveHuntProvider>` React Context exposing current hunt + setter
+- [x] [FE] Wire hunt switcher (lists hunts, marks active, links to ended-hunt retros) → screens.md: App shell (Active-hunt switcher) + Hunt switcher & lifecycle dialogs
+- [x] [FE] Wire first-run empty-state CTA → screens.md: App shell (First-run shell state)
 
 ### 2. Applications & board
 

@@ -14,6 +14,7 @@ import {
 import { type Route } from 'next';
 import { usePathname } from 'next/navigation';
 
+import { useActiveJobHunt } from '@/app/features/job-hunt/hooks/useActiveJobHunt';
 import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../../ui/Collapsible';
@@ -45,14 +46,10 @@ const settingsItems: NavLeaf[] = [
   { key: 'notification', url: '/settings/notification', icon: IconBell },
 ];
 
-export function NavMain({
-  messages,
-  hasActiveJobHunt,
-}: {
-  messages: ClientMessages['layout']['nav'];
-  hasActiveJobHunt: boolean;
-}) {
+export function NavMain({ messages }: { messages: ClientMessages['layout']['nav'] }) {
   const pathname = usePathname();
+  const { activeJobHunt } = useActiveJobHunt();
+  const hasActiveJobHunt = activeJobHunt !== null;
 
   return (
     <SidebarMenu>

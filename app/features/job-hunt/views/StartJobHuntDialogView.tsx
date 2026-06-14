@@ -6,11 +6,12 @@ import { NameJobHuntDialogView } from './NameJobHuntDialogView';
 
 type StartJobHuntFormProps = {
   messages: ClientMessages['layout']['jobHuntDialogs']['start'];
+  errors: ClientMessages['layout']['jobHuntDialogs']['errors'];
   onSuccess: () => void;
 };
 
-function StartJobHuntForm({ messages, onSuccess }: StartJobHuntFormProps) {
-  const { control, Form, isPending, onSubmit } = useStartJobHuntVM(messages, onSuccess);
+function StartJobHuntForm({ messages, errors, onSuccess }: StartJobHuntFormProps) {
+  const { control, Form, isPending, onSubmit } = useStartJobHuntVM(messages, errors, onSuccess);
 
   return (
     <Form onSubmit={onSubmit} className='grid gap-6'>
@@ -31,6 +32,7 @@ export function StartJobHuntDialog({ open, onOpenChange, messages }: StartJobHun
       <DialogContent>
         <StartJobHuntForm
           messages={messages.start}
+          errors={messages.errors}
           onSuccess={() => {
             onOpenChange(false);
           }}

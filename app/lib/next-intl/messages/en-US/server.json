@@ -10,6 +10,10 @@
     "toSignIn": "To Sign In Page",
     "toDashboard": "To Dashboard Page"
   },
+  "retro": {
+    "comingSoonTitle": "Retro coming soon",
+    "comingSoonDescription": "The retro for this hunt — funnel, time stats, source and resume performance — is on the way."
+  },
   "auth": {
     "signIn": {
       "title": "Log in to Faros",

@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useTransition } from 'react';
 
 import {
   IconArchive,
@@ -11,6 +11,9 @@ import {
   IconPlus,
   IconSelector,
 } from '@tabler/icons-react';
+import LinkPrimitive from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import {
   DropdownMenu,
@@ -23,16 +26,20 @@ import {
 } from '@/app/components/ui/DropdownMenu';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/app/components/ui/Sidebar';
 import { Small, Muted } from '@/app/components/ui/Typography';
+import { endJobHuntAction } from '@/app/features/job-hunt/actions/endJobHuntAction';
+import { useActiveJobHunt } from '@/app/features/job-hunt/hooks/useActiveJobHunt';
+import { type JobHuntSummary } from '@/app/features/job-hunt/types';
+import { resolveErrorMessage } from '@/app/features/job-hunt/utils/resolveMessage';
 import { confirm } from '@/app/lib/confirm/confirm';
 import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
+import { toast } from '@/app/lib/sonner/toast';
 
-import { activeSketchJobHunt, endedSketchJobHunts, type SketchJobHunt } from './sketchData';
 import { RenameJobHuntDialogView } from '../views/RenameJobHuntDialogView';
 import { StartJobHuntDialog } from '../views/StartJobHuntDialogView';
 
 type DialogState = {
   kind: 'start' | 'rename';
-  jobHunt?: SketchJobHunt;
+  jobHunt?: JobHuntSummary;
 } | null;
 
 type JobHuntSwitcherProps = {
@@ -41,20 +48,38 @@ type JobHuntSwitcherProps = {
 };
 
 export function JobHuntSwitcher({ messages, dialogMessages }: JobHuntSwitcherProps) {
+  const t = useTranslations('validation');
+  const router = useRouter();
+  const [, startTransition] = useTransition();
+
+  const { activeJobHunt, jobHunts } = useActiveJobHunt();
+  const endedJobHunts = jobHunts.filter((jobHunt) => jobHunt.status === 'ended');
+
   const [dialog, setDialog] = useState<DialogState>(null);
   const closeDialog = (open: boolean) => {
     if (!open) {
       setDialog(null);
     }
   };
-  const confirmEndJobHunt = () => {
+
+  const confirmEndJobHunt = (jobHunt: JobHuntSummary) => {
     confirm.destructive({
       title: dialogMessages.end.title,
       content: dialogMessages.end.description,
       confirmText: dialogMessages.end.confirm,
       cancelText: dialogMessages.end.cancel,
       onConfirm: () => {
-        // TODO(L76): call the endJobHunt server action.
+        startTransition(async () => {
+          const result = await endJobHuntAction({ id: jobHunt.id });
+
+          if (result.status === 'error') {
+            toast.error(resolveErrorMessage(t, dialogMessages.errors, result.errorKey));
+
+            return;
+          }
+
+          router.refresh();
+        });
       },
     });
   };
@@ -76,7 +101,7 @@ export function JobHuntSwitcher({ messages, dialogMessages }: JobHuntSwitcherPro
   );
 
   // First-run: no active hunt — the switcher collapses into a single "Start a hunt" CTA.
-  if (!activeSketchJobHunt) {
+  if (!activeJobHunt) {
     return (
       <SidebarMenu>
         <SidebarMenuItem>
@@ -104,8 +129,6 @@ export function JobHuntSwitcher({ messages, dialogMessages }: JobHuntSwitcherPro
       </SidebarMenu>
     );
   }
-
-  const activeJobHunt = activeSketchJobHunt;
 
   return (
     <SidebarMenu>
@@ -153,14 +176,21 @@ export function JobHuntSwitcher({ messages, dialogMessages }: JobHuntSwitcherPro
               </DropdownMenuItem>
             </DropdownMenuGroup>
 
-            {endedSketchJobHunts.length > 0 && (
+            {endedJobHunts.length > 0 && (
               <DropdownMenuGroup>
                 <DropdownMenuLabel className='text-xs text-muted-foreground'>
                   {messages.endedJobHunts}
                 </DropdownMenuLabel>
-                {endedSketchJobHunts.map((jobHunt) => (
-                  // TODO(L77): link ended hunt to its Retro.
-                  <DropdownMenuItem key={jobHunt.id}>
+                {endedJobHunts.map((jobHunt) => (
+                  <DropdownMenuItem
+                    key={jobHunt.id}
+                    render={
+                      <LinkPrimitive
+                        href={`/retro/${jobHunt.id}`}
+                        aria-label={messages.viewRetro}
+                      />
+                    }
+                  >
                     <IconBriefcase className='text-muted-foreground' />
                     <span className='flex-1 truncate'>{jobHunt.name}</span>
                     <IconArrowRight className='ml-auto text-muted-foreground' />
@@ -179,7 +209,12 @@ export function JobHuntSwitcher({ messages, dialogMessages }: JobHuntSwitcherPro
                 <IconPencil />
                 {messages.renameJobHunt}
               </DropdownMenuItem>
-              <DropdownMenuItem variant='destructive' onClick={confirmEndJobHunt}>
+              <DropdownMenuItem
+                variant='destructive'
+                onClick={() => {
+                  confirmEndJobHunt(activeJobHunt);
+                }}
+              >
                 <IconArchive />
                 {messages.endJobHunt}
               </DropdownMenuItem>

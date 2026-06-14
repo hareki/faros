@@ -1,5 +1,4 @@
 import { JobHuntSwitcher } from '@/app/features/job-hunt/components/JobHuntSwitcher';
-import { activeSketchJobHunt } from '@/app/features/job-hunt/components/sketchData';
 import { getClientMessages } from '@/app/lib/next-intl/utils/getClientMessages';
 
 import { BrandButton } from './BrandButton';
@@ -23,10 +22,7 @@ export async function AppSidebar() {
           />
         </SidebarGroup>
         <SidebarGroup>
-          <NavMain
-            messages={clientMessages.layout.nav}
-            hasActiveJobHunt={activeSketchJobHunt !== null}
-          />
+          <NavMain messages={clientMessages.layout.nav} />
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>

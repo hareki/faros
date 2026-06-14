@@ -11,13 +11,13 @@ import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
 
 import { StartJobHuntDialog } from '../views/StartJobHuntDialogView';
 
-type JobHuntFirstRunProps = {
-  messages: ClientMessages['layout']['jobHuntFirstRun'];
+type EmptyJobHuntProps = {
+  messages: ClientMessages['layout']['jobHuntEmpty'];
   dialogMessages: ClientMessages['layout']['jobHuntDialogs'];
 };
 
-/** Focused first-run CTA shown in the main area when the user has no active hunt. */
-export function JobHuntFirstRun({ messages, dialogMessages }: JobHuntFirstRunProps) {
+/** Focused empty job hunt CTA shown in the main area when the user has no active hunt. */
+export function EmptyJobHunt({ messages, dialogMessages }: EmptyJobHuntProps) {
   const [startOpen, setStartOpen] = useState(false);
 
   return (

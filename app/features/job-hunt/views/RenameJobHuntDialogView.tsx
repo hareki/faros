@@ -1,5 +1,5 @@
 import { Dialog, DialogContent } from '@/app/components/ui/Dialog';
-import { type SketchJobHunt } from '@/app/features/job-hunt/components/sketchData';
+import { type JobHuntSummary } from '@/app/features/job-hunt/types';
 import { useRenameJobHuntVM } from '@/app/features/job-hunt/view-models/useRenameJobHuntVM';
 import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
 
@@ -7,12 +7,13 @@ import { NameJobHuntDialogView } from './NameJobHuntDialogView';
 
 type RenameJobHuntFormProps = {
   messages: ClientMessages['layout']['jobHuntDialogs']['rename'];
-  jobHunt?: SketchJobHunt;
+  errors: ClientMessages['layout']['jobHuntDialogs']['errors'];
+  jobHunt?: JobHuntSummary;
   onSuccess: () => void;
 };
 
-function RenameJobHuntForm({ messages, jobHunt, onSuccess }: RenameJobHuntFormProps) {
-  const { control, Form, isPending, onSubmit } = useRenameJobHuntVM(messages, {
+function RenameJobHuntForm({ messages, errors, jobHunt, onSuccess }: RenameJobHuntFormProps) {
+  const { control, Form, isPending, onSubmit } = useRenameJobHuntVM(messages, errors, {
     jobHunt,
     onSuccess,
   });
@@ -28,7 +29,7 @@ type RenameJobHuntDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   messages: ClientMessages['layout']['jobHuntDialogs'];
-  jobHunt?: SketchJobHunt;
+  jobHunt?: JobHuntSummary;
 };
 
 export function RenameJobHuntDialogView({
@@ -42,6 +43,7 @@ export function RenameJobHuntDialogView({
       <DialogContent>
         <RenameJobHuntForm
           messages={messages.rename}
+          errors={messages.errors}
           jobHunt={jobHunt}
           onSuccess={() => {
             onOpenChange(false);

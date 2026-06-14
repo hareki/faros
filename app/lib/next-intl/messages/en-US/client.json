@@ -48,8 +48,8 @@
       "endJobHunt": "End hunt",
       "viewRetro": "View Retro"
     },
-    "jobHuntFirstRun": {
-      "title": "Start your first hunt",
+    "jobHuntEmpty": {
+      "title": "No active hunt",
       "description": "Group your applications into a hunt to start tracking your search.",
       "cta": "Start a hunt"
     },
