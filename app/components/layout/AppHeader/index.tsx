@@ -1,10 +1,11 @@
-import { IconBell, IconSearch } from '@tabler/icons-react';
+import { IconSearch } from '@tabler/icons-react';
 import { getTranslations } from 'next-intl/server';
 
 import { getClientMessages } from '@/app/lib/next-intl/utils/getClientMessages';
 
 import { NavUser } from './NavUser';
-import { Button } from '../../ui/Button';
+import { NotificationButton } from './Notification';
+import { ThemeSwitcher } from './ThemeSwitcher';
 import { Input } from '../../ui/Input';
 import { SidebarTrigger } from '../../ui/Sidebar';
 
@@ -20,9 +21,9 @@ export async function AppHeader() {
       </div>
 
       <div className='flex gap-2'>
-        <Button size='icon' variant='outline'>
-          <IconBell />
-        </Button>
+        <ThemeSwitcher messages={clientMessages.layout.theme} />
+        <NotificationButton />
+
         <NavUser
           messages={clientMessages.layout.navUser}
           user={{

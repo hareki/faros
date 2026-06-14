@@ -277,7 +277,7 @@ function DropdownMenuRadioItem({
       data-inset={inset}
       className={cn(
         `
-          relative flex cursor-default items-center gap-2.5 rounded-2xl py-2 pr-8 pl-3 text-sm
+          relative flex cursor-pointer items-center gap-2.5 rounded-2xl py-2 pr-8 pl-3 text-sm
           font-medium outline-hidden select-none
           focus:bg-accent focus:text-accent-foreground
           focus:**:text-accent-foreground

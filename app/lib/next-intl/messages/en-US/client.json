@@ -103,6 +103,12 @@
     },
     "navUser": {
       "signOut": "Sign out"
+    },
+    "theme": {
+      "label": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
     }
   },
   "auth": {
