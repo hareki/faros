@@ -16,4 +16,4 @@ export type FormInputProps<
   disabled?: boolean;
 
   inputProps?: InputProps;
-} & XOR<{ label?: string }, { label: string; labelAddon?: ReactNode }>;
+} & XOR<{ label?: ReactNode }, { label: ReactNode; labelAddon?: ReactNode }>;

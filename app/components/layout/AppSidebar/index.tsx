@@ -21,9 +21,7 @@ export async function AppSidebar() {
             dialogMessages={clientMessages.layout.jobHuntDialogs}
           />
         </SidebarGroup>
-        <SidebarGroup>
-          <NavMain messages={clientMessages.layout.nav} />
-        </SidebarGroup>
+        <NavMain messages={clientMessages.layout.nav} />
       </SidebarContent>
     </Sidebar>
   );

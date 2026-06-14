@@ -37,16 +37,19 @@
       "settings": "Cài đặt",
       "tags": "Thẻ",
       "subStages": "Giai đoạn phụ",
-      "notification": "Thông báo"
+      "notification": "Thông báo",
+      "retro": "Tổng kết",
+      "huntSection": "Đợt này",
+      "workspaceSection": "Không gian làm việc"
     },
     "jobHuntSwitcher": {
       "activeJobHunt": "Đợt tìm việc hiện tại",
-      "jobHunts": "Các đợt tìm việc",
+      "endedJobHunt": "Đợt đã kết thúc",
       "endedJobHunts": "Đợt đã kết thúc",
       "startJobHunt": "Bắt đầu một đợt tìm việc",
       "renameJobHunt": "Đổi tên đợt",
       "endJobHunt": "Kết thúc đợt",
-      "viewRetro": "Xem tổng kết"
+      "deleteJobHunt": "Xóa đợt"
     },
     "jobHuntEmpty": {
       "title": "Không có đợt tìm việc đang hoạt động nào",
@@ -73,12 +76,29 @@
       "end": {
         "title": "Kết thúc đợt này?",
         "description": "Kết thúc sẽ chuyển đợt sang chỉ đọc và mở khóa phần Tổng kết. Hành động này không thể hoàn tác.",
+        "confirmPrompt": "Để xác nhận, hãy nhập {name} bên dưới.",
+        "inputPlaceholder": "Tên đợt",
         "confirm": "Kết thúc đợt",
         "cancel": "Hủy"
       },
+      "delete": {
+        "title": "Xóa đợt này?",
+        "description": "Hành động này sẽ xóa vĩnh viễn đợt và toàn bộ đơn ứng tuyển trong đó. Không thể hoàn tác.",
+        "confirmPrompt": "Để xác nhận, hãy nhập {name} bên dưới.",
+        "inputPlaceholder": "Tên đợt",
+        "confirm": "Xóa đợt",
+        "cancel": "Hủy"
+      },
+      "startBlocked": {
+        "title": "Bạn đang có một đợt tìm việc",
+        "description": "Bạn đã có một đợt tìm việc đang hoạt động. Hãy kết thúc đợt đó trước khi bắt đầu đợt mới.",
+        "endCurrent": "Kết thúc đợt hiện tại",
+        "cancel": "Đã hiểu"
+      },
       "errors": {
         "errorActiveJobHuntExists": "Bạn đã có một đợt tìm việc đang hoạt động. Hãy kết thúc đợt đó trước khi bắt đầu đợt mới.",
-        "errorJobHuntNotFound": "Đợt tìm việc này không còn tồn tại."
+        "errorJobHuntNotFound": "Đợt tìm việc này không còn tồn tại.",
+        "errorCannotDeleteActiveJobHunt": "Chỉ có thể xóa các đợt đã kết thúc."
       }
     },
     "navUser": {

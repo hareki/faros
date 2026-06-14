@@ -37,16 +37,19 @@
       "settings": "Settings",
       "tags": "Tags",
       "subStages": "Sub-stages",
-      "notification": "Notification"
+      "notification": "Notification",
+      "retro": "Retro",
+      "huntSection": "This hunt",
+      "workspaceSection": "Workspace"
     },
     "jobHuntSwitcher": {
       "activeJobHunt": "Active hunt",
-      "jobHunts": "Job Hunts",
+      "endedJobHunt": "Ended hunt",
       "endedJobHunts": "Ended hunts",
       "startJobHunt": "Start a hunt",
       "renameJobHunt": "Rename hunt",
       "endJobHunt": "End hunt",
-      "viewRetro": "View Retro"
+      "deleteJobHunt": "Delete hunt"
     },
     "jobHuntEmpty": {
       "title": "No active hunt",
@@ -73,12 +76,29 @@
       "end": {
         "title": "End this hunt?",
         "description": "Ending makes the hunt read-only and unlocks its Retro. This can't be undone.",
+        "confirmPrompt": "To confirm, type {name} below.",
+        "inputPlaceholder": "Hunt name",
         "confirm": "End hunt",
         "cancel": "Cancel"
       },
+      "delete": {
+        "title": "Delete this hunt?",
+        "description": "This permanently deletes the hunt and every application in it. This can't be undone.",
+        "confirmPrompt": "To confirm, type {name} below.",
+        "inputPlaceholder": "Hunt name",
+        "confirm": "Delete hunt",
+        "cancel": "Cancel"
+      },
+      "startBlocked": {
+        "title": "You have an active hunt",
+        "description": "You already have an active hunt. End it before starting a new one.",
+        "endCurrent": "End current hunt",
+        "cancel": "Got it"
+      },
       "errors": {
         "errorActiveJobHuntExists": "You already have an active hunt. End it before starting a new one.",
-        "errorJobHuntNotFound": "That hunt no longer exists."
+        "errorJobHuntNotFound": "That hunt no longer exists.",
+        "errorCannotDeleteActiveJobHunt": "Only ended hunts can be deleted."
       }
     },
     "navUser": {

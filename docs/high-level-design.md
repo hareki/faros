@@ -15,7 +15,16 @@ The app's **primary lens is workflow driver**: it surfaces what the user needs t
 - Manually started and ended by the user. No automation around hunt lifecycle.
 - **Read-only after ending**: an ended hunt is immutable. (A future enhancement may allow
   editing a few simple text fields to fix typos, but ending is otherwise final.)
-- Each ended hunt has a Retro view.
+- **Reviewable after ending**: an ended hunt keeps its Retro view and a read-only Tracker
+  Board (its applications frozen as they stood at end), re-selectable from the switcher.
+- **Permanently deletable**: an ended hunt can be hard-deleted, cascading its applications
+  (see [ADR-0004](adr/0004-hard-delete-ended-hunts.md)). The active hunt cannot be deleted.
+
+**Selected hunt & navigation**: the shell tracks one _selected_ hunt — the active hunt or an
+ended hunt the user picked — resolved from a cookie (see
+[ADR-0005](adr/0005-selected-hunt-via-cookie.md)). The hunt-scoped nav follows it: Dashboard
+for the active hunt, Retro for an ended one, with the Tracker Board available to both. Resume
+Library and Settings are user-global and independent of the selection.
 
 ### Application
 
@@ -79,6 +88,9 @@ Sub-stages exist only for **Active** and **Final Stages**. **Applied** is a sing
 waiting state and **Closed** is sub-classified by its outcome, so neither offers
 sub-stages. Moving a card between columns clears its sub-stage.
 
+For an ended hunt the board is **read-only** — a frozen view of where each application stood
+when the hunt ended (no drag, quick-add, or edits).
+
 Each card has a **configurable sub-stage tag** (HR screen, tech screen, onsite, etc.) indicating exact pipeline position within the column. Cards can also have additional tags/labels for filtering (frontend, remote, startup, etc.).
 
 ### Retro View (per ended hunt)
@@ -135,7 +147,7 @@ Two front doors, one engine room.
 ## V1 Feature Set
 
 - Auth (email + OAuth); one account per email, providers auto-linked by verified email.
-- Job Hunt CRUD; one active at a time.
+- Job Hunt CRUD; one active at a time; permanent delete restricted to ended hunts.
 - Application CRUD with minimal required fields and optional metadata.
 - Kanban board with fixed columns + configurable sub-stage tags.
 - Per-application activity log.

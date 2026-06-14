@@ -45,7 +45,7 @@ function DialogOverlay({ className, ...props }: DialogPrimitive.Backdrop.Props) 
 function DialogContent({
   className,
   children,
-  showCloseButton = true,
+  showCloseButton = false,
   ...props
 }: DialogPrimitive.Popup.Props & {
   showCloseButton?: boolean;
@@ -73,13 +73,7 @@ function DialogContent({
         {showCloseButton && (
           <DialogPrimitive.Close
             data-slot='dialog-close'
-            render={
-              <Button
-                variant='ghost'
-                className='absolute top-4 right-4 bg-secondary'
-                size='icon-sm'
-              />
-            }
+            render={<Button variant='ghost' className='absolute top-4 right-4' size='icon-sm' />}
           >
             <IconX />
             <span className='sr-only'>Close</span>
@@ -92,7 +86,7 @@ function DialogContent({
 
 function DialogHeader({ className, ...props }: ComponentProps<'div'>) {
   return (
-    <div data-slot='dialog-header' className={cn('flex flex-col gap-1.5', className)} {...props} />
+    <div data-slot='dialog-header' className={cn('flex flex-col gap-2', className)} {...props} />
   );
 }
 

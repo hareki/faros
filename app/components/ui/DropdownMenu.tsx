@@ -58,9 +58,7 @@ function DropdownMenuContent({
               **:data-[slot$=-separator]:bg-foreground/5
               **:data-[slot$=-trigger]:focus:bg-foreground/10
               **:data-[slot$=-trigger]:aria-expanded:bg-foreground/10!
-              **:data-[variant=destructive]:**:text-accent-foreground!
-              **:data-[variant=destructive]:text-accent-foreground!
-              **:data-[variant=destructive]:focus:bg-foreground/10!
+              **:data-[variant=destructive]:data-highlighted:bg-destructive/10
               dark:ring-foreground/10
               data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95
               data-closed:animate-out data-closed:overflow-hidden data-closed:fade-out-0
@@ -203,9 +201,7 @@ function DropdownMenuSubContent({
           **:data-[slot$=-separator]:bg-foreground/5
           **:data-[slot$=-trigger]:focus:bg-foreground/10
           **:data-[slot$=-trigger]:aria-expanded:bg-foreground/10!
-          **:data-[variant=destructive]:**:text-accent-foreground!
-          **:data-[variant=destructive]:text-accent-foreground!
-          **:data-[variant=destructive]:focus:bg-foreground/10!
+          **:data-[variant=destructive]:data-highlighted:bg-destructive/10
           dark:ring-foreground/10
           data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95
           data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95

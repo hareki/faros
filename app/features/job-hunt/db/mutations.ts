@@ -8,6 +8,7 @@ import { jobHunts } from '@/app/features/job-hunt/db/schema';
 type StartJobHuntParams = { userId: string; name: string };
 type RenameJobHuntParams = { userId: string; id: string; name: string };
 type EndJobHuntParams = { userId: string; id: string };
+type DeleteJobHuntParams = { userId: string; id: string };
 
 /**
  * Inserts a new active hunt. The `one_active_job_hunt_per_user` partial unique index is the
@@ -52,6 +53,21 @@ export async function endJobHunt(executor: DbExecutor, { userId, id }: EndJobHun
     .update(jobHunts)
     .set({ status: 'ended', endedAt: now, updatedAt: now })
     .where(and(eq(jobHunts.id, id), eq(jobHunts.userId, userId), eq(jobHunts.status, 'active')))
+    .returning();
+
+  return row;
+}
+
+/**
+ * Permanently deletes an ended hunt the user owns. Cascades to its applications (and their
+ * tags) via the `onDelete: 'cascade'` foreign keys. The `status = 'ended'` predicate is the
+ * guard that the live active hunt can never be deleted. Returns the deleted row, or
+ * `undefined` when no ended hunt matches (wrong id, not the owner, or still active).
+ */
+export async function deleteJobHunt(executor: DbExecutor, { userId, id }: DeleteJobHuntParams) {
+  const [row] = await executor
+    .delete(jobHunts)
+    .where(and(eq(jobHunts.id, id), eq(jobHunts.userId, userId), eq(jobHunts.status, 'ended')))
     .returning();
 
   return row;

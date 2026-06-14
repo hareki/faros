@@ -9,8 +9,15 @@ docs. It is a glossary only — no implementation detail.
 
 **Job Hunt**:
 A session that groups applications (e.g. "2026 Senior FE Hunt"). Exactly one is active
-at a time; manually started and ended.
+at a time; manually started and ended. Ended hunts stay reviewable (their Retro plus a
+read-only board) and can be permanently deleted; the active hunt cannot.
 _Avoid_: Search, campaign, session.
+
+**Selected hunt**:
+The hunt currently in view in the app shell — the active hunt, or an ended hunt the user
+picked from the switcher to review read-only. Distinct from the _active_ hunt: exactly one
+hunt is active, but any one hunt (active or ended) is the selected one at a time.
+_Avoid_: Current hunt (ambiguous with active).
 
 **Application**:
 A single job application belonging to one Job Hunt. Carries a Stage, an optional

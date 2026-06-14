@@ -4,14 +4,13 @@ import { Fragment, useState, useTransition } from 'react';
 
 import {
   IconArchive,
-  IconArrowRight,
   IconBriefcase,
   IconCheck,
   IconPencil,
   IconPlus,
   IconSelector,
+  IconTrash,
 } from '@tabler/icons-react';
-import LinkPrimitive from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
@@ -26,7 +25,9 @@ import {
 } from '@/app/components/ui/DropdownMenu';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/app/components/ui/Sidebar';
 import { Small, Muted } from '@/app/components/ui/Typography';
+import { deleteJobHuntAction } from '@/app/features/job-hunt/actions/deleteJobHuntAction';
 import { endJobHuntAction } from '@/app/features/job-hunt/actions/endJobHuntAction';
+import { selectJobHuntAction } from '@/app/features/job-hunt/actions/selectJobHuntAction';
 import { useActiveJobHunt } from '@/app/features/job-hunt/hooks/useActiveJobHunt';
 import { type JobHuntSummary } from '@/app/features/job-hunt/types';
 import { resolveErrorMessage } from '@/app/features/job-hunt/utils/resolveMessage';
@@ -34,13 +35,17 @@ import { confirm } from '@/app/lib/confirm/confirm';
 import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
 import { toast } from '@/app/lib/sonner/toast';
 
+import { ConfirmByNameDialogView } from '../views/ConfirmByNameDialogView';
 import { RenameJobHuntDialogView } from '../views/RenameJobHuntDialogView';
 import { StartJobHuntDialog } from '../views/StartJobHuntDialogView';
 
-type DialogState = {
-  kind: 'start' | 'rename';
-  jobHunt?: JobHuntSummary;
-} | null;
+type DialogState =
+  | { kind: 'start' }
+  | { kind: 'startBlocked' }
+  | { kind: 'rename'; jobHunt: JobHuntSummary }
+  | { kind: 'end'; jobHunt: JobHuntSummary }
+  | { kind: 'delete'; jobHunt: JobHuntSummary }
+  | null;
 
 type JobHuntSwitcherProps = {
   messages: ClientMessages['layout']['jobHuntSwitcher'];
@@ -50,9 +55,9 @@ type JobHuntSwitcherProps = {
 export function JobHuntSwitcher({ messages, dialogMessages }: JobHuntSwitcherProps) {
   const t = useTranslations('validation');
   const router = useRouter();
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
 
-  const { activeJobHunt, jobHunts } = useActiveJobHunt();
+  const { activeJobHunt, selectedJobHunt, jobHunts } = useActiveJobHunt();
   const endedJobHunts = jobHunts.filter((jobHunt) => jobHunt.status === 'ended');
 
   const [dialog, setDialog] = useState<DialogState>(null);
@@ -62,27 +67,87 @@ export function JobHuntSwitcher({ messages, dialogMessages }: JobHuntSwitcherPro
     }
   };
 
+  const reportError = (errorKey: Parameters<typeof resolveErrorMessage>[2]) => {
+    toast.error(resolveErrorMessage(t, dialogMessages.errors, errorKey));
+  };
+
+  // Selecting a hunt records it in the cookie, then lands on that hunt's primary view: the
+  // dashboard for the active hunt, the Retro for an ended one.
+  const selectJobHunt = (jobHunt: JobHuntSummary) => {
+    if (jobHunt.id === selectedJobHunt?.id) {
+      return;
+    }
+
+    startTransition(async () => {
+      const result = await selectJobHuntAction({ id: jobHunt.id });
+
+      if (result.status === 'error') {
+        reportError(result.errorKey);
+
+        return;
+      }
+
+      router.push(jobHunt.status === 'active' ? '/dashboard' : '/retro');
+      router.refresh();
+    });
+  };
+
   const confirmEndJobHunt = (jobHunt: JobHuntSummary) => {
-    confirm.destructive({
-      title: dialogMessages.end.title,
-      content: dialogMessages.end.description,
-      confirmText: dialogMessages.end.confirm,
-      cancelText: dialogMessages.end.cancel,
+    startTransition(async () => {
+      const result = await endJobHuntAction({ id: jobHunt.id });
+
+      if (result.status === 'error') {
+        reportError(result.errorKey);
+
+        return;
+      }
+
+      // Keep the just-ended hunt selected so its Retro is what the user lands on.
+      await selectJobHuntAction({ id: jobHunt.id });
+      setDialog(null);
+      router.push('/retro');
+      router.refresh();
+    });
+  };
+
+  const confirmDeleteJobHunt = (jobHunt: JobHuntSummary) => {
+    startTransition(async () => {
+      const result = await deleteJobHuntAction({ id: jobHunt.id });
+
+      if (result.status === 'error') {
+        reportError(result.errorKey);
+
+        return;
+      }
+
+      setDialog(null);
+      // The selection cookie was cleared server-side; fall back to the new default view.
+      router.push(activeJobHunt ? '/dashboard' : '/retro');
+      router.refresh();
+    });
+  };
+
+  const handleStartJobHunt = () => {
+    if (!activeJobHunt) {
+      setDialog({ kind: 'start' });
+
+      return;
+    }
+
+    confirm({
+      title: dialogMessages.startBlocked.title,
+      content: dialogMessages.startBlocked.description,
+      cancelText: dialogMessages.startBlocked.cancel,
+      confirmText: dialogMessages.startBlocked.endCurrent,
       onConfirm: () => {
-        startTransition(async () => {
-          const result = await endJobHuntAction({ id: jobHunt.id });
-
-          if (result.status === 'error') {
-            toast.error(resolveErrorMessage(t, dialogMessages.errors, result.errorKey));
-
-            return;
-          }
-
-          router.refresh();
-        });
+        if (activeJobHunt) {
+          setDialog({ kind: 'end', jobHunt: activeJobHunt });
+        }
       },
     });
   };
+
+  const confirmTarget = dialog?.kind === 'end' || dialog?.kind === 'delete' ? dialog.jobHunt : null;
 
   const dialogs = (
     <Fragment>
@@ -95,13 +160,38 @@ export function JobHuntSwitcher({ messages, dialogMessages }: JobHuntSwitcherPro
         open={dialog?.kind === 'rename'}
         onOpenChange={closeDialog}
         messages={dialogMessages}
-        jobHunt={dialog?.jobHunt}
+        jobHunt={dialog?.kind === 'rename' ? dialog.jobHunt : undefined}
+      />
+      <ConfirmByNameDialogView
+        open={dialog?.kind === 'end'}
+        onOpenChange={closeDialog}
+        jobHuntName={confirmTarget?.name ?? ''}
+        isPending={isPending}
+        onConfirm={() => {
+          if (dialog?.kind === 'end') {
+            confirmEndJobHunt(dialog.jobHunt);
+          }
+        }}
+        messages={dialogMessages.end}
+      />
+      <ConfirmByNameDialogView
+        open={dialog?.kind === 'delete'}
+        onOpenChange={closeDialog}
+        jobHuntName={confirmTarget?.name ?? ''}
+        isPending={isPending}
+        onConfirm={() => {
+          if (dialog?.kind === 'delete') {
+            confirmDeleteJobHunt(dialog.jobHunt);
+          }
+        }}
+        messages={dialogMessages.delete}
       />
     </Fragment>
   );
 
-  // First-run: no active hunt — the switcher collapses into a single "Start a hunt" CTA.
-  if (!activeJobHunt) {
+  // First-run: the user has no hunts at all — the switcher collapses into a single
+  // "Start a hunt" CTA.
+  if (!selectedJobHunt) {
     return (
       <SidebarMenu>
         <SidebarMenuItem>
@@ -130,6 +220,19 @@ export function JobHuntSwitcher({ messages, dialogMessages }: JobHuntSwitcherPro
     );
   }
 
+  const renderHuntItem = (jobHunt: JobHuntSummary, muted: boolean) => (
+    <DropdownMenuItem
+      key={jobHunt.id}
+      onClick={() => {
+        selectJobHunt(jobHunt);
+      }}
+    >
+      <IconBriefcase className={muted ? 'text-muted-foreground' : undefined} />
+      <span className='flex-1 truncate'>{jobHunt.name}</span>
+      {selectedJobHunt.id === jobHunt.id && <IconCheck className='ml-auto' />}
+    </DropdownMenuItem>
+  );
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -153,10 +256,12 @@ export function JobHuntSwitcher({ messages, dialogMessages }: JobHuntSwitcherPro
                 </div>
                 <div className='grid flex-1 text-left text-sm/tight'>
                   <Muted as='span' className='truncate text-xs text-sidebar-foreground/70'>
-                    {messages.activeJobHunt}
+                    {selectedJobHunt.status === 'active'
+                      ? messages.activeJobHunt
+                      : messages.endedJobHunt}
                   </Muted>
                   <Small as='span' className='truncate'>
-                    {activeJobHunt.name}
+                    {selectedJobHunt.name}
                   </Small>
                 </div>
                 <IconSelector className='ml-auto' />
@@ -165,71 +270,66 @@ export function JobHuntSwitcher({ messages, dialogMessages }: JobHuntSwitcherPro
           />
 
           <DropdownMenuContent align='start' className='min-w-56'>
-            <DropdownMenuGroup>
-              <DropdownMenuLabel className='text-xs text-muted-foreground'>
-                {messages.jobHunts}
-              </DropdownMenuLabel>
-              <DropdownMenuItem>
-                <IconBriefcase />
-                <span className='flex-1 truncate'>{activeJobHunt.name}</span>
-                <IconCheck className='ml-auto' />
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
+            {activeJobHunt && (
+              <DropdownMenuGroup>
+                <DropdownMenuLabel className='text-xs text-muted-foreground'>
+                  {messages.activeJobHunt}
+                </DropdownMenuLabel>
+                {renderHuntItem(activeJobHunt, false)}
+              </DropdownMenuGroup>
+            )}
 
             {endedJobHunts.length > 0 && (
               <DropdownMenuGroup>
                 <DropdownMenuLabel className='text-xs text-muted-foreground'>
                   {messages.endedJobHunts}
                 </DropdownMenuLabel>
-                {endedJobHunts.map((jobHunt) => (
-                  <DropdownMenuItem
-                    key={jobHunt.id}
-                    render={
-                      <LinkPrimitive
-                        href={`/retro/${jobHunt.id}`}
-                        aria-label={messages.viewRetro}
-                      />
-                    }
-                  >
-                    <IconBriefcase className='text-muted-foreground' />
-                    <span className='flex-1 truncate'>{jobHunt.name}</span>
-                    <IconArrowRight className='ml-auto text-muted-foreground' />
-                  </DropdownMenuItem>
-                ))}
+                {endedJobHunts.map((jobHunt) => renderHuntItem(jobHunt, true))}
               </DropdownMenuGroup>
             )}
 
             <DropdownMenuSeparator />
+
             <DropdownMenuGroup>
-              <DropdownMenuItem
-                onClick={() => {
-                  setDialog({ kind: 'rename', jobHunt: activeJobHunt });
-                }}
-              >
-                <IconPencil />
-                {messages.renameJobHunt}
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                variant='destructive'
-                onClick={() => {
-                  confirmEndJobHunt(activeJobHunt);
-                }}
-              >
-                <IconArchive />
-                {messages.endJobHunt}
+              <DropdownMenuItem onClick={handleStartJobHunt}>
+                <IconPlus />
+                {messages.startJobHunt}
               </DropdownMenuItem>
             </DropdownMenuGroup>
 
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem
-                onClick={() => {
-                  setDialog({ kind: 'start' });
-                }}
-              >
-                <IconPlus />
-                {messages.startJobHunt}
-              </DropdownMenuItem>
+              {selectedJobHunt.status === 'active' ? (
+                <Fragment>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setDialog({ kind: 'rename', jobHunt: selectedJobHunt });
+                    }}
+                  >
+                    <IconPencil />
+                    {messages.renameJobHunt}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    variant='destructive'
+                    onClick={() => {
+                      setDialog({ kind: 'end', jobHunt: selectedJobHunt });
+                    }}
+                  >
+                    <IconArchive />
+                    {messages.endJobHunt}
+                  </DropdownMenuItem>
+                </Fragment>
+              ) : (
+                <DropdownMenuItem
+                  variant='destructive'
+                  onClick={() => {
+                    setDialog({ kind: 'delete', jobHunt: selectedJobHunt });
+                  }}
+                >
+                  <IconTrash />
+                  {messages.deleteJobHunt}
+                </DropdownMenuItem>
+              )}
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>

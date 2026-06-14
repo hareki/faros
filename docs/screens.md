@@ -24,16 +24,22 @@ repeated per route. The shell is a sidebar + header layout.
     out.
 - **Sidebar**:
   - Header: app logo / home link ("Faros").
-  - Top: the **active Job Hunt switcher** — a dropdown showing the active hunt's name and
-    listing the user's Job Hunts, marking the one active hunt, and linking ended hunts to
-    their Retro. Entry point for "Start a hunt" / "End hunt". (See _Hunt switcher &
-    lifecycle dialogs_ below.)
-  - Nav: **Dashboard**, **Tracker Board**, **Resume Library**, and **Settings**
-    (expandable → Sub-stages, Tags, Notification — a single Notification page with
-    separate rules and preferences sections).
-- **First-run shell state**: when the user has **no active hunt**, the shell collapses
-  navigation that depends on a hunt and surfaces a single focused CTA ("Start your first
-  hunt").
+  - Top: the **Job Hunt switcher** — a dropdown showing the selected hunt's name (labelled
+    "Active hunt" or "Ended hunt") and listing the user's hunts grouped active vs ended.
+    Picking any hunt makes it the **selected hunt** and routes to its primary view (Dashboard
+    for the active hunt, Retro for an ended one). Entry point for "Start a hunt",
+    "Rename hunt", "End hunt", and — for a selected ended hunt — "Delete hunt". (See _Hunt
+    switcher & lifecycle dialogs_ below.)
+  - Nav, in two labelled groups: **This hunt** — **Dashboard** (or **Retro** when an ended
+    hunt is selected) and **Tracker Board**, which follow the selected hunt; and
+    **Workspace** — **Resume Library** and **Settings** (expandable → Sub-stages, Tags,
+    Notification — a single Notification page with separate rules and preferences sections),
+    which are user-global and independent of the selection.
+- **Default selection**: the active hunt if there is one, otherwise the most-recent ended
+  hunt — so its Retro and read-only board stay reachable and "Start a hunt" is still offered.
+- **First-run shell state**: only when the user has **no hunts at all**, the shell hides the
+  **This hunt** group (keeping **Workspace** visible) and surfaces a single focused CTA
+  ("Start your first hunt").
 
 ---
 
@@ -94,6 +100,8 @@ The action-oriented board for the active hunt.
   query string (nuqs) so a filtered view is shareable/bookmarkable and survives refresh.
 - **Quick-add application** entry point.
 - Per-column empty states.
+- **Ended hunt**: the board is **read-only** — a frozen snapshot of where each application
+  stood when the hunt ended; no drag-and-drop, quick-add, or edits.
 
 ### Resume Library — resumes route
 
@@ -117,9 +125,12 @@ User-level configuration, likely tabbed/sectioned:
 - **Notification preferences**: `user_notification_prefs` — in-app toggle, email digest
   on/off + cadence (daily/weekly), quiet hours, timezone.
 
-### Retro — per ended hunt
+### Retro — per ended hunt — `(app)/retro`
 
-The self-improvement review for an ended hunt (reached from the hunt switcher; read-only).
+The self-improvement review for the selected ended hunt (selected from the hunt switcher;
+read-only). The route reads the selected hunt from the cookie rather than a URL id (see
+[ADR-0005](adr/0005-selected-hunt-via-cookie.md)); an active selection redirects to the
+Dashboard.
 
 - **Funnel** (Recharts): Applied → first response → first interview → final round → offer,
   with counts and conversion rates (milestones derived from the activity log/events).
@@ -172,10 +183,15 @@ complete/cancel actions. Creating an `offer_deadline` event auto-logs `offer_rec
 
 ### Hunt switcher & lifecycle dialogs
 
-- **Start hunt** dialog (name the hunt; blocked if one is already active — friendly
-  conflict message).
-- **End hunt** confirmation (makes it read-only, unlocks its Retro).
-- **Rename hunt** dialog.
+- **Start hunt** dialog (name the hunt). If a hunt is already active, picking "Start a hunt"
+  instead opens a **blocked** explanatory dialog with a shortcut to end the current hunt
+  first — the start form is never shown in that state.
+- **End hunt** confirmation — type-to-confirm (retype the hunt's exact name) before ending;
+  makes the hunt read-only and unlocks its Retro.
+- **Rename hunt** dialog (active hunt only).
+- **Delete hunt** — only for a selected ended hunt; type-to-confirm (retype the hunt's exact
+  name); permanently deletes the hunt and its applications (see
+  [ADR-0004](adr/0004-hard-delete-ended-hunts.md)).
 
 ### Resume picker dialog
 

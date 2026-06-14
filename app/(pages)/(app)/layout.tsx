@@ -7,6 +7,10 @@ import { db } from '@/app/db/client';
 import { ActiveHuntProvider } from '@/app/features/job-hunt/components/ActiveHuntProvider';
 import { EmptyJobHunt } from '@/app/features/job-hunt/components/EmptyJobHunt';
 import { listJobHunts } from '@/app/features/job-hunt/db/queries';
+import {
+  pickSelectedJobHunt,
+  readSelectedJobHuntId,
+} from '@/app/features/job-hunt/server/selectedJobHunt';
 import { requireUser } from '@/app/lib/better-auth/session';
 import { getClientMessages } from '@/app/lib/next-intl/utils/getClientMessages';
 
@@ -20,9 +24,14 @@ export default async function PrivateLayout({ children }: PropsWithChildren) {
     status,
   }));
   const activeJobHunt = jobHunts.find((jobHunt) => jobHunt.status === 'active') ?? null;
+  const selectedJobHunt = pickSelectedJobHunt(jobHunts, await readSelectedJobHuntId());
 
   return (
-    <ActiveHuntProvider jobHunts={jobHunts} activeJobHunt={activeJobHunt}>
+    <ActiveHuntProvider
+      jobHunts={jobHunts}
+      activeJobHunt={activeJobHunt}
+      selectedJobHunt={selectedJobHunt}
+    >
       <SidebarProvider>
         <AppSidebar />
         {/* HACK: Make app header border connect to sidebar without adjusting the sidebar padding right,
@@ -30,7 +39,7 @@ export default async function PrivateLayout({ children }: PropsWithChildren) {
         <SidebarInset className='-ml-3'>
           <AppHeader />
           <main className='flex flex-1 flex-col p-3'>
-            {activeJobHunt ? (
+            {selectedJobHunt ? (
               children
             ) : (
               <EmptyJobHunt
