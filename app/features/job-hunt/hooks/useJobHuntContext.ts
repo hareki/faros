@@ -2,7 +2,7 @@ import { createContext, use } from 'react';
 
 import { type JobHuntSummary } from '@/app/features/job-hunt/types';
 
-export type ActiveHuntContextValue = {
+export type JobHuntContextValue = {
   /** The user's single active hunt, or `null` in the first-run shell. */
   activeJobHunt: JobHuntSummary | null;
   /**
@@ -14,14 +14,14 @@ export type ActiveHuntContextValue = {
   jobHunts: JobHuntSummary[];
 };
 
-export const ActiveHuntContext = createContext<ActiveHuntContextValue | null>(null);
+export const JobHuntContext = createContext<JobHuntContextValue | null>(null);
 
 /** Reads the active-hunt context; throws if used outside `<ActiveHuntProvider>`. */
-export function useActiveJobHunt() {
-  const context = use(ActiveHuntContext);
+export function useJobHuntContext() {
+  const context = use(JobHuntContext);
 
   if (!context) {
-    throw new Error('useActiveJobHunt must be used within an ActiveHuntProvider.');
+    throw new Error('useJobHuntContext must be used within an JobHuntProvider.');
   }
 
   return context;

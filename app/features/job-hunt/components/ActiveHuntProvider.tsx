@@ -1,30 +1,48 @@
 'use client';
 
-import { type PropsWithChildren } from 'react';
+import { type PropsWithChildren, useEffect } from 'react';
 
-import { ActiveHuntContext } from '@/app/features/job-hunt/hooks/useActiveJobHunt';
+import { parseAsString, useQueryState } from 'nuqs';
+
+import { JobHuntContext } from '@/app/features/job-hunt/hooks/useJobHuntContext';
 import { type JobHuntSummary } from '@/app/features/job-hunt/types';
+import {
+  JOB_HUNT_PARAM,
+  resolveSelectedJobHunt,
+} from '@/app/features/job-hunt/utils/selectedJobHunt';
 
 type ActiveHuntProviderProps = PropsWithChildren<{
   jobHunts: JobHuntSummary[];
   activeJobHunt: JobHuntSummary | null;
-  selectedJobHunt: JobHuntSummary | null;
 }>;
 
 /**
- * Distributes the server-fetched hunts to client components in the app shell. Read-only:
- * the server layout is the source of truth, and lifecycle/selection mutations re-sync via
- * `router.refresh()` (or a navigation that re-runs the layout).
+ * Distributes the server-fetched hunts to the app shell and resolves the *selected* hunt from
+ * the `?job_hunt` URL param — the single source of truth. It also canonicalizes the URL: when a
+ * hunt is selectable but the param is missing or stale it writes the resolved id back (a shallow
+ * `replace`, so no history entry and no server round-trip); when the user has no hunts it strips
+ * any leftover param. Hunt-scoped pages (Dashboard/Retro) already redirect to the canonical URL
+ * server-side, so there this is a no-op — it mainly keeps the hunt-independent pages in sync.
  */
-export function ActiveHuntProvider({
-  jobHunts,
-  activeJobHunt,
-  selectedJobHunt,
-  children,
-}: ActiveHuntProviderProps) {
+export function JobHuntProvider({ jobHunts, activeJobHunt, children }: ActiveHuntProviderProps) {
+  const [param, setParam] = useQueryState(JOB_HUNT_PARAM, parseAsString);
+  const selectedJobHunt = resolveSelectedJobHunt(jobHunts, param);
+
+  useEffect(() => {
+    if (jobHunts.length === 0) {
+      if (param) {
+        void setParam(null);
+      }
+
+      return;
+    }
+
+    if (selectedJobHunt && param !== selectedJobHunt.id) {
+      void setParam(selectedJobHunt.id);
+    }
+  }, [jobHunts.length, param, selectedJobHunt, setParam]);
+
   return (
-    <ActiveHuntContext value={{ activeJobHunt, selectedJobHunt, jobHunts }}>
-      {children}
-    </ActiveHuntContext>
+    <JobHuntContext value={{ activeJobHunt, selectedJobHunt, jobHunts }}>{children}</JobHuntContext>
   );
 }

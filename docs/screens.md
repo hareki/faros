@@ -128,8 +128,8 @@ User-level configuration, likely tabbed/sectioned:
 ### Retro — per ended hunt — `(app)/retro`
 
 The self-improvement review for the selected ended hunt (selected from the hunt switcher;
-read-only). The route reads the selected hunt from the cookie rather than a URL id (see
-[ADR-0005](adr/0005-selected-hunt-via-cookie.md)); an active selection redirects to the
+read-only). The route reads the selected hunt from the `?job_hunt` URL query param (see
+[ADR-0005](adr/0005-selected-hunt-via-url-query-param.md)); an active selection redirects to the
 Dashboard.
 
 - **Funnel** (Recharts): Applied → first response → first interview → final round → offer,

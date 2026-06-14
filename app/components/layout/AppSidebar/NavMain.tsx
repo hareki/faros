@@ -17,7 +17,8 @@ import {
 import { type Route } from 'next';
 import { usePathname } from 'next/navigation';
 
-import { useActiveJobHunt } from '@/app/features/job-hunt/hooks/useActiveJobHunt';
+import { useJobHuntContext } from '@/app/features/job-hunt/hooks/useJobHuntContext';
+import { jobHuntHref } from '@/app/features/job-hunt/utils/selectedJobHunt';
 import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../../ui/Collapsible';
@@ -52,7 +53,7 @@ const settingsItems: NavLeaf[] = [
 
 export function NavMain({ messages }: { messages: ClientMessages['layout']['nav'] }) {
   const pathname = usePathname();
-  const { selectedJobHunt } = useActiveJobHunt();
+  const { selectedJobHunt } = useJobHuntContext();
 
   // The hunt-scoped slot follows the selected hunt: an active hunt opens on its Dashboard, an
   // ended hunt on its (read-only) Retro. The Tracker Board stays available for both.
@@ -69,7 +70,7 @@ export function NavMain({ messages }: { messages: ClientMessages['layout']['nav'
     <SidebarMenuItem key={item.url}>
       <SidebarMenuButton
         isActive={pathname === item.url}
-        render={<Link href={item.url} variant='unstyled' />}
+        render={<Link href={jobHuntHref(item.url, selectedJobHunt?.id)} variant='unstyled' />}
       >
         <item.icon />
         <span>{messages[item.key]}</span>
@@ -117,7 +118,12 @@ export function NavMain({ messages }: { messages: ClientMessages['layout']['nav'
                     <SidebarMenuSubItem key={item.url}>
                       <SidebarMenuSubButton
                         isActive={pathname === item.url}
-                        render={<Link href={item.url} variant='unstyled' />}
+                        render={
+                          <Link
+                            href={jobHuntHref(item.url, selectedJobHunt?.id)}
+                            variant='unstyled'
+                          />
+                        }
                       >
                         <item.icon />
                         <span>{messages[item.key]}</span>

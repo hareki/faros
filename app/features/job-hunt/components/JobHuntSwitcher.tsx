@@ -27,10 +27,10 @@ import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/app/component
 import { Small, Muted } from '@/app/components/ui/Typography';
 import { deleteJobHuntAction } from '@/app/features/job-hunt/actions/deleteJobHuntAction';
 import { endJobHuntAction } from '@/app/features/job-hunt/actions/endJobHuntAction';
-import { selectJobHuntAction } from '@/app/features/job-hunt/actions/selectJobHuntAction';
-import { useActiveJobHunt } from '@/app/features/job-hunt/hooks/useActiveJobHunt';
+import { useJobHuntContext } from '@/app/features/job-hunt/hooks/useJobHuntContext';
 import { type JobHuntSummary } from '@/app/features/job-hunt/types';
 import { resolveErrorMessage } from '@/app/features/job-hunt/utils/resolveMessage';
+import { jobHuntHref } from '@/app/features/job-hunt/utils/selectedJobHunt';
 import { confirm } from '@/app/lib/confirm/confirm';
 import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
 import { toast } from '@/app/lib/sonner/toast';
@@ -57,7 +57,7 @@ export function JobHuntSwitcher({ messages, dialogMessages }: JobHuntSwitcherPro
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  const { activeJobHunt, selectedJobHunt, jobHunts } = useActiveJobHunt();
+  const { activeJobHunt, selectedJobHunt, jobHunts } = useJobHuntContext();
   const endedJobHunts = jobHunts.filter((jobHunt) => jobHunt.status === 'ended');
 
   const [dialog, setDialog] = useState<DialogState>(null);
@@ -71,25 +71,14 @@ export function JobHuntSwitcher({ messages, dialogMessages }: JobHuntSwitcherPro
     toast.error(resolveErrorMessage(t, dialogMessages.errors, errorKey));
   };
 
-  // Selecting a hunt records it in the cookie, then lands on that hunt's primary view: the
-  // dashboard for the active hunt, the Retro for an ended one.
+  // Selecting a hunt writes it to the `?job_hunt` URL param by navigating to that hunt's primary
+  // view: the Dashboard for the active hunt, the Retro for an ended one.
   const selectJobHunt = (jobHunt: JobHuntSummary) => {
     if (jobHunt.id === selectedJobHunt?.id) {
       return;
     }
 
-    startTransition(async () => {
-      const result = await selectJobHuntAction({ id: jobHunt.id });
-
-      if (result.status === 'error') {
-        reportError(result.errorKey);
-
-        return;
-      }
-
-      router.push(jobHunt.status === 'active' ? '/dashboard' : '/retro');
-      router.refresh();
-    });
+    router.push(jobHuntHref(jobHunt.status === 'active' ? '/dashboard' : '/retro', jobHunt.id));
   };
 
   const confirmEndJobHunt = (jobHunt: JobHuntSummary) => {
@@ -102,10 +91,9 @@ export function JobHuntSwitcher({ messages, dialogMessages }: JobHuntSwitcherPro
         return;
       }
 
-      // Keep the just-ended hunt selected so its Retro is what the user lands on.
-      await selectJobHuntAction({ id: jobHunt.id });
       setDialog(null);
-      router.push('/retro');
+      // Keep the just-ended hunt selected (now via the URL param) so its Retro is what we land on.
+      router.push(jobHuntHref('/retro', jobHunt.id));
       router.refresh();
     });
   };
@@ -121,8 +109,9 @@ export function JobHuntSwitcher({ messages, dialogMessages }: JobHuntSwitcherPro
       }
 
       setDialog(null);
-      // The selection cookie was cleared server-side; fall back to the new default view.
-      router.push(activeJobHunt ? '/dashboard' : '/retro');
+      // The selected hunt is gone; land on the bare Dashboard and let the server canonicalize the
+      // URL to the new fallback selection (active => most-recent ended => none).
+      router.push('/dashboard');
       router.refresh();
     });
   };

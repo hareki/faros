@@ -6,7 +6,7 @@ import { getClientMessages } from '@/app/lib/next-intl/utils/getClientMessages';
 import { NavUser } from './NavUser';
 import { NotificationButton } from './Notification';
 import { ThemeSwitcher } from './ThemeSwitcher';
-import { Input } from '../../ui/Input';
+import { InputGroup, InputGroupAddon, InputGroupInput } from '../../ui/InputGroup';
 import { SidebarTrigger } from '../../ui/Sidebar';
 
 export async function AppHeader() {
@@ -17,7 +17,12 @@ export async function AppHeader() {
     <header className='flex shrink-0 items-center justify-between gap-2 border-b p-3'>
       <div className='flex gap-2'>
         <SidebarTrigger />
-        <Input placeholder={t('search')} variant='outline' icon={<IconSearch />} />
+        <InputGroup variant='outline'>
+          <InputGroupInput placeholder={t('search')} />
+          <InputGroupAddon align='inline-start'>
+            <IconSearch />
+          </InputGroupAddon>
+        </InputGroup>
       </div>
 
       <div className='flex gap-2'>

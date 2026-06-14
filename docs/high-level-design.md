@@ -21,8 +21,8 @@ The app's **primary lens is workflow driver**: it surfaces what the user needs t
   (see [ADR-0004](adr/0004-hard-delete-ended-hunts.md)). The active hunt cannot be deleted.
 
 **Selected hunt & navigation**: the shell tracks one _selected_ hunt — the active hunt or an
-ended hunt the user picked — resolved from a cookie (see
-[ADR-0005](adr/0005-selected-hunt-via-cookie.md)). The hunt-scoped nav follows it: Dashboard
+ended hunt the user picked — resolved from the `?job_hunt` URL query param (see
+[ADR-0005](adr/0005-selected-hunt-via-url-query-param.md)). The hunt-scoped nav follows it: Dashboard
 for the active hunt, Retro for an ended one, with the Tracker Board available to both. Resume
 Library and Settings are user-global and independent of the selection.
 
