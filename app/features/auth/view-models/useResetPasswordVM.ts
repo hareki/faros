@@ -53,7 +53,7 @@ export function useResetPasswordVM(messages: ResetPasswordMessages) {
       const result = await requestPasswordResetAction(values);
 
       if (result.status === 'error') {
-        toast.error(resolveErrorMessage(t, messages, result.errorKey));
+        toast.error(resolveErrorMessage(t, messages.errors, result.errorKey));
 
         return;
       }

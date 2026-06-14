@@ -4,7 +4,6 @@ import { Fragment, useState } from 'react';
 
 import {
   IconArchive,
-  IconArchiveOff,
   IconArrowRight,
   IconBriefcase,
   IconCheck,
@@ -48,8 +47,6 @@ export function JobHuntSwitcher({ messages, dialogMessages }: JobHuntSwitcherPro
       setDialog(null);
     }
   };
-  const firstEndedJobHunt = endedSketchJobHunts[0];
-
   const confirmEndJobHunt = () => {
     confirm.destructive({
       title: dialogMessages.end.title,
@@ -57,18 +54,7 @@ export function JobHuntSwitcher({ messages, dialogMessages }: JobHuntSwitcherPro
       confirmText: dialogMessages.end.confirm,
       cancelText: dialogMessages.end.cancel,
       onConfirm: () => {
-        // TODO(L74-78): call the endHunt server action.
-      },
-    });
-  };
-  const confirmUnarchiveJobHunt = () => {
-    confirm({
-      title: dialogMessages.unarchive.title,
-      content: dialogMessages.unarchive.description,
-      confirmText: dialogMessages.unarchive.confirm,
-      cancelText: dialogMessages.unarchive.cancel,
-      onConfirm: () => {
-        // TODO(L74-78): call the unarchiveHunt server action.
+        // TODO(L76): call the endJobHunt server action.
       },
     });
   };
@@ -197,12 +183,6 @@ export function JobHuntSwitcher({ messages, dialogMessages }: JobHuntSwitcherPro
                 <IconArchive />
                 {messages.endJobHunt}
               </DropdownMenuItem>
-              {firstEndedJobHunt && (
-                <DropdownMenuItem onClick={confirmUnarchiveJobHunt}>
-                  <IconArchiveOff />
-                  {messages.unarchiveJobHunt}
-                </DropdownMenuItem>
-              )}
             </DropdownMenuGroup>
 
             <DropdownMenuSeparator />

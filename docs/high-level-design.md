@@ -13,11 +13,8 @@ The app's **primary lens is workflow driver**: it surfaces what the user needs t
 - Groups applications into a session (e.g., "2026 Senior FE Hunt").
 - Only **one hunt active at a time**.
 - Manually started and ended by the user. No automation around hunt lifecycle.
-- **Read-only after ending**, with an "unarchive" escape hatch for corrections.
-  Unarchive unlocks in-place editing of an ended hunt; it does **not** change status
-  back to active, so the single active-hunt slot is untouched and corrections never
-  require ending the live hunt. Read-only-after-ending is a soft, owner-toggleable
-  default, not a hard lock.
+- **Read-only after ending**: an ended hunt is immutable. (A future enhancement may allow
+  editing a few simple text fields to fix typos, but ending is otherwise final.)
 - Each ended hunt has a Retro view.
 
 ### Application

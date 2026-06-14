@@ -46,7 +46,6 @@
       "startJobHunt": "Bắt đầu một đợt tìm việc",
       "renameJobHunt": "Đổi tên đợt",
       "endJobHunt": "Kết thúc đợt",
-      "unarchiveJobHunt": "Mở lại",
       "viewRetro": "Xem tổng kết"
     },
     "jobHuntFirstRun": {
@@ -73,15 +72,13 @@
       },
       "end": {
         "title": "Kết thúc đợt này?",
-        "description": "Kết thúc sẽ chuyển đợt sang chỉ đọc và mở khóa phần Tổng kết. Bạn có thể mở lại sau để chỉnh sửa.",
+        "description": "Kết thúc sẽ chuyển đợt sang chỉ đọc và mở khóa phần Tổng kết. Hành động này không thể hoàn tác.",
         "confirm": "Kết thúc đợt",
         "cancel": "Hủy"
       },
-      "unarchive": {
-        "title": "Mở lại đợt này?",
-        "description": "Mở lại cho phép chỉnh sửa trực tiếp một đợt đã kết thúc. Đợt vẫn ở trạng thái đã kết thúc và không trở lại hoạt động.",
-        "confirm": "Mở lại",
-        "cancel": "Hủy"
+      "errors": {
+        "errorActiveJobHuntExists": "Bạn đã có một đợt tìm việc đang hoạt động. Hãy kết thúc đợt đó trước khi bắt đầu đợt mới.",
+        "errorJobHuntNotFound": "Đợt tìm việc này không còn tồn tại."
       }
     },
     "navUser": {
@@ -102,8 +99,10 @@
       "resendEmail": "Gửi lại email",
       "resendEmailSuccess": "Đã gửi email xác minh.",
 
-      "errorInvalidCredentials": "Email hoặc mật khẩu không đúng.",
-      "errorInvalidToken": "Liên kết đặt lại này không hợp lệ hoặc đã hết hạn."
+      "errors": {
+        "errorInvalidCredentials": "Email hoặc mật khẩu không đúng.",
+        "errorInvalidToken": "Liên kết đặt lại này không hợp lệ hoặc đã hết hạn."
+      }
     },
     "signIn": {
       "submit": "Đăng nhập"

@@ -46,7 +46,6 @@
       "startJobHunt": "Start a hunt",
       "renameJobHunt": "Rename hunt",
       "endJobHunt": "End hunt",
-      "unarchiveJobHunt": "Unarchive",
       "viewRetro": "View Retro"
     },
     "jobHuntFirstRun": {
@@ -73,15 +72,13 @@
       },
       "end": {
         "title": "End this hunt?",
-        "description": "Ending makes the hunt read-only and unlocks its Retro. You can unarchive it later to make corrections.",
+        "description": "Ending makes the hunt read-only and unlocks its Retro. This can't be undone.",
         "confirm": "End hunt",
         "cancel": "Cancel"
       },
-      "unarchive": {
-        "title": "Unarchive this hunt?",
-        "description": "Unarchiving unlocks in-place editing of an ended hunt. It stays ended and does not become active again.",
-        "confirm": "Unarchive",
-        "cancel": "Cancel"
+      "errors": {
+        "errorActiveJobHuntExists": "You already have an active hunt. End it before starting a new one.",
+        "errorJobHuntNotFound": "That hunt no longer exists."
       }
     },
     "navUser": {
@@ -102,8 +99,10 @@
       "resendEmail": "Resend email",
       "resendEmailSuccess": "Verification email sent.",
 
-      "errorInvalidCredentials": "Invalid email or password.",
-      "errorInvalidToken": "This reset link is invalid or has expired."
+      "errors": {
+        "errorInvalidCredentials": "Invalid email or password.",
+        "errorInvalidToken": "This reset link is invalid or has expired."
+      }
     },
     "signIn": {
       "submit": "Log in"

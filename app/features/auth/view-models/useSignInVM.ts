@@ -48,7 +48,7 @@ export function useSignInVM(messages: SignInMessages) {
       }
 
       if (result.status === 'error') {
-        toast.error(resolveErrorMessage(t, messages, result.errorKey));
+        toast.error(resolveErrorMessage(t, messages.errors, result.errorKey));
 
         return;
       }
@@ -77,7 +77,7 @@ export function useSignInVM(messages: SignInMessages) {
       const result = await resendVerificationEmailAction({ email: unverifiedEmail });
 
       if (result.status === 'error') {
-        toast.error(resolveErrorMessage(t, messages, result.errorKey));
+        toast.error(resolveErrorMessage(t, messages.errors, result.errorKey));
 
         return;
       }

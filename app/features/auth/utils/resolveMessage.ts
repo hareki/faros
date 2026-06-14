@@ -10,7 +10,7 @@ import { type AuthErrorKey } from '../actions/types';
 
 export function resolveErrorMessage(
   t: ValidationTranslator,
-  messages: Pick<Messages['auth']['shared'], AuthErrorKey>,
+  messages: Messages['auth']['shared']['errors'],
   errorKey: AuthErrorKey | GlobalErrorKey,
 ): string {
   return resolveErrorMessagePrimitive(t, messages, errorKey);

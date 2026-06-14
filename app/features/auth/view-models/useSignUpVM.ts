@@ -41,7 +41,7 @@ export function useSignUpVM(messages: SignUpMessages) {
       const result = await signUpAction(values);
 
       if (result.status === 'error') {
-        toast.error(resolveErrorMessage(t, messages, result.errorKey));
+        toast.error(resolveErrorMessage(t, messages.errors, result.errorKey));
 
         return;
       }
@@ -69,7 +69,7 @@ export function useSignUpVM(messages: SignUpMessages) {
       const result = await resendVerificationEmailAction({ email: sentToEmail });
 
       if (result.status === 'error') {
-        toast.error(resolveErrorMessage(t, messages, result.errorKey));
+        toast.error(resolveErrorMessage(t, messages.errors, result.errorKey));
 
         return;
       }

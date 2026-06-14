@@ -71,8 +71,8 @@ Dependency-ordered. Each feature: sketch static UI → build BE → wire FE.
 ### 1. Job Hunt
 
 - [x] [FE] Sketch hunt switcher dropdown + first-run "Start your first hunt" empty state (static) → screens.md: App shell (Active-hunt switcher, First-run shell state) + Hunt switcher & lifecycle dialogs
-- [ ] [BE] Drizzle queries + server actions: `createHunt`, `endHunt`, `unarchiveHunt`, `renameHunt`
-- [ ] [BE] Rely on partial unique index for "one active"; surface a friendly conflict result for the UI
+- [x] [BE] Drizzle queries + server actions: `startJobHunt`, `endJobHunt`, `renameJobHunt`
+- [x] [BE] Rely on partial unique index for "one active"; surface a friendly conflict result for the UI
 - [ ] [FE] `<ActiveHuntProvider>` React Context exposing current hunt + setter
 - [ ] [FE] Wire hunt switcher (lists hunts, marks active, links to ended-hunt retros) → screens.md: App shell (Active-hunt switcher) + Hunt switcher & lifecycle dialogs
 - [ ] [FE] Wire first-run empty-state CTA → screens.md: App shell (First-run shell state)
@@ -139,15 +139,13 @@ Lay the flexible schema/writer before rules, runners, and UI.
 
 ### 7. Retro view (ended hunts)
 
-- [ ] [FE] Sketch retro view: funnel, time stats, source breakdown, resume performance, outcome cards, read-only toggle (static) → screens.md: Retro
+- [ ] [FE] Sketch retro view: funnel, time stats, source breakdown, resume performance, outcome cards (static; ended hunts are read-only) → screens.md: Retro
 - [ ] [BE] Analytics queries: funnel counts/rates; median times (first response, apply-to-offer, hunt length); source breakdown w/ response rate; resume performance (one-offs bucketed as "Custom"); outcome counts
-- [ ] [FE] Read-only mode toggle on ended hunts → screens.md: Retro (Read-only toggle)
 - [ ] [FE] Wire funnel chart (Recharts): applied → first response → first interview → final round → offer → screens.md: Retro (Funnel)
 - [ ] [FE] Wire time-stats panel → screens.md: Retro (Time stats)
 - [ ] [FE] Wire source-breakdown chart (response rate per `application_source`) → screens.md: Retro (Source breakdown)
 - [ ] [FE] Wire resume-performance chart (response rate per library resume; one-offs bucketed as "Custom") → screens.md: Retro (Resume performance)
 - [ ] [FE] Wire outcome summary cards (offers received / accepted / ghosted / withdrawn) → screens.md: Retro (Outcome summary)
-- [ ] [FE] Unarchive escape-hatch button (calls `unarchiveHunt` from feature 1) → screens.md: Retro + Hunt switcher & lifecycle dialogs (Unarchive)
 
 ## Cross-cutting polish (final pass)
 

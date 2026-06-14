@@ -41,7 +41,7 @@ export function useNewPasswordVM(messages: NewPasswordMessages, token: string) {
       const result = await resetPasswordAction({ token, newPassword: values.password });
 
       if (result.status === 'error') {
-        toast.error(resolveErrorMessage(t, messages, result.errorKey));
+        toast.error(resolveErrorMessage(t, messages.errors, result.errorKey));
 
         return;
       }

@@ -36,6 +36,37 @@ export async function createVerifiedUser({ email, password }: { email: string; p
   return user;
 }
 
+// Inserts a verified user (no credential account). Returns the new user row.
+export async function createUser(overrides: { email?: string } = {}) {
+  const email = overrides.email ?? `user-${crypto.randomUUID()}@example.com`;
+  const [user] = await db
+    .insert(users)
+    .values({ email, name: email.split('@')[0], emailVerified: true })
+    .returning();
+
+  return user;
+}
+
+// Inserts a job_hunt for the given user. Defaults to an active hunt.
+export async function createJobHunt(
+  userId: string,
+  overrides: {
+    name?: string;
+    status?: (typeof schema.jobHuntStatus.enumValues)[number];
+  } = {},
+) {
+  const [hunt] = await db
+    .insert(jobHunts)
+    .values({
+      userId,
+      name: overrides.name ?? 'Test Hunt',
+      status: overrides.status ?? 'active',
+    })
+    .returning();
+
+  return hunt;
+}
+
 // Builds the user => job_hunt => application chain so activity-log tests have a real
 // application_id to attach rows to. Returns the new application's id.
 export async function createApplication(
@@ -45,16 +76,8 @@ export async function createApplication(
     stage?: (typeof schema.boardStage.enumValues)[number];
   } = {},
 ) {
-  const email = `app-${crypto.randomUUID()}@example.com`;
-  const [user] = await db
-    .insert(users)
-    .values({ email, name: email.split('@')[0], emailVerified: true })
-    .returning();
-
-  const [hunt] = await db
-    .insert(jobHunts)
-    .values({ userId: user.id, name: 'Test Hunt' })
-    .returning();
+  const user = await createUser();
+  const hunt = await createJobHunt(user.id);
 
   const [application] = await db
     .insert(applications)

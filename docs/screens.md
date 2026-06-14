@@ -119,8 +119,7 @@ User-level configuration, likely tabbed/sectioned:
 
 ### Retro — per ended hunt
 
-The self-improvement review for an ended hunt (reached from the hunt switcher;
-read-only by default).
+The self-improvement review for an ended hunt (reached from the hunt switcher; read-only).
 
 - **Funnel** (Recharts): Applied → first response → first interview → final round → offer,
   with counts and conversion rates (milestones derived from the activity log/events).
@@ -129,8 +128,7 @@ read-only by default).
   recruiter, other).
 - **Resume performance**: response rate per library Resume; one-offs bucketed as "Custom".
 - **Outcome summary** cards: offers received, accepted, ghosted, withdrawn.
-- **Read-only toggle** + **Unarchive** escape hatch (unlocks in-place edits without
-  reactivating the hunt).
+- Ended hunts are **read-only** — the Retro is a review surface, not an editor.
 
 ---
 
@@ -178,7 +176,6 @@ complete/cancel actions. Creating an `offer_deadline` event auto-logs `offer_rec
   conflict message).
 - **End hunt** confirmation (makes it read-only, unlocks its Retro).
 - **Rename hunt** dialog.
-- **Unarchive** confirmation on an ended hunt.
 
 ### Resume picker dialog
 
