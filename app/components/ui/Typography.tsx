@@ -153,6 +153,18 @@ function Large<T extends ElementType = 'div'>({ as, className, ...props }: Polym
   );
 }
 
+function Text<T extends ElementType = 'span'>({ as, className, ...props }: PolymorphicProps<T>) {
+  const Comp: ElementType = as ?? 'span';
+
+  return (
+    <Comp
+      data-slot='typography-text'
+      className={cn('text-base leading-none font-medium', className)}
+      {...props}
+    />
+  );
+}
+
 function Small<T extends ElementType = 'small'>({ as, className, ...props }: PolymorphicProps<T>) {
   const Comp: ElementType = as ?? 'small';
 
@@ -165,8 +177,8 @@ function Small<T extends ElementType = 'small'>({ as, className, ...props }: Pol
   );
 }
 
-function Muted<T extends ElementType = 'p'>({ as, className, ...props }: PolymorphicProps<T>) {
-  const Comp: ElementType = as ?? 'p';
+function Muted<T extends ElementType = 'span'>({ as, className, ...props }: PolymorphicProps<T>) {
+  const Comp: ElementType = as ?? 'span';
 
   return (
     <Comp
@@ -177,4 +189,4 @@ function Muted<T extends ElementType = 'p'>({ as, className, ...props }: Polymor
   );
 }
 
-export { H1, H2, H3, H4, P, Blockquote, List, InlineCode, Lead, Large, Small, Muted };
+export { H1, H2, H3, H4, P, Blockquote, List, InlineCode, Lead, Large, Text, Small, Muted };
