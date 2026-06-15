@@ -1,0 +1,45 @@
+name: Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Tests share one Neon branch and truncate between runs, so never run two at once.
+concurrency:
+  group: test-suite
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.6.0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Write test env file
+        run: |
+          mkdir -p env
+          printf '%s' "$ENV_TEST" > env/.env.test
+        env:
+          ENV_TEST: ${{ secrets.ENV_TEST }}
+
+      - name: Run migrations on test branch
+        run: pnpm db:migrate:test
+
+      - name: Run tests
+        run: pnpm test
