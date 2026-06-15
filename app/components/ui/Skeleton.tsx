@@ -1,6 +1,8 @@
+import { type ComponentProps } from 'react';
+
 import { cn } from '@/app/lib/tailwind/utils';
 
-function Skeleton({ className, ...props }: React.ComponentProps<'div'>) {
+function Skeleton({ className, ...props }: ComponentProps<'div'>) {
   return (
     <div
       data-slot='skeleton'

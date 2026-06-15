@@ -1,8 +1,10 @@
+import { type ComponentProps } from 'react';
+
 import { IconLoader2 } from '@tabler/icons-react';
 
 import { cn } from '@/app/lib/tailwind/utils';
 
-function Spinner({ className, ...props }: React.ComponentProps<'svg'>) {
+function Spinner({ className, ...props }: ComponentProps<'svg'>) {
   return (
     <IconLoader2
       role='status'

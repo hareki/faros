@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import { type ComponentPropsWithRef } from 'react';
 
 import { Combobox as ComboboxPrimitive } from '@base-ui/react';
 import { IconChevronDown, IconX, IconCheck, IconSearch } from '@tabler/icons-react';
@@ -14,7 +14,7 @@ import {
 } from '@/app/components/ui/InputGroup';
 import { cn } from '@/app/lib/tailwind/utils';
 
-import { SimpleEmpty } from '../simple/SimpleEmpty';
+import { SimpleEmpty } from '../../simple/SimpleEmpty';
 
 const Combobox = ComboboxPrimitive.Root;
 
@@ -250,7 +250,7 @@ function ComboboxSeparator({ className, ...props }: ComboboxPrimitive.Separator.
 function ComboboxChips({
   className,
   ...props
-}: React.ComponentPropsWithRef<typeof ComboboxPrimitive.Chips> & ComboboxPrimitive.Chips.Props) {
+}: ComponentPropsWithRef<typeof ComboboxPrimitive.Chips> & ComboboxPrimitive.Chips.Props) {
   return (
     <ComboboxPrimitive.Chips
       data-slot='combobox-chips'
@@ -322,10 +322,6 @@ function ComboboxChipsInput({ className, ...props }: ComboboxPrimitive.Input.Pro
   );
 }
 
-function useComboboxAnchor() {
-  return React.useRef<HTMLDivElement | null>(null);
-}
-
 export {
   Combobox,
   ComboboxInput,
@@ -342,5 +338,4 @@ export {
   ComboboxChipsInput,
   ComboboxTrigger,
   ComboboxValue,
-  useComboboxAnchor,
 };

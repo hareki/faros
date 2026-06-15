@@ -29,7 +29,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/app/components/ui/Too
 import { useIsMobile } from '@/app/hooks/useMobile';
 import { cn } from '@/app/lib/tailwind/utils';
 
-import { SidebarContext, useSidebar, type SidebarContextProps } from './hooks/useSidebar';
+import { SidebarContext, useSidebar, type SidebarContextProps } from './useSidebar';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
