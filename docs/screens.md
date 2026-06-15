@@ -23,8 +23,8 @@ repeated per route. The shell is a sidebar + header layout.
     for an ended one. (Opens the lifecycle dialogs below.)
   - **Global Search**: _scope TBD — to be defined in a later design pass._ Present as a
     placeholder in the shell; not a built V1 feature yet (see _Deferred_).
-  - **Account menu**: signed-in user (name/avatar from OAuth profile), theme toggle, sign
-    out.
+  - **Account menu**: signed-in user (name/avatar from OAuth profile), a **Theme** submenu
+    (System / Light / Dark), and sign out.
 - **Sidebar**:
   - Header: app logo / home link ("Faros").
   - Top: the **Job Hunt switcher** — a searchable combobox whose trigger shows the selected

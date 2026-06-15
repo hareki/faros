@@ -5,6 +5,7 @@ import { IconLogout, IconChevronDown } from '@tabler/icons-react';
 import { useSignOut } from '@/app/features/auth/hooks/useSignOut';
 import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
 
+import { ThemeSwitcher } from './ThemeSwitcher';
 import { Avatar, AvatarImage, AvatarFallback, AvatarBadge } from '../../ui/Avatar';
 import { Button } from '../../ui/Button';
 import {
@@ -18,17 +19,17 @@ import {
 } from '../../ui/DropdownMenu';
 import { Small, Muted } from '../../ui/Typography';
 
-export function NavUser({
-  user,
-  messages,
-}: {
+type NavUserProps = {
   user: {
     name: string;
     email: string;
     avatar: string;
   };
   messages: ClientMessages['layout']['navUser'];
-}) {
+  themeMessages: ClientMessages['layout']['theme'];
+};
+
+export function NavUser({ user, messages, themeMessages }: NavUserProps) {
   const [signOut] = useSignOut();
 
   return (
@@ -70,6 +71,11 @@ export function NavUser({
               </div>
             </div>
           </DropdownMenuLabel>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+
+        <DropdownMenuGroup>
+          <ThemeSwitcher messages={themeMessages} />
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
 

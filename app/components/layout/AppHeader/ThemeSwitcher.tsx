@@ -5,21 +5,19 @@ import { useTheme } from '@teispace/next-themes';
 
 import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
 
-import { Button } from '../../ui/Button';
 import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuLabel,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
 } from '../../ui/DropdownMenu';
 
-type ThemeButtonProps = {
+type ThemeSwitcherProps = {
   messages: ClientMessages['layout']['theme'];
 };
 
-export function ThemeSwitcher({ messages }: ThemeButtonProps) {
+export function ThemeSwitcher({ messages }: ThemeSwitcherProps) {
   const { theme, setTheme } = useTheme();
 
   const options = [
@@ -31,22 +29,18 @@ export function ThemeSwitcher({ messages }: ThemeButtonProps) {
   const ActiveIcon = options.find((option) => option.value === theme)?.icon ?? IconDeviceDesktop;
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        render={
-          <Button size='icon' variant='outline' aria-label={messages.label}>
-            <ActiveIcon />
-          </Button>
-        }
-      />
-      <DropdownMenuContent align='end'>
+    <DropdownMenuSub>
+      <DropdownMenuSubTrigger>
+        <ActiveIcon />
+        {messages.label}
+      </DropdownMenuSubTrigger>
+      <DropdownMenuSubContent>
         <DropdownMenuRadioGroup
           value={theme}
           onValueChange={(value) => {
             setTheme(value);
           }}
         >
-          <DropdownMenuLabel>{messages.label}</DropdownMenuLabel>
           {options.map(({ value, label, icon: Icon }) => (
             <DropdownMenuRadioItem key={value} value={value}>
               <Icon />
@@ -54,7 +48,7 @@ export function ThemeSwitcher({ messages }: ThemeButtonProps) {
             </DropdownMenuRadioItem>
           ))}
         </DropdownMenuRadioGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </DropdownMenuSubContent>
+    </DropdownMenuSub>
   );
 }
