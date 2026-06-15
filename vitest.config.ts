@@ -18,5 +18,10 @@ export default defineConfig({
     // The auth suite shares one Neon branch and truncates between tests, so test
     // files must not run in parallel.
     fileParallelism: false,
+    // Cross-region latency to the Neon test branch plus Neon's scale-to-zero
+    // cold start and scrypt password hashing push the heaviest auth tests past
+    // vitest's 5s default in CI, so widen both the test and hook budgets.
+    testTimeout: 30000,
+    hookTimeout: 30000,
   },
 });
