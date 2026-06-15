@@ -6,10 +6,7 @@ import { IconArchive, IconPencil, IconPlus, IconTrash } from '@tabler/icons-reac
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
-import {
-  GhostIconButtonGroup,
-  GhostIconButtonGroupItem,
-} from '@/app/components/ui/GhostIconButtonGroup';
+import { GhostButtonGroup, GhostButtonGroupItem } from '@/app/components/ui/GhostButtonGroup';
 import { deleteJobHuntAction } from '@/app/features/job-hunt/actions/deleteJobHuntAction';
 import { endJobHuntAction } from '@/app/features/job-hunt/actions/endJobHuntAction';
 import { useJobHuntContext } from '@/app/features/job-hunt/hooks/useJobHuntContext';
@@ -112,40 +109,42 @@ export function JobHuntActionGroup({ dialogMessages }: JobHuntActionGroupProps) 
 
   return (
     <Fragment>
-      <GhostIconButtonGroup>
-        <GhostIconButtonGroupItem onClick={handleStartJobHunt}>
+      <GhostButtonGroup>
+        <GhostButtonGroupItem onClick={handleStartJobHunt}>
           <IconPlus />
-        </GhostIconButtonGroupItem>
+        </GhostButtonGroupItem>
 
         {selectedJobHunt?.status === 'active' && (
           <Fragment>
-            <GhostIconButtonGroupItem
+            <GhostButtonGroupItem
               onClick={() => {
                 setDialog({ kind: 'rename', jobHunt: selectedJobHunt });
               }}
             >
               <IconPencil />
-            </GhostIconButtonGroupItem>
-            <GhostIconButtonGroupItem
+            </GhostButtonGroupItem>
+            <GhostButtonGroupItem
+              variant='destructive'
               onClick={() => {
                 setDialog({ kind: 'end', jobHunt: selectedJobHunt });
               }}
             >
               <IconArchive />
-            </GhostIconButtonGroupItem>
+            </GhostButtonGroupItem>
           </Fragment>
         )}
 
         {selectedJobHunt?.status === 'ended' && (
-          <GhostIconButtonGroupItem
+          <GhostButtonGroupItem
+            variant='destructive'
             onClick={() => {
               setDialog({ kind: 'delete', jobHunt: selectedJobHunt });
             }}
           >
             <IconTrash />
-          </GhostIconButtonGroupItem>
+          </GhostButtonGroupItem>
         )}
-      </GhostIconButtonGroup>
+      </GhostButtonGroup>
 
       <StartJobHuntDialog
         open={dialog?.kind === 'start'}
