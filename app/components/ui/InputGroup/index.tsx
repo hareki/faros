@@ -9,7 +9,7 @@ import { Input } from '@/app/components/ui/Input';
 import { cn } from '@/app/lib/tailwind/utils';
 
 import { Textarea } from '../Textarea';
-import { inputGroupVariants } from './variants';
+import { inputGroupControlClassName, inputGroupVariants } from './variants';
 
 function InputGroup({
   className,
@@ -156,15 +156,7 @@ function InputGroupInput({ className, ...props }: ComponentProps<typeof Input>) 
   return (
     <Input
       data-slot='input-group-control'
-      className={cn(
-        `
-          flex-1 rounded-none border-0 bg-transparent shadow-none ring-0
-          focus-visible:ring-0
-          aria-invalid:ring-0
-          dark:bg-transparent
-        `,
-        className,
-      )}
+      className={cn(inputGroupControlClassName, className)}
       {...props}
     />
   );

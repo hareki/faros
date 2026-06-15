@@ -35,3 +35,11 @@ export const inputGroupVariants = cva(
     },
   },
 );
+
+/** Neutralizes a standalone input's border/background/ring so it blends into an `InputGroup`. */
+export const inputGroupControlClassName = `
+  flex-1 rounded-none border-0 bg-transparent shadow-none ring-0
+  focus-visible:ring-0
+  aria-invalid:ring-0
+  dark:bg-transparent
+`;
