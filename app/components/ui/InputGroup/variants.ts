@@ -2,7 +2,7 @@ import { cva } from 'class-variance-authority';
 
 export const inputGroupVariants = cva(
   `
-    group/input-group relative flex h-9 w-full min-w-0 items-center rounded-4xl border
+    group/input-group relative flex h-input-height w-full min-w-0 items-center rounded-4xl border
     border-transparent bg-input/50 transition-[color,box-shadow,background-color] outline-none
     in-data-[slot=combobox-content]:focus-within:border-inherit
     in-data-[slot=combobox-content]:focus-within:ring-0

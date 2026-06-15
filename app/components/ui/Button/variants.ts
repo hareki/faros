@@ -48,10 +48,10 @@ export const buttonVariants = cva(
       },
       size: {
         default: `
-            h-9 gap-1.5 px-3
-            has-data-[icon=inline-end]:pr-2.5
-            has-data-[icon=inline-start]:pl-2.5
-          `,
+          h-input-height gap-1.5 px-3
+          has-data-[icon=inline-end]:pr-2.5
+          has-data-[icon=inline-start]:pl-2.5
+        `,
         xs: `
           h-6 gap-1 px-2.5 text-xs
           has-data-[icon=inline-end]:pr-2
@@ -68,7 +68,7 @@ export const buttonVariants = cva(
           has-data-[icon=inline-end]:pr-3
           has-data-[icon=inline-start]:pl-3
         `,
-        icon: 'size-9',
+        icon: 'size-input-height',
         'icon-xs': `
           size-6
           [&_svg:not([class*='size-'])]:size-3
