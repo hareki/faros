@@ -17,7 +17,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuSeparator,
 } from '../../ui/DropdownMenu';
-import { Small, Muted } from '../../ui/Typography';
+import { Muted, Text } from '../../ui/Typography';
 
 type NavUserProps = {
   user: {
@@ -37,7 +37,7 @@ export function NavUser({ user, messages, themeMessages }: NavUserProps) {
       <DropdownMenuTrigger
         render={
           <Button variant='ghost' size='icon'>
-            <Avatar className='size-8'>
+            <Avatar className='size-10'>
               <AvatarImage src={user.avatar} alt={user.name} />
               <AvatarFallback className='rounded-full'>CN</AvatarFallback>
               <AvatarBadge className='bg-secondary text-secondary-foreground'>
@@ -57,17 +57,13 @@ export function NavUser({ user, messages, themeMessages }: NavUserProps) {
         <DropdownMenuGroup>
           <DropdownMenuLabel className='p-0 font-normal'>
             <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
-              <Avatar className='size-8 rounded-lg'>
+              <Avatar className='size-10 rounded-full'>
                 <AvatarImage src={user.avatar} alt={user.name} />
                 <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
               </Avatar>
               <div className='grid flex-1 text-left text-sm/tight'>
-                <Small as='span' className='truncate'>
-                  {user.name}
-                </Small>
-                <Muted as='span' className='truncate text-xs'>
-                  {user.email}
-                </Muted>
+                <Text className='truncate font-medium'>{user.name}</Text>
+                <Muted className='truncate'>{user.email}</Muted>
               </div>
             </div>
           </DropdownMenuLabel>
