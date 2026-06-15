@@ -49,7 +49,9 @@
       "startJobHunt": "Bắt đầu một đợt tìm việc",
       "renameJobHunt": "Đổi tên đợt",
       "endJobHunt": "Kết thúc đợt",
-      "deleteJobHunt": "Xóa đợt"
+      "deleteJobHunt": "Xóa đợt",
+      "searchPlaceholder": "Tìm đợt",
+      "noResults": "Không tìm thấy đợt nào."
     },
     "jobHuntEmpty": {
       "title": "Không có đợt tìm việc đang hoạt động nào",

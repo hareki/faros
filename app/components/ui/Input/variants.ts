@@ -16,8 +16,7 @@ export const inputVariants = cva(
   {
     variants: {
       variant: {
-        default: 'border-transparent',
-        outline: 'border-border bg-input/50',
+        default: 'border-border bg-input/50',
       },
     },
     defaultVariants: {

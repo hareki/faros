@@ -17,7 +17,7 @@ export async function AppHeader() {
     <header className='flex shrink-0 items-center justify-between gap-2 border-b p-3'>
       <div className='flex gap-2'>
         <SidebarTrigger />
-        <InputGroup variant='outline'>
+        <InputGroup>
           <InputGroupInput placeholder={t('search')} />
           <InputGroupAddon align='inline-start'>
             <IconSearch />

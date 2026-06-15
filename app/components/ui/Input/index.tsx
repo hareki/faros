@@ -1,4 +1,4 @@
-import { type ComponentProps, type ReactNode } from 'react';
+import { type ComponentProps } from 'react';
 
 import { Input as InputPrimitive } from '@base-ui/react/input';
 import { type VariantProps } from 'class-variance-authority';
@@ -11,38 +11,15 @@ function Input({
   className,
   type,
   variant = 'default',
-  icon,
   ...props
-}: ComponentProps<'input'> &
-  VariantProps<typeof inputVariants> & {
-    icon?: ReactNode;
-  }) {
-  const input = (
+}: ComponentProps<'input'> & VariantProps<typeof inputVariants>) {
+  return (
     <InputPrimitive
       type={type}
       data-slot='input'
-      className={cn(inputVariants({ variant }), icon && 'pl-9', className)}
+      className={cn(inputVariants({ variant }), className)}
       {...props}
     />
-  );
-
-  if (!icon) {
-    return input;
-  }
-
-  return (
-    <div className='relative w-full'>
-      {input}
-      <span
-        aria-hidden
-        className={cn(`
-          pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-muted-foreground
-          [&_svg:not([class*='size-'])]:size-4
-        `)}
-      >
-        {icon}
-      </span>
-    </div>
   );
 }
 

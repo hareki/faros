@@ -5,7 +5,6 @@ import { Fragment, useState, useTransition } from 'react';
 import {
   IconArchive,
   IconBriefcase,
-  IconCheck,
   IconPencil,
   IconPlus,
   IconSelector,
@@ -15,14 +14,18 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/app/components/ui/DropdownMenu';
+  Combobox,
+  ComboboxCollection,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxGroup,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxLabel,
+  ComboboxList,
+  ComboboxSeparator,
+  ComboboxTrigger,
+} from '@/app/components/ui/Combobox';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/app/components/ui/Sidebar';
 import { Small, Muted } from '@/app/components/ui/Typography';
 import { deleteJobHuntAction } from '@/app/features/job-hunt/actions/deleteJobHuntAction';
@@ -34,6 +37,7 @@ import { jobHuntHref } from '@/app/features/job-hunt/utils/selectedJobHunt';
 import { confirm } from '@/app/lib/confirm/confirm';
 import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
 import { toast } from '@/app/lib/sonner/toast';
+import { cn } from '@/app/lib/tailwind/utils';
 
 import { ConfirmByNameDialogView } from '../views/ConfirmByNameDialogView';
 import { RenameJobHuntDialogView } from '../views/RenameJobHuntDialogView';
@@ -52,6 +56,23 @@ type JobHuntSwitcherProps = {
   dialogMessages: ClientMessages['layout']['jobHuntDialogs'];
 };
 
+type JobHuntGroup = {
+  value: string;
+  label: string;
+  items: JobHuntSummary[];
+};
+
+// Footer actions live inside the combobox popup but aren't selectable items, so they're plain
+// buttons styled to match `ComboboxItem`.
+const actionItemClassName = `
+  flex w-full cursor-default items-center gap-2.5 rounded-2xl px-3 py-2 text-left text-sm
+  font-medium outline-hidden select-none
+  hover:bg-foreground/10
+  focus-visible:bg-foreground/10
+  [&_svg]:pointer-events-none [&_svg]:shrink-0
+  [&_svg:not([class*='size-'])]:size-4
+`;
+
 export function JobHuntSwitcher({ messages, dialogMessages }: JobHuntSwitcherProps) {
   const t = useTranslations('validation');
   const router = useRouter();
@@ -61,6 +82,7 @@ export function JobHuntSwitcher({ messages, dialogMessages }: JobHuntSwitcherPro
   const endedJobHunts = jobHunts.filter((jobHunt) => jobHunt.status === 'ended');
 
   const [dialog, setDialog] = useState<DialogState>(null);
+  const [open, setOpen] = useState(false);
   const closeDialog = (open: boolean) => {
     if (!open) {
       setDialog(null);
@@ -209,24 +231,37 @@ export function JobHuntSwitcher({ messages, dialogMessages }: JobHuntSwitcherPro
     );
   }
 
-  const renderHuntItem = (jobHunt: JobHuntSummary, muted: boolean) => (
-    <DropdownMenuItem
-      key={jobHunt.id}
-      onClick={() => {
-        selectJobHunt(jobHunt);
-      }}
-    >
-      <IconBriefcase className={muted ? 'text-muted-foreground' : undefined} />
-      <span className='flex-1 truncate'>{jobHunt.name}</span>
-      {selectedJobHunt.id === jobHunt.id && <IconCheck className='ml-auto' />}
-    </DropdownMenuItem>
-  );
+  const runAction = (action: () => void) => {
+    setOpen(false);
+    action();
+  };
+
+  const groups: JobHuntGroup[] = [
+    ...(activeJobHunt
+      ? [{ value: 'active', label: messages.activeJobHunt, items: [activeJobHunt] }]
+      : []),
+    ...(endedJobHunts.length > 0
+      ? [{ value: 'ended', label: messages.endedJobHunts, items: endedJobHunts }]
+      : []),
+  ];
 
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <DropdownMenu>
-          <DropdownMenuTrigger
+        <Combobox
+          items={groups}
+          value={selectedJobHunt}
+          onValueChange={(jobHunt: JobHuntSummary | null) => {
+            if (jobHunt) {
+              selectJobHunt(jobHunt);
+            }
+          }}
+          itemToStringLabel={(jobHunt: JobHuntSummary) => jobHunt.name}
+          isItemEqualToValue={(a: JobHuntSummary, b: JobHuntSummary) => a.id === b.id}
+          open={open}
+          onOpenChange={setOpen}
+        >
+          <ComboboxTrigger
             render={
               <SidebarMenuButton
                 size='lg'
@@ -258,70 +293,90 @@ export function JobHuntSwitcher({ messages, dialogMessages }: JobHuntSwitcherPro
             }
           />
 
-          <DropdownMenuContent align='start' className='min-w-56'>
-            {activeJobHunt && (
-              <DropdownMenuGroup>
-                <DropdownMenuLabel className='text-xs text-muted-foreground'>
-                  {messages.activeJobHunt}
-                </DropdownMenuLabel>
-                {renderHuntItem(activeJobHunt, false)}
-              </DropdownMenuGroup>
-            )}
+          <ComboboxContent align='start' className='min-w-56'>
+            <ComboboxInput showTrigger={false} placeholder={messages.searchPlaceholder} />
+            <ComboboxEmpty />
+            <ComboboxList>
+              {(group: JobHuntGroup, index: number) => (
+                <ComboboxGroup key={group.value} items={group.items}>
+                  <ComboboxLabel>{group.label}</ComboboxLabel>
+                  <ComboboxCollection>
+                    {(jobHunt: JobHuntSummary) => (
+                      <ComboboxItem key={jobHunt.id} value={jobHunt}>
+                        <IconBriefcase
+                          className={
+                            jobHunt.status === 'ended' ? 'text-muted-foreground' : undefined
+                          }
+                        />
+                        <span className='flex-1 truncate'>{jobHunt.name}</span>
+                      </ComboboxItem>
+                    )}
+                  </ComboboxCollection>
+                  {index < groups.length - 1 && <ComboboxSeparator />}
+                </ComboboxGroup>
+              )}
+            </ComboboxList>
 
-            {endedJobHunts.length > 0 && (
-              <DropdownMenuGroup>
-                <DropdownMenuLabel className='text-xs text-muted-foreground'>
-                  {messages.endedJobHunts}
-                </DropdownMenuLabel>
-                {endedJobHunts.map((jobHunt) => renderHuntItem(jobHunt, true))}
-              </DropdownMenuGroup>
-            )}
-
-            <DropdownMenuSeparator />
-
-            <DropdownMenuGroup>
-              <DropdownMenuItem onClick={handleStartJobHunt}>
+            <div className='p-1.5 pt-0'>
+              <ComboboxSeparator />
+              <button
+                type='button'
+                className={cn(actionItemClassName)}
+                onClick={() => {
+                  runAction(handleStartJobHunt);
+                }}
+              >
                 <IconPlus />
                 {messages.startJobHunt}
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
+              </button>
 
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
+              <ComboboxSeparator />
               {selectedJobHunt.status === 'active' ? (
                 <Fragment>
-                  <DropdownMenuItem
+                  <button
+                    type='button'
+                    className={cn(actionItemClassName)}
                     onClick={() => {
-                      setDialog({ kind: 'rename', jobHunt: selectedJobHunt });
+                      runAction(() => {
+                        setDialog({ kind: 'rename', jobHunt: selectedJobHunt });
+                      });
                     }}
                   >
                     <IconPencil />
                     {messages.renameJobHunt}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    variant='destructive'
+                  </button>
+                  <button
+                    type='button'
+                    data-variant='destructive'
+                    className={cn(actionItemClassName)}
                     onClick={() => {
-                      setDialog({ kind: 'end', jobHunt: selectedJobHunt });
+                      runAction(() => {
+                        setDialog({ kind: 'end', jobHunt: selectedJobHunt });
+                      });
                     }}
                   >
                     <IconArchive />
                     {messages.endJobHunt}
-                  </DropdownMenuItem>
+                  </button>
                 </Fragment>
               ) : (
-                <DropdownMenuItem
-                  variant='destructive'
+                <button
+                  type='button'
+                  data-variant='destructive'
+                  className={cn(actionItemClassName)}
                   onClick={() => {
-                    setDialog({ kind: 'delete', jobHunt: selectedJobHunt });
+                    runAction(() => {
+                      setDialog({ kind: 'delete', jobHunt: selectedJobHunt });
+                    });
                   }}
                 >
                   <IconTrash />
                   {messages.deleteJobHunt}
-                </DropdownMenuItem>
+                </button>
               )}
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
+            </div>
+          </ComboboxContent>
+        </Combobox>
       </SidebarMenuItem>
       {dialogs}
     </SidebarMenu>

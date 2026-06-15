@@ -24,12 +24,12 @@ repeated per route. The shell is a sidebar + header layout.
     out.
 - **Sidebar**:
   - Header: app logo / home link ("Faros").
-  - Top: the **Job Hunt switcher** — a dropdown showing the selected hunt's name (labelled
-    "Active hunt" or "Ended hunt") and listing the user's hunts grouped active vs ended.
-    Picking any hunt makes it the **selected hunt** and routes to its primary view (Dashboard
-    for the active hunt, Retro for an ended one). Entry point for "Start a hunt",
-    "Rename hunt", "End hunt", and — for a selected ended hunt — "Delete hunt". (See _Hunt
-    switcher & lifecycle dialogs_ below.)
+  - Top: the **Job Hunt switcher** — a searchable combobox whose trigger shows the selected
+    hunt's name (labelled "Active hunt" or "Ended hunt"); opening it reveals a search field over
+    the user's hunts grouped active vs ended (so it scales as hunts accumulate). Picking any hunt
+    makes it the **selected hunt** and routes to its primary view (Dashboard for the active hunt,
+    Retro for an ended one). Entry point for "Start a hunt", "Rename hunt", "End hunt", and — for
+    a selected ended hunt — "Delete hunt". (See _Hunt switcher & lifecycle dialogs_ below.)
   - Nav, in two labelled groups: **This hunt** — **Dashboard** (or **Retro** when an ended
     hunt is selected) and **Tracker Board**, which follow the selected hunt; and
     **Workspace** — **Resume Library** and **Settings** (expandable → Sub-stages, Tags,
