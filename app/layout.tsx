@@ -13,7 +13,7 @@ import { ConfirmDialog } from '@/app/lib/confirm/components/ConfirmDialog';
 import { cn } from '@/app/lib/tailwind/utils';
 
 import { rubik } from './fonts';
-import { GlobalClientProvider } from './lib/next-intl/components/GlobalClientProvider';
+import { GlobalClientIntlProvider } from './lib/next-intl/components/GlobalClientIntlProvider';
 import { Sonner } from './lib/sonner/components/Sonner';
 import { serverEnv } from './lib/t3-env/server';
 
@@ -60,11 +60,11 @@ async function InnerRootLayout({ children }: RootLayoutProps) {
         <ThemeProvider attribute='data-theme' defaultTheme='system'>
           <Suspense>
             <NuqsAdapter>
-              <GlobalClientProvider>
+              <GlobalClientIntlProvider>
                 <ConfirmDialog />
                 <Sonner />
                 {children}
-              </GlobalClientProvider>
+              </GlobalClientIntlProvider>
             </NuqsAdapter>
           </Suspense>
         </ThemeProvider>

@@ -2,9 +2,6 @@
   "metadata": {
     "description": "Công cụ Theo dõi Xin việc"
   },
-  "layout": {
-    "search": "Tìm kiếm"
-  },
   "landingPage": {
     "title": "Trang Đích (Luôn truy cập được)",
     "toSignIn": "Đến trang Đăng nhập",

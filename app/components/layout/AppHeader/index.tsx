@@ -1,28 +1,21 @@
-import { IconSearch } from '@tabler/icons-react';
-import { getTranslations } from 'next-intl/server';
-
 import { getClientMessages } from '@/app/lib/next-intl/utils/getClientMessages';
 
+import { GlobalSearch } from './GlobalSearch';
+import { JobHuntActionGroup } from './JobHuntActionGroup';
 import { NavUser } from './NavUser';
 import { NotificationButton } from './Notification';
 import { ThemeSwitcher } from './ThemeSwitcher';
-import { InputGroup, InputGroupAddon, InputGroupInput } from '../../ui/InputGroup';
 import { SidebarTrigger } from '../../ui/Sidebar';
 
 export async function AppHeader() {
-  const t = await getTranslations('layout');
   const clientMessages = await getClientMessages();
 
   return (
     <header className='flex shrink-0 items-center justify-between gap-2 border-b p-3'>
       <div className='flex gap-2'>
         <SidebarTrigger />
-        <InputGroup>
-          <InputGroupInput placeholder={t('search')} />
-          <InputGroupAddon align='inline-start'>
-            <IconSearch />
-          </InputGroupAddon>
-        </InputGroup>
+        <JobHuntActionGroup dialogMessages={clientMessages.layout.jobHuntDialogs} />
+        <GlobalSearch />
       </div>
 
       <div className='flex gap-2'>

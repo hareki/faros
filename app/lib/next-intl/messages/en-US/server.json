@@ -2,9 +2,6 @@
   "metadata": {
     "description": "Job Application Tracker"
   },
-  "layout": {
-    "search": "Search"
-  },
   "landingPage": {
     "title": "Landing Page (Always accessible)",
     "toSignIn": "To Sign In Page",

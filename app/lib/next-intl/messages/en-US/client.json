@@ -19,6 +19,9 @@
     "tryAgain": "Try again"
   },
   "components": {
+    "globalSearch": {
+      "placeholder": "Search"
+    },
     "simpleEmpty": {
       "noData": "No data"
     },

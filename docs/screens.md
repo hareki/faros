@@ -16,8 +16,11 @@ connected-accounts, AI chatbot) are noted at the end as deferred.
 Every authenticated route renders inside one shell, so it is described here and not
 repeated per route. The shell is a sidebar + header layout.
 
-- **Header** (left → right): sidebar toggle, the **global Search** entry point, the
-  notifications bell (in-app feed trigger), and the **account menu**.
+- **Header** (left → right): sidebar toggle, the **Job Hunt actions** group, the **global Search**
+  entry point, the notifications bell (in-app feed trigger), and the **account menu**.
+  - **Job Hunt actions**: a context-aware cluster of icon buttons acting on the selected hunt —
+    "Start a hunt" (always), plus "Rename hunt"/"End hunt" for an active selection or "Delete hunt"
+    for an ended one. (Opens the lifecycle dialogs below.)
   - **Global Search**: _scope TBD — to be defined in a later design pass._ Present as a
     placeholder in the shell; not a built V1 feature yet (see _Deferred_).
   - **Account menu**: signed-in user (name/avatar from OAuth profile), theme toggle, sign
@@ -28,8 +31,9 @@ repeated per route. The shell is a sidebar + header layout.
     hunt's name (labelled "Active hunt" or "Ended hunt"); opening it reveals a search field over
     the user's hunts grouped active vs ended (so it scales as hunts accumulate). Picking any hunt
     makes it the **selected hunt** and routes to its primary view (Dashboard for the active hunt,
-    Retro for an ended one). Entry point for "Start a hunt", "Rename hunt", "End hunt", and — for
-    a selected ended hunt — "Delete hunt". (See _Hunt switcher & lifecycle dialogs_ below.)
+    Retro for an ended one). In the no-hunts first-run state it collapses into a single "Start a
+    hunt" CTA. The lifecycle actions (Start/Rename/End/Delete) live in the header **Job Hunt
+    actions** group, not the switcher. (See _Hunt switcher & lifecycle dialogs_ below.)
   - Nav, in two labelled groups: **This hunt** — **Dashboard** (or **Retro** when an ended
     hunt is selected) and **Tracker Board**, which follow the selected hunt; and
     **Workspace** — **Resume Library** and **Settings** (expandable → Sub-stages, Tags,

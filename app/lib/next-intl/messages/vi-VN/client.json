@@ -19,6 +19,9 @@
     "tryAgain": "Thử lại"
   },
   "components": {
+    "globalSearch": {
+      "placeholder": "Tìm kiếm"
+    },
     "simpleEmpty": {
       "noData": "Không có dữ liệu"
     },
