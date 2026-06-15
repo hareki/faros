@@ -1,6 +1,5 @@
 import { getTranslations } from 'next-intl/server';
 
-import { H1 } from '@/app/components/ui/Typography';
 import { getUser } from '@/app/lib/better-auth/session';
 
 import { Link } from './components/ui/Link';
@@ -13,7 +12,6 @@ export default async function LandingPage() {
   return (
     <div>
       <LocaleSwitcher />
-      <H1>{t('title')}</H1>
       {user ? (
         <Link href='/dashboard'>{t('toDashboard')}</Link>
       ) : (

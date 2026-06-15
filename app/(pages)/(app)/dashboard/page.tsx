@@ -2,13 +2,10 @@ import { type Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 
-import { SimpleEmpty } from '@/app/components/simple/SimpleEmpty';
 import { db } from '@/app/db/client';
 import { getSelectedJobHunt } from '@/app/features/job-hunt/server/selectedJobHunt';
 import { JOB_HUNT_PARAM } from '@/app/features/job-hunt/utils/selectedJobHunt';
 import { requireUser } from '@/app/lib/better-auth/session';
-
-import { Test } from './test';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('metadata');
@@ -37,10 +34,5 @@ export default async function Dashboard({ searchParams }: DashboardProps) {
     redirect(`/dashboard?${JOB_HUNT_PARAM}=${selectedJobHunt.id}`);
   }
 
-  return (
-    <div>
-      <SimpleEmpty />
-      <Test />
-    </div>
-  );
+  return null;
 }
