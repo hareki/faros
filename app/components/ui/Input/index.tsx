@@ -22,7 +22,7 @@ function Input({
 }: ComponentProps<'input'> & VariantProps<typeof inputVariants> & AddonConfig) {
   if (addon) {
     return (
-      <div data-slot='input-group' role='group' className={cn(inputGroupVariants())}>
+      <div data-slot='input-group' role='group' className={cn(inputGroupVariants({ variant }))}>
         <InputPrimitive
           type={type}
           data-slot='input-group-control'
