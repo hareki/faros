@@ -30,6 +30,12 @@
       "content": "This action cannot be undone",
       "confirmText": "Confirm",
       "cancelText": "Cancel"
+    },
+    "notification": {
+      "empty": {
+        "title": "No Notifications",
+        "description": "You're all caught up. New notifications will appear here."
+      }
     }
   },
   "layout": {

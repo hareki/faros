@@ -30,6 +30,12 @@
       "content": "Hành động này không thể hoàn tác",
       "confirmText": "Xác nhận",
       "cancelText": "Hủy"
+    },
+    "notification": {
+      "empty": {
+        "title": "Không có thông báo",
+        "description": "Bạn đã xem hết rồi. Thông báo mới sẽ xuất hiện ở đây."
+      }
     }
   },
   "layout": {
