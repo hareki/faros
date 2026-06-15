@@ -155,7 +155,7 @@ function DropdownMenuSubTrigger({
       data-inset={inset}
       className={cn(
         `
-          flex cursor-default items-center gap-2 rounded-2xl px-3 py-2 text-sm font-medium
+          flex cursor-pointer items-center gap-2 rounded-2xl px-3 py-2 text-sm font-medium
           outline-hidden select-none
           focus:bg-accent focus:text-accent-foreground
           not-data-[variant=destructive]:focus:**:text-accent-foreground
