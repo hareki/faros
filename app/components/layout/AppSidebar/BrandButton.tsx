@@ -23,7 +23,7 @@ export function BrandButton() {
           render={<Link href={jobHuntHref('/dashboard', selectedJobHunt?.id)} variant='unstyled' />}
         >
           <FavIcon className='size-8!' />
-          <H3 as='h1'>Faros</H3>
+          <H3 as='span'>Faros</H3>
         </SidebarMenuButton>
       </SidebarMenuItem>
     </SidebarMenu>

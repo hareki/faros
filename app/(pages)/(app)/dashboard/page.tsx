@@ -3,7 +3,6 @@ import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 
 import { SimpleEmpty } from '@/app/components/simple/SimpleEmpty';
-import { H2 } from '@/app/components/ui/Typography';
 import { db } from '@/app/db/client';
 import { getSelectedJobHunt } from '@/app/features/job-hunt/server/selectedJobHunt';
 import { JOB_HUNT_PARAM } from '@/app/features/job-hunt/utils/selectedJobHunt';
@@ -40,7 +39,6 @@ export default async function Dashboard({ searchParams }: DashboardProps) {
 
   return (
     <div>
-      <H2>Dashboard Page, hello {user.name}</H2>
       <SimpleEmpty />
       <Test />
     </div>

@@ -1,3 +1,5 @@
+import { type UrlObject } from 'url';
+
 import { type ComponentProps } from 'react';
 
 import { type VariantProps } from 'class-variance-authority';
@@ -6,6 +8,8 @@ import LinkPrimitive from 'next/link';
 import { cn } from '@/app/lib/tailwind/utils';
 
 import { linkVariants } from './variants';
+
+export type Routes = Exclude<ComponentProps<typeof LinkPrimitive>['href'], UrlObject>;
 
 export function Link({
   className,

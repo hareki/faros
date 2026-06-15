@@ -2,17 +2,15 @@ import { type PropsWithChildren } from 'react';
 
 import { AppHeader } from '@/app/components/layout/AppHeader';
 import { AppSidebar } from '@/app/components/layout/AppSidebar';
+import { PageWrapper } from '@/app/components/layout/PageWrapper';
 import { SidebarInset, SidebarProvider } from '@/app/components/ui/Sidebar';
 import { db } from '@/app/db/client';
 import { JobHuntProvider } from '@/app/features/job-hunt/components/ActiveHuntProvider';
-import { EmptyJobHunt } from '@/app/features/job-hunt/components/EmptyJobHunt';
 import { listJobHunts } from '@/app/features/job-hunt/db/queries';
 import { requireUser } from '@/app/lib/better-auth/session';
-import { getClientMessages } from '@/app/lib/next-intl/utils/getClientMessages';
 
 export default async function PrivateLayout({ children }: PropsWithChildren) {
   const user = await requireUser();
-  const clientMessages = await getClientMessages();
 
   const jobHunts = (await listJobHunts(db, user.id)).map(({ id, name, status }) => ({
     id,
@@ -29,16 +27,7 @@ export default async function PrivateLayout({ children }: PropsWithChildren) {
          since the padding is used to compute collapsed state with */}
         <SidebarInset className='-ml-3'>
           <AppHeader />
-          <main className='flex flex-1 flex-col p-3'>
-            {jobHunts.length > 0 ? (
-              children
-            ) : (
-              <EmptyJobHunt
-                messages={clientMessages.layout.jobHuntEmpty}
-                dialogMessages={clientMessages.layout.jobHuntDialogs}
-              />
-            )}
-          </main>
+          <PageWrapper firstRun={jobHunts.length === 0}>{children}</PageWrapper>
         </SidebarInset>
       </SidebarProvider>
     </JobHuntProvider>
