@@ -1,6 +1,16 @@
 {
   "metadata": {
-    "description": "Job Application Tracker"
+    "description": "Job Application Tracker",
+    "dashboard": "Dashboard",
+    "trackerBoard": "Tracker Board",
+    "resumeLibrary": "Resume Library",
+    "retro": "Retro",
+    "settingsNotification": "Notifications",
+    "settingsTags": "Tags",
+    "settingsSubStages": "Sub-stages",
+    "signIn": "Log in",
+    "signUp": "Sign up",
+    "resetPassword": "Reset password"
   },
   "landingPage": {
     "title": "Landing Page (Always accessible)",

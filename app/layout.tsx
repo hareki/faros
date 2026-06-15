@@ -3,7 +3,6 @@ import { Suspense, type PropsWithChildren } from 'react';
 // Use this instead of 'next-themes'
 // https://github.com/pacocoursey/next-themes/issues/387#issuecomment-4181891723
 import { ThemeProvider } from '@teispace/next-themes';
-import { getTheme } from '@teispace/next-themes/server';
 import { type Metadata } from 'next';
 import Script from 'next/script';
 import { getLocale, getTranslations } from 'next-intl/server';
@@ -23,8 +22,12 @@ export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('metadata');
 
   return {
-    title: 'Faros',
+    title: {
+      template: '%s | Faros',
+      default: 'Faros',
+    },
     description: t('description'),
+    metadataBase: new URL(serverEnv.APP_URL),
   };
 }
 
@@ -32,7 +35,6 @@ type RootLayoutProps = PropsWithChildren;
 
 async function InnerRootLayout({ children }: RootLayoutProps) {
   const locale = await getLocale();
-  const initialTheme = await getTheme();
 
   return (
     <html

@@ -3,6 +3,7 @@ import * as z from 'zod';
 
 export const serverEnv = createEnv({
   server: {
+    APP_URL: z.url(),
     STAGE: z.enum(['development', 'production']),
     DB_CONNECTION_STRING: z.url(),
     RESEND_API_KEY: z.string(),

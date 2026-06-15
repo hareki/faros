@@ -1,3 +1,4 @@
+import { type Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 
 import { NewPasswordFormView } from '@/app/features/auth/views/NewPasswordFormView';
@@ -7,6 +8,12 @@ import { getClientMessages } from '@/app/lib/next-intl/utils/getClientMessages';
 type ResetPasswordProps = {
   searchParams: Promise<{ token?: string }>;
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('metadata');
+
+  return { title: t('resetPassword') };
+}
 
 export default async function ResetPassword({ searchParams }: ResetPasswordProps) {
   const { token } = await searchParams;

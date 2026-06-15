@@ -1,3 +1,4 @@
+import { type Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 
@@ -10,6 +11,12 @@ import { requireUser } from '@/app/lib/better-auth/session';
 type RetroPageProps = {
   searchParams: Promise<{ [JOB_HUNT_PARAM]?: string }>;
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('metadata');
+
+  return { title: t('retro') };
+}
 
 // Placeholder Retro surface for the selected ended hunt. The real review (funnel, time stats,
 // source/resume performance) lands with feature #7.

@@ -1,8 +1,15 @@
+import { type Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 
 import { Link } from '@/app/components/ui/Link';
 import { SignInForm } from '@/app/features/auth/views/SignInFormView';
 import { getClientMessages } from '@/app/lib/next-intl/utils/getClientMessages';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('metadata');
+
+  return { title: t('signIn') };
+}
 
 export default async function SignIn() {
   const t = await getTranslations('auth.signIn');

@@ -1,6 +1,16 @@
 {
   "metadata": {
-    "description": "Công cụ Theo dõi Xin việc"
+    "description": "Công cụ Theo dõi Xin việc",
+    "dashboard": "Bảng điều khiển",
+    "trackerBoard": "Bảng theo dõi",
+    "resumeLibrary": "Thư viện CV",
+    "retro": "Retro",
+    "settingsNotification": "Thông báo",
+    "settingsTags": "Thẻ",
+    "settingsSubStages": "Giai đoạn phụ",
+    "signIn": "Đăng nhập",
+    "signUp": "Đăng ký",
+    "resetPassword": "Đặt lại mật khẩu"
   },
   "landingPage": {
     "title": "Trang Đích (Luôn truy cập được)",

@@ -16,6 +16,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - The React Compiler is enabled, so do not use `useMemo`, `useCallback`, or `memo` unless there is a very good reason to.
 - Define a named `XxxProps` type for component props instead of inlining the object type literal in the parameter list (e.g. `SimpleEmptyProps`).
 - Render text through the typography primitives in `app/components/ui/Typography.tsx` (`H1`–`H4`, `P`, `Lead`, `Large`, `Small`, `Muted`, `Blockquote`, `List`, `InlineCode`) instead of hand-styling raw `<h1>`–`<h4>`/`<p>`/`<span>`/`<small>` with text size/weight/color classes. Use the polymorphic `as` prop to change the rendered element (e.g. `<Small as='span'>`) and `className` to fine-tune. Exception: base UI primitives in `app/components/ui/` that wrap third-party primitives (e.g. `DialogTitle`, `SheetDescription`) keep their own elements.
+- Route metadata must be localized: export an async `generateMetadata` (never a static `export const metadata`) and pull strings via `await getTranslations('metadata')`. Page titles live under the `metadata` namespace in `server.json` (server-only — metadata is generated on the server); the `%s | Faros` title template and `metadataBase` are defined once on the root layout (`app/layout.tsx`), so each page only returns its own translated `title`.
 
 ## Agent skills
 
