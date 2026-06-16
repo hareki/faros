@@ -30,9 +30,10 @@ type DialogState =
 
 type JobHuntActionGroupProps = {
   dialogMessages: ClientMessages['layout']['jobHuntDialogs'];
+  actionMessages: ClientMessages['layout']['jobHuntSwitcher'];
 };
 
-export function JobHuntActionGroup({ dialogMessages }: JobHuntActionGroupProps) {
+export function JobHuntActionGroup({ dialogMessages, actionMessages }: JobHuntActionGroupProps) {
   const t = useTranslations('validation');
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -110,13 +111,14 @@ export function JobHuntActionGroup({ dialogMessages }: JobHuntActionGroupProps) 
   return (
     <Fragment>
       <GhostButtonGroup>
-        <GhostButtonGroupItem onClick={handleStartJobHunt}>
+        <GhostButtonGroupItem tooltip={actionMessages.startJobHunt} onClick={handleStartJobHunt}>
           <IconPlus />
         </GhostButtonGroupItem>
 
         {selectedJobHunt?.status === 'active' && (
           <Fragment>
             <GhostButtonGroupItem
+              tooltip={actionMessages.renameJobHunt}
               onClick={() => {
                 setDialog({ kind: 'rename', jobHunt: selectedJobHunt });
               }}
@@ -124,6 +126,7 @@ export function JobHuntActionGroup({ dialogMessages }: JobHuntActionGroupProps) 
               <IconPencil />
             </GhostButtonGroupItem>
             <GhostButtonGroupItem
+              tooltip={actionMessages.endJobHunt}
               variant='destructive'
               onClick={() => {
                 setDialog({ kind: 'end', jobHunt: selectedJobHunt });
@@ -136,6 +139,7 @@ export function JobHuntActionGroup({ dialogMessages }: JobHuntActionGroupProps) 
 
         {selectedJobHunt?.status === 'ended' && (
           <GhostButtonGroupItem
+            tooltip={actionMessages.deleteJobHunt}
             variant='destructive'
             onClick={() => {
               setDialog({ kind: 'delete', jobHunt: selectedJobHunt });

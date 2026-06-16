@@ -38,7 +38,7 @@ export function NavUser({ user, messages, themeMessages, localeMessages }: NavUs
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button variant='ghost' size='icon'>
+          <Button variant='ghost' size='icon' tooltip={messages.tooltip}>
             <Avatar className='size-10'>
               <AvatarImage src={user.avatar} alt={user.name} />
               <AvatarFallback className='rounded-full'>CN</AvatarFallback>

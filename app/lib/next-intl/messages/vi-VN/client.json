@@ -32,6 +32,7 @@
       "cancelText": "Hủy"
     },
     "notification": {
+      "tooltip": "Thông báo",
       "empty": {
         "title": "Không có thông báo",
         "description": "Bạn đã xem hết rồi. Thông báo mới sẽ xuất hiện ở đây."
@@ -39,6 +40,9 @@
     }
   },
   "layout": {
+    "appHeader": {
+      "toggleSidebar": "Bật/tắt thanh bên"
+    },
     "nav": {
       "dashboard": "Bảng điều khiển",
       "trackerBoard": "Bảng theo dõi",
@@ -113,6 +117,7 @@
       }
     },
     "navUser": {
+      "tooltip": "Tài khoản",
       "signOut": "Đăng xuất"
     },
     "theme": {

@@ -32,6 +32,7 @@
       "cancelText": "Cancel"
     },
     "notification": {
+      "tooltip": "Notifications",
       "empty": {
         "title": "No Notifications",
         "description": "You're all caught up. New notifications will appear here."
@@ -39,6 +40,9 @@
     }
   },
   "layout": {
+    "appHeader": {
+      "toggleSidebar": "Toggle sidebar"
+    },
     "nav": {
       "dashboard": "Dashboard",
       "trackerBoard": "Tracker Board",
@@ -113,6 +117,7 @@
       }
     },
     "navUser": {
+      "tooltip": "Account",
       "signOut": "Sign out"
     },
     "theme": {

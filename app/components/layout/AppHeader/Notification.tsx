@@ -25,11 +25,13 @@ function NotificationEmpty() {
 }
 
 export function NotificationButton() {
+  const t = useTranslations('components.notification');
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button size='icon' variant='outline'>
+          <Button size='icon' variant='outline' tooltip={t('tooltip')}>
             <IconBell />
           </Button>
         }

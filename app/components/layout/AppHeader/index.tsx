@@ -12,8 +12,11 @@ export async function AppHeader() {
   return (
     <header className='flex shrink-0 items-center justify-between gap-4 border-b p-3'>
       <div className='flex max-w-md grow gap-2'>
-        <SidebarTrigger />
-        <JobHuntActionGroup dialogMessages={clientMessages.layout.jobHuntDialogs} />
+        <SidebarTrigger tooltip={clientMessages.layout.appHeader.toggleSidebar} />
+        <JobHuntActionGroup
+          dialogMessages={clientMessages.layout.jobHuntDialogs}
+          actionMessages={clientMessages.layout.jobHuntSwitcher}
+        />
         <GlobalSearch />
       </div>
 
