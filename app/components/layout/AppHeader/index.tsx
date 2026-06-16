@@ -23,6 +23,7 @@ export async function AppHeader() {
         <NavUser
           messages={clientMessages.layout.navUser}
           themeMessages={clientMessages.layout.theme}
+          localeMessages={clientMessages.layout.locale}
           user={{
             name: 'shadcn',
             email: 'm@example.com',

@@ -2,12 +2,8 @@
 
 import { IconLogout, IconChevronDown } from '@tabler/icons-react';
 
-import { useSignOut } from '@/app/features/auth/hooks/useSignOut';
-import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
-
-import { ThemeSwitcher } from './ThemeSwitcher';
-import { Avatar, AvatarImage, AvatarFallback, AvatarBadge } from '../../ui/Avatar';
-import { Button } from '../../ui/Button';
+import { Avatar, AvatarImage, AvatarFallback, AvatarBadge } from '@/app/components/ui/Avatar';
+import { Button } from '@/app/components/ui/Button';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -16,8 +12,13 @@ import {
   DropdownMenuItem,
   DropdownMenuGroup,
   DropdownMenuSeparator,
-} from '../../ui/DropdownMenu';
-import { Muted, Text } from '../../ui/Typography';
+} from '@/app/components/ui/DropdownMenu';
+import { Muted, Text } from '@/app/components/ui/Typography';
+import { useSignOut } from '@/app/features/auth/hooks/useSignOut';
+import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
+
+import { LocaleSwitcher } from './LocaleSwitcher';
+import { ThemeSwitcher } from './ThemeSwitcher';
 
 type NavUserProps = {
   user: {
@@ -27,9 +28,10 @@ type NavUserProps = {
   };
   messages: ClientMessages['layout']['navUser'];
   themeMessages: ClientMessages['layout']['theme'];
+  localeMessages: ClientMessages['layout']['locale'];
 };
 
-export function NavUser({ user, messages, themeMessages }: NavUserProps) {
+export function NavUser({ user, messages, themeMessages, localeMessages }: NavUserProps) {
   const [signOut] = useSignOut();
 
   return (
@@ -72,6 +74,7 @@ export function NavUser({ user, messages, themeMessages }: NavUserProps) {
 
         <DropdownMenuGroup>
           <ThemeSwitcher messages={themeMessages} />
+          <LocaleSwitcher messages={localeMessages} />
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
 

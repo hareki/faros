@@ -3,15 +3,14 @@
 import { IconSun, IconMoon, IconDeviceDesktop } from '@tabler/icons-react';
 import { useTheme } from '@teispace/next-themes';
 
-import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
-
 import {
   DropdownMenuSub,
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-} from '../../ui/DropdownMenu';
+} from '@/app/components/ui/DropdownMenu';
+import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
 
 type ThemeSwitcherProps = {
   messages: ClientMessages['layout']['theme'];

@@ -8,7 +8,7 @@ import type clientMessages from '../messages/en-US/client.json';
 export type ClientMessages = typeof clientMessages;
 
 /**
- * Registry of client namespaces served to every page via `GlobalClientProvider`.
+ * Registry of client namespaces served to every page via `GlobalClientIntlProvider`.
  * Feature-specific client messages are passed as props (or through a
  * feature-scoped provider) instead, so each page ships only what it needs.
  */

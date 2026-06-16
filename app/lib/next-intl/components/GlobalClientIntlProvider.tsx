@@ -9,10 +9,9 @@ type GlobalClientProviderProps = PropsWithChildren;
 
 export async function GlobalClientIntlProvider({ children }: GlobalClientProviderProps) {
   const clientMessages = await getClientMessages();
+  const globalClientMessages = pickNamespaces(clientMessages, GLOBAL_CLIENT_NAMESPACES);
 
   return (
-    <NextIntlClientProvider messages={pickNamespaces(clientMessages, GLOBAL_CLIENT_NAMESPACES)}>
-      {children}
-    </NextIntlClientProvider>
+    <NextIntlClientProvider messages={globalClientMessages}>{children}</NextIntlClientProvider>
   );
 }

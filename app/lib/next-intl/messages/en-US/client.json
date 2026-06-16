@@ -120,6 +120,11 @@
       "light": "Light",
       "dark": "Dark",
       "system": "System"
+    },
+    "locale": {
+      "label": "Language",
+      "en-US": "English (US)",
+      "vi-VN": "Tiếng Việt"
     }
   },
   "auth": {
