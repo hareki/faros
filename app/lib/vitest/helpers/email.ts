@@ -1,4 +1,4 @@
-// Capture store for the mocked auth email boundary (see test/setup.ts).
+// Capture store for the mocked auth email boundary (see app/lib/vitest/setup.ts).
 // better-auth hands the verification/reset URL to the functions in
 // app/features/auth/utils/email.tsx; the mock records them here so tests can
 // assert which email fired and extract tokens.

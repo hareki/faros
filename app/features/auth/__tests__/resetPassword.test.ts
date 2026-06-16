@@ -6,9 +6,8 @@ import { sessions } from '@/app/db/schema';
 import { requestPasswordResetAction } from '@/app/features/auth/actions/requestPasswordResetAction';
 import { resetPasswordAction } from '@/app/features/auth/actions/resetPasswordAction';
 import { signInAction } from '@/app/features/auth/actions/signInAction';
-
-import { createVerifiedUser } from '../helpers/db';
-import { emailsOfType, tokenForEmail } from '../helpers/email';
+import { createVerifiedUser } from '@/app/lib/vitest/helpers/db';
+import { emailsOfType, tokenForEmail } from '@/app/lib/vitest/helpers/email';
 
 const PASSWORD = 'Sup3r$ecret!';
 const NEW_PASSWORD = 'Br4nd$newPass!';

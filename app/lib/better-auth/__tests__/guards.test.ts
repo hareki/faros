@@ -2,8 +2,7 @@ import { headers } from 'next/headers';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { auth } from '@/app/lib/better-auth';
-
-import { createVerifiedUser } from '../helpers/db';
+import { createVerifiedUser } from '@/app/lib/vitest/helpers/db';
 
 const PASSWORD = 'Sup3r$ecret!';
 

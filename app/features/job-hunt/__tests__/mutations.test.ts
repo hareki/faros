@@ -6,8 +6,7 @@ import { jobHunts } from '@/app/db/schema';
 import { endJobHunt, renameJobHunt, startJobHunt } from '@/app/features/job-hunt/db/mutations';
 import { getActiveJobHunt, listJobHunts } from '@/app/features/job-hunt/db/queries';
 import { isUniqueViolation } from '@/app/lib/drizzle/errors';
-
-import { createJobHunt, createUser } from '../helpers/db';
+import { createJobHunt, createUser } from '@/app/lib/vitest/helpers/db';
 
 describe('startJobHunt', () => {
   it('creates an active hunt', async () => {

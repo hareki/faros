@@ -4,8 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { db } from '@/app/db/client';
 import { sessions } from '@/app/db/schema';
 import { signInAction } from '@/app/features/auth/actions/signInAction';
-
-import { createVerifiedUser } from '../helpers/db';
+import { createVerifiedUser } from '@/app/lib/vitest/helpers/db';
 
 const PASSWORD = 'Sup3r$ecret!';
 

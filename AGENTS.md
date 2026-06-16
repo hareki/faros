@@ -13,10 +13,10 @@ Run package.json scripts with `pnpm`, never `bun` (the scripts already shell out
 - `pnpm dev` — dev server. `pnpm inngest:dev` and `pnpm email:dev` run the Inngest and email-preview servers.
 - `pnpm typecheck` — `tsc` (noEmit). After editing any `messages/**/*.json`, run `pnpm i18n:generate` first or the message types go stale.
 - `pnpm lint` — oxlint (`--fix`); `pnpm fmt` — oxfmt. There is **no ESLint/Prettier** despite the `eslint-plugin-*` devDeps. `pnpm cleanup` chains typecheck + fmt + lint.
-- `pnpm test` — Vitest (`run`); `pnpm test:watch` to watch. Tests live in `test/<feature>/`, not co-located. Run one file with `pnpm test test/auth/signIn.test.ts`, or filter by name with `pnpm test -t 'name'`.
+- `pnpm test` — Vitest (`run`); `pnpm test:watch` to watch. Tests are co-located with their source in `app/features/<feature>/__tests__/` (and `app/lib/<module>/__tests__/` for shared modules); shared test infra lives in `app/lib/vitest/` (`setup.ts`, `helpers/`, `stubs/`). Run one file with `pnpm test app/features/auth/__tests__/signIn.test.ts`, or filter by name with `pnpm test -t 'name'`.
 - `pnpm db:generate` — make a migration from schema changes; `pnpm db:migrate:dev|test|prod` — apply; plus `pnpm db:studio`, `pnpm db:seed`, `pnpm db:push`.
 
-Tests run against a dedicated Neon `test` branch (`env/.env.test`), truncating every table between tests (`test/setup.ts`), so `fileParallelism` is off and a host guard refuses to run unless `DB_CONNECTION_STRING` points at the test branch — dev/prod can never be wiped. `server-only` is stubbed and the auth email boundary is mocked in setup.
+Tests run against a dedicated Neon `test` branch (`env/.env.test`), truncating every table between tests (`app/lib/vitest/setup.ts`), so `fileParallelism` is off and a host guard refuses to run unless `DB_CONNECTION_STRING` points at the test branch — dev/prod can never be wiped. `server-only` is stubbed and the auth email boundary is mocked in setup.
 
 ## Architecture
 

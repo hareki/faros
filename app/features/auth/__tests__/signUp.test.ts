@@ -5,9 +5,8 @@ import { db } from '@/app/db/client';
 import { accounts, users } from '@/app/db/schema';
 import { signInAction } from '@/app/features/auth/actions/signInAction';
 import { signUpAction } from '@/app/features/auth/actions/signUpAction';
-
-import { createVerifiedUser } from '../helpers/db';
-import { emailsOfType } from '../helpers/email';
+import { createVerifiedUser } from '@/app/lib/vitest/helpers/db';
+import { emailsOfType } from '@/app/lib/vitest/helpers/email';
 
 const PASSWORD = 'Sup3r$ecret!'; // >=10 chars + a special char (passes zPassword)
 

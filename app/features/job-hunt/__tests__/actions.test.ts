@@ -5,8 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { db } from '@/app/db/client';
 import { jobHunts } from '@/app/db/schema';
 import { auth } from '@/app/lib/better-auth';
-
-import { createVerifiedUser } from '../helpers/db';
+import { createVerifiedUser } from '@/app/lib/vitest/helpers/db';
 
 const PASSWORD = 'Sup3r$ecret!';
 

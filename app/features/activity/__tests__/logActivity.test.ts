@@ -10,8 +10,7 @@ import {
   recordClose,
   recordStageChange,
 } from '@/app/features/activity/db/mutations';
-
-import { createApplication } from '../helpers/db';
+import { createApplication } from '@/app/lib/vitest/helpers/db';
 
 function activitiesOfType(
   applicationId: string,
