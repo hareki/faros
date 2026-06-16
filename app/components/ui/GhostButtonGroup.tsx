@@ -28,7 +28,7 @@ export function GhostButtonGroup({ className, children, ...props }: GhostButtonG
 
 type GhostButtonGroupItemProps = Pick<
   ComponentProps<typeof Button>,
-  'className' | 'onClick' | 'children'
+  'className' | 'onClick' | 'children' | 'tooltip'
 > & {
   variant?: 'default' | 'destructive';
   shape?: 'pill' | 'circle';
