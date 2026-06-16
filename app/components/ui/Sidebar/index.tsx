@@ -525,7 +525,8 @@ function SidebarMenuItem({ className, ...props }: ComponentProps<'li'>) {
 const sidebarMenuButtonVariants = cva(
   `
     peer/menu-button group/menu-button flex w-full items-center gap-2 overflow-hidden rounded-xl
-    px-3 py-2 text-left text-sm ring-sidebar-ring outline-hidden transition-[width,height,padding]
+    px-3 py-2 text-left text-sm font-medium text-muted-foreground ring-sidebar-ring outline-hidden
+    transition-[width,height,padding]
     group-has-data-[sidebar=menu-action]/menu-item:pr-8
     group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2!
     hover:bg-sidebar-accent hover:text-sidebar-accent-foreground
@@ -534,7 +535,7 @@ const sidebarMenuButtonVariants = cva(
     disabled:pointer-events-none disabled:opacity-50
     aria-disabled:pointer-events-none aria-disabled:opacity-50
     data-open:hover:bg-sidebar-accent data-open:hover:text-sidebar-accent-foreground
-    data-active:bg-sidebar-accent data-active:font-medium data-active:text-sidebar-accent-foreground
+    data-active:bg-sidebar-accent data-active:text-sidebar-accent-foreground
     [&_svg]:size-4 [&_svg]:shrink-0
     [&>span:last-child]:truncate
   `,
@@ -770,7 +771,7 @@ function SidebarMenuSubButton({
         className: cn(
           `
             flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-xl px-3
-            text-sidebar-foreground ring-sidebar-ring outline-hidden
+            font-medium text-muted-foreground ring-sidebar-ring outline-hidden
             group-data-[collapsible=icon]:hidden
             hover:bg-sidebar-accent hover:text-sidebar-accent-foreground
             focus-visible:ring-2
