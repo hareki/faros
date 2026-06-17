@@ -44,9 +44,7 @@ function DropdownMenuContent({
               relative z-50 max-h-(--available-height) w-(--anchor-width) min-w-48
               origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-3xl
               bg-popover/70 p-1.5 text-popover-foreground shadow-lg ring-1 ring-foreground/5
-              duration-100 outline-none
-              before:pointer-events-none before:absolute before:inset-0 before:-z-1
-              before:rounded-[inherit] before:backdrop-blur-2xl before:backdrop-saturate-150
+              backdrop-blur-sm backdrop-saturate-150 duration-100 outline-none
               data-[side=bottom]:slide-in-from-top-2
               data-[side=inline-end]:slide-in-from-left-2
               data-[side=inline-start]:slide-in-from-right-2
@@ -189,9 +187,7 @@ function DropdownMenuSubContent({
       className={cn(
         `
           relative w-auto min-w-36 rounded-3xl bg-popover/70 p-1.5 text-popover-foreground shadow-lg
-          ring-1 ring-foreground/5 duration-100
-          before:pointer-events-none before:absolute before:inset-0 before:-z-1
-          before:rounded-[inherit] before:backdrop-blur-2xl before:backdrop-saturate-150
+          ring-1 ring-foreground/5 backdrop-blur-sm backdrop-saturate-150 duration-100
           data-[side=bottom]:slide-in-from-top-2
           data-[side=left]:slide-in-from-right-2
           data-[side=right]:slide-in-from-left-2

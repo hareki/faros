@@ -32,7 +32,12 @@ export function BoardColumn({
   emptyTitle,
 }: BoardColumnProps) {
   return (
-    <section className='scroll-layer max-h-full shrink-0 basis-80 rounded-3xl bg-muted'>
+    <section
+      className={`
+        scroll-layer max-h-full shrink-0 basis-80 rounded-3xl bg-muted
+        light:bg-crust
+      `}
+    >
       <header className='flex shrink-0 items-center justify-between p-3'>
         <div className='flex items-center gap-2'>
           <span className={cn('size-2 rounded-full', STAGE_DOT_CLASS[stage])} />

@@ -121,7 +121,7 @@ function ComboboxContent({
               origin-(--transform-origin) overflow-hidden rounded-3xl bg-popover/70
               text-popover-foreground shadow-lg ring-1 ring-foreground/5 duration-100
               before:pointer-events-none before:absolute before:inset-0 before:-z-1
-              before:rounded-[inherit] before:backdrop-blur-2xl before:backdrop-saturate-150
+              before:rounded-[inherit] before:backdrop-blur-sm before:backdrop-saturate-150
               data-[chips=true]:min-w-(--anchor-width)
               data-[side=bottom]:slide-in-from-top-2
               data-[side=inline-end]:slide-in-from-left-2

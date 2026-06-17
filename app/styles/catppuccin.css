@@ -25,7 +25,7 @@
   --ctp-surface1: #d0d3db;
   --ctp-surface0: #dbdee5;
   /* ctp-base mixed with ctp-surface0 50% transparency */
-  --ctp-surface: ##e7e9ee;
+  --ctp-surface: #e7e9ee;
   --ctp-base: #f4f5f8;
   --ctp-mantle: #eef0f4;
   --ctp-crust: #e7e9ef;

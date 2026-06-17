@@ -51,7 +51,7 @@ export function NavUser({ user, messages, themeMessages, localeMessages }: NavUs
       />
 
       <DropdownMenuContent
-        className='w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg'
+        className='w-(--anchor-width) min-w-56'
         side='bottom'
         align='end'
         sideOffset={4}

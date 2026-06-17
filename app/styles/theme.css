@@ -1,4 +1,5 @@
 @custom-variant dark (&:is([data-theme="dark"] *));
+@custom-variant light (&:is([data-theme="light"] *));
 
 @theme inline {
   --color-background: var(--background);
@@ -50,12 +51,15 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
   --spacing-input-height: --spacing(10);
+
+  --color-mantle: var(--ctp-mantle);
+  --color-crust: var(--ctp-crust);
 }
 
 :root {
   --background: var(--ctp-base);
   --foreground: var(--ctp-text);
-  --card: var(--ctp-surface);
+  --card: var(--ctp-base);
   --card-foreground: var(--ctp-text);
   --popover: var(--ctp-base);
   --popover-foreground: var(--ctp-text);
@@ -96,6 +100,7 @@
 }
 
 [data-theme='dark'] {
+  --card: var(--ctp-surface);
   --secondary: var(--ctp-surface1);
   --input: var(--ctp-surface1);
 }
