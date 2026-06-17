@@ -86,6 +86,7 @@ Dependency-ordered. Each feature: sketch static UI → build BE → wire FE.
 - [ ] [BE] Tag CRUD per user
 - [ ] [BE] Board read query (apps grouped by stage for the active hunt)
 - [ ] [BE] Server actions: `createApplication`, `updateApplication`, `moveStage`, `setSubStage`, `setTags`, `closeApplication` (writes `closed_outcome` + `closed_at`); each calls `logActivity()`
+  - `createApplication` accepts an initial `stage` (board quick-add prefills the column; migration use-case) and backfills the implied milestones for non-applied creation — `response_received` for active/final_stages, outcome-implied response/offer for closed (which also collects `closed_outcome`); see ADR-0006
 - [ ] [FE] Wire board columns + cards to real data → screens.md: Tracker Board (Kanban)
 - [ ] [FE] Wire card detail drawer (metadata, activity-log timeline, notes via Lexical) → screens.md: Application Detail Drawer
 - [ ] [FE] Sub-stage dropdown on card (writes `sub_stage_change` activity) → screens.md: Application Detail Drawer (Sub-stage picker)
