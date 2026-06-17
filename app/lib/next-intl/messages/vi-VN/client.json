@@ -132,6 +132,18 @@
       "vi-VN": "Tiếng Việt"
     }
   },
+  "trackerBoard": {
+    "addApplication": "Thêm đơn ứng tuyển",
+    "stages": {
+      "applied": "Đã nộp",
+      "active": "Đang phỏng vấn",
+      "final_stages": "Vòng cuối",
+      "closed": "Đã đóng"
+    },
+    "empty": {
+      "title": "Chưa có đơn ứng tuyển"
+    }
+  },
   "auth": {
     "shared": {
       "email": "Email",

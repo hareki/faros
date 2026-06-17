@@ -132,6 +132,18 @@
       "vi-VN": "Tiếng Việt"
     }
   },
+  "trackerBoard": {
+    "addApplication": "Add application",
+    "stages": {
+      "applied": "Applied",
+      "active": "Active",
+      "final_stages": "Final Stages",
+      "closed": "Closed"
+    },
+    "empty": {
+      "title": "No applications"
+    }
+  },
   "auth": {
     "shared": {
       "email": "Email",

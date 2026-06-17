@@ -79,7 +79,7 @@ Dependency-ordered. Each feature: sketch static UI → build BE → wire FE.
 
 ### 2. Applications & board
 
-- [ ] [FE] Sketch board route: 4 fixed columns (Applied / Active / Final Stages / Closed) with static cards → screens.md: Tracker Board (Kanban)
+- [x] [FE] Sketch board route: 4 fixed columns (Applied / Active / Final Stages / Closed) with static cards → screens.md: Tracker Board (Kanban)
 - [ ] [FE] Sketch card: company, role, sub-stage chip, tag chips, source icon → screens.md: Tracker Board (Cards)
 - [ ] [FE] Sketch card detail drawer: all metadata, activity-log timeline, resume-picker slot, notes (Lexical), event-list slot → screens.md: Application Detail Drawer
 - [ ] [BE] Sub-stage CRUD per user per stage (settings screen)
