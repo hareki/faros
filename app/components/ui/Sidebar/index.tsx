@@ -129,7 +129,7 @@ function SidebarProvider({
         }
         className={cn(
           `
-            group/sidebar-wrapper flex min-h-svh w-full
+            group/sidebar-wrapper flex size-full
             has-data-[variant=inset]:bg-sidebar
           `,
           className,
@@ -341,7 +341,7 @@ function SidebarInset({ className, ...props }: ComponentProps<'main'>) {
       data-slot='sidebar-inset'
       className={cn(
         `
-          relative flex w-full flex-1 flex-col bg-background
+          relative scroll-layer
           md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0
           md:peer-data-[variant=inset]:rounded-2xl md:peer-data-[variant=inset]:shadow-sm
           md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2
@@ -404,7 +404,7 @@ function SidebarContent({ className, ...props }: ComponentProps<'div'>) {
       data-sidebar='content'
       className={cn(
         `
-          no-scrollbar flex min-h-0 flex-1 flex-col gap-2 overflow-auto [--radius:var(--radius-xl)]
+          scroll-layer no-scrollbar gap-2 overflow-auto [--radius:var(--radius-xl)]
           group-data-[collapsible=icon]:overflow-hidden
         `,
         className,

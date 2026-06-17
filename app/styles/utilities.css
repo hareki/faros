@@ -5,3 +5,7 @@
 @utility flex-center {
   @apply flex items-center justify-center;
 }
+
+@utility scroll-layer {
+  @apply flex flex-1 min-h-0 flex-col overflow-auto;
+}

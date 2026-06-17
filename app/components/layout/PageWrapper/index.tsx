@@ -27,11 +27,11 @@ export async function PageWrapper({ children, firstRun }: PageWrapperProps) {
   };
 
   return (
-    <main className='flex flex-1 flex-col p-3'>
+    <main className='scroll-layer p-3'>
       {!firstRun ? (
-        <div>
+        <div className='scroll-layer gap-6'>
           <PageTitle titles={titles} />
-          {children}
+          <div className='scroll-layer'>{children}</div>
         </div>
       ) : (
         <EmptyJobHunt

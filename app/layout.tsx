@@ -40,9 +40,7 @@ async function InnerRootLayout({ children }: RootLayoutProps) {
     <html
       lang={locale}
       className={cn(
-        'font-sans',
-        'h-full',
-        'antialiased',
+        'font-sans antialiased',
         /* Enable using font-sans className*/
         rubik.variable,
       )}
@@ -58,7 +56,7 @@ async function InnerRootLayout({ children }: RootLayoutProps) {
           />
         )}
       </head>
-      <body className='flex min-h-full flex-col'>
+      <body className='size-screen overflow-auto bg-background'>
         <ThemeProvider attribute='data-theme' defaultTheme='system'>
           <Suspense>
             <NuqsAdapter>
