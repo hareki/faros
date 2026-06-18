@@ -57,7 +57,7 @@ export function ConfirmDialog() {
 
   return (
     <AlertDialog open={open} onOpenChange={handleOpenChange}>
-      <AlertDialogContent size={size}>
+      <AlertDialogContent size={size} className='frosted-glass'>
         <AlertDialogHeader>
           {icon && (
             <AlertDialogMedia className={cn(destructive && 'bg-destructive/10 text-destructive')}>

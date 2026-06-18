@@ -9,3 +9,7 @@
 @utility scroll-layer {
   @apply flex flex-1 min-h-0 flex-col overflow-auto;
 }
+
+@utility frosted-glass {
+  @apply bg-popover/70! backdrop-blur-sm backdrop-saturate-150;
+}
