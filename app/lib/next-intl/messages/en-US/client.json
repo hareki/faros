@@ -142,6 +142,16 @@
     },
     "empty": {
       "title": "No applications"
+    },
+    "appliedVia": "Via {source} on {date}",
+    "appliedOn": "On {date}",
+    "sources": {
+      "linkedin": "LinkedIn",
+      "itviec": "ITviec",
+      "referral": "Referral",
+      "direct": "Direct",
+      "recruiter": "Recruiter",
+      "other": "Other"
     }
   },
   "auth": {

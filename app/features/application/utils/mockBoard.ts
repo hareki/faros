@@ -10,10 +10,11 @@ export const MOCK_BOARD_APPLICATIONS: BoardApplication[] = [
     stage: 'applied',
     subStage: null,
     tags: [
-      { id: 'tag-frontend', name: 'frontend', color: '#89b4fa' },
-      { id: 'tag-remote', name: 'remote', color: '#a6e3a1' },
+      { id: 'tag-frontend', name: 'Frontend', color: '#89b4fa' },
+      { id: 'tag-remote', name: 'Remote', color: '#a6e3a1' },
     ],
     source: 'linkedin',
+    appliedAt: new Date('2026-06-10'),
   },
   {
     id: 'mock-applied-2',
@@ -21,8 +22,9 @@ export const MOCK_BOARD_APPLICATIONS: BoardApplication[] = [
     role: 'Frontend Engineer',
     stage: 'applied',
     subStage: null,
-    tags: [{ id: 'tag-frontend', name: 'frontend', color: '#89b4fa' }],
+    tags: [{ id: 'tag-frontend', name: 'Frontend', color: '#89b4fa' }],
     source: 'direct',
+    appliedAt: new Date('2026-06-08'),
   },
   {
     id: 'mock-applied-3',
@@ -30,8 +32,9 @@ export const MOCK_BOARD_APPLICATIONS: BoardApplication[] = [
     role: 'Product Engineer',
     stage: 'applied',
     subStage: null,
-    tags: [{ id: 'tag-startup', name: 'startup', color: '#f9e2af' }],
+    tags: [{ id: 'tag-startup', name: 'Startup', color: '#f9e2af' }],
     source: 'referral',
+    appliedAt: new Date('2026-06-05'),
   },
   {
     id: 'mock-active-1',
@@ -39,8 +42,9 @@ export const MOCK_BOARD_APPLICATIONS: BoardApplication[] = [
     role: 'Frontend Engineer',
     stage: 'active',
     subStage: { id: 'sub-tech-screen', name: 'Tech Screen' },
-    tags: [{ id: 'tag-frontend', name: 'frontend', color: '#89b4fa' }],
+    tags: [{ id: 'tag-frontend', name: 'Frontend', color: '#89b4fa' }],
     source: 'referral',
+    appliedAt: new Date('2026-05-28'),
   },
   {
     id: 'mock-active-2',
@@ -48,8 +52,9 @@ export const MOCK_BOARD_APPLICATIONS: BoardApplication[] = [
     role: 'UI Engineer',
     stage: 'active',
     subStage: { id: 'sub-hr-screen', name: 'HR Screen' },
-    tags: [{ id: 'tag-startup', name: 'startup', color: '#f9e2af' }],
+    tags: [{ id: 'tag-startup', name: 'Startup', color: '#f9e2af' }],
     source: 'recruiter',
+    appliedAt: new Date('2026-05-22'),
   },
   {
     id: 'mock-final-1',
@@ -57,7 +62,8 @@ export const MOCK_BOARD_APPLICATIONS: BoardApplication[] = [
     role: 'UI Engineer',
     stage: 'final_stages',
     subStage: { id: 'sub-onsite', name: 'Onsite' },
-    tags: [{ id: 'tag-startup', name: 'startup', color: '#f9e2af' }],
-    source: 'direct',
+    tags: [{ id: 'tag-startup', name: 'Startup', color: '#f9e2af' }],
+    source: null,
+    appliedAt: new Date('2026-05-15'),
   },
 ];

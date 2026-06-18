@@ -142,6 +142,16 @@
     },
     "empty": {
       "title": "Chưa có đơn ứng tuyển"
+    },
+    "appliedVia": "Qua {source} vào ngày {date}",
+    "appliedOn": "Vào ngày {date}",
+    "sources": {
+      "linkedin": "LinkedIn",
+      "itviec": "ITviec",
+      "referral": "Giới thiệu",
+      "direct": "Trực tiếp",
+      "recruiter": "Nhà tuyển dụng",
+      "other": "Khác"
     }
   },
   "auth": {

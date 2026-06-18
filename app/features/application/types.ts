@@ -28,4 +28,5 @@ export type BoardApplication = {
   subStage: BoardSubStage | null;
   tags: BoardTag[];
   source: ApplicationSource | null;
+  appliedAt: Date;
 };

@@ -20,6 +20,9 @@ export function TrackerBoardView({ messages, applications }: TrackerBoardViewPro
           label={messages.stages[stage]}
           addLabel={messages.addApplication}
           emptyTitle={messages.empty.title}
+          appliedVia={messages.appliedVia}
+          appliedOn={messages.appliedOn}
+          sources={messages.sources}
           applications={applications.filter((application) => application.stage === stage)}
         />
       ))}

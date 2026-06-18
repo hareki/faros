@@ -96,8 +96,8 @@ The action-oriented board for the active hunt.
 - Four fixed **Stage** columns: **Applied** (waiting on them), **Active** (interviewing),
   **Final Stages** (offer pending / post-onsite), **Closed** (rejected / withdrawn /
   accepted / ghosted).
-- **Cards**: company, role, Sub-stage chip (Active & Final Stages only), Tag chips,
-  source icon.
+- **Cards**: company, role, Sub-stage chip (Active & Final Stages only), Tag chips, and an
+  **Applied via {source}** footer.
 - **Drag & drop** (dnd-kit) between columns writes a `stage_change` Activity and clears
   the Sub-stage; dropping into **Closed** opens the Closed-outcome prompt.
 - **Filter bar**: filter by Tag, Sub-stage, source, working model — state lives in the URL

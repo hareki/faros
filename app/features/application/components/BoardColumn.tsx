@@ -3,10 +3,12 @@ import { IconPlus } from '@tabler/icons-react';
 import { SimpleEmpty } from '@/app/components/simple/SimpleEmpty';
 import { Button } from '@/app/components/ui/Button';
 import { Muted, Small } from '@/app/components/ui/Typography';
+import { type ClientMessages } from '@/app/lib/next-intl/utils/clientMessages';
 import { cn } from '@/app/lib/tailwind/utils';
 
 import { ApplicationCard } from './ApplicationCard';
 import { type BoardApplication, type BoardStage } from '../types';
+import { STAGE_COLOR } from '../utils/stageColors';
 
 type BoardColumnProps = {
   stage: BoardStage;
@@ -14,14 +16,9 @@ type BoardColumnProps = {
   addLabel: string;
   applications: BoardApplication[];
   emptyTitle: string;
-};
-
-// Categorical dot color per stage; closed reads terminal/neutral.
-const STAGE_DOT_CLASS: Record<BoardStage, string> = {
-  applied: 'bg-chart-1',
-  active: 'bg-chart-4',
-  final_stages: 'bg-chart-2',
-  closed: 'bg-muted-foreground',
+  appliedVia: string;
+  appliedOn: string;
+  sources: ClientMessages['trackerBoard']['sources'];
 };
 
 export function BoardColumn({
@@ -30,31 +27,48 @@ export function BoardColumn({
   addLabel,
   applications,
   emptyTitle,
+  appliedVia,
+  appliedOn,
+  sources,
 }: BoardColumnProps) {
   return (
     <section
       className={`
-        scroll-layer max-h-full shrink-0 basis-80 rounded-3xl bg-muted
+        scroll-layer max-h-full shrink-0 grow-0 basis-80 rounded-4xl bg-muted
         light:bg-crust
       `}
     >
-      <header className='flex shrink-0 items-center justify-between p-3'>
+      <header className='flex shrink-0 items-center justify-between ps-5 pe-4 pt-3 pb-0'>
         <div className='flex items-center gap-2'>
-          <span className={cn('size-2 rounded-full', STAGE_DOT_CLASS[stage])} />
+          <span className={cn('size-2 rounded-full', STAGE_COLOR[stage].dot)} />
           <Small as='h2'>{label}</Small>
           <Muted as='span'>{applications.length}</Muted>
         </div>
 
         {/* Opens the quick-add dialog prefilled to this column's stage once wired (todos L88). */}
-        <Button size='icon-sm' variant='ghost' tooltip={addLabel}>
+        <Button
+          size='icon-sm'
+          variant='ghost'
+          tooltip={addLabel}
+          className='
+            hover:bg-background/40
+            hover:dark:bg-background/40
+          '
+        >
           <IconPlus />
         </Button>
       </header>
 
       {applications.length > 0 ? (
-        <div className='scroll-layer gap-3 overflow-auto p-3'>
+        <div className='scroll-layer gap-3 overflow-auto p-3 pt-1'>
           {applications.map((application) => (
-            <ApplicationCard key={application.id} application={application} />
+            <ApplicationCard
+              key={application.id}
+              application={application}
+              appliedVia={appliedVia}
+              appliedOn={appliedOn}
+              sources={sources}
+            />
           ))}
         </div>
       ) : (
