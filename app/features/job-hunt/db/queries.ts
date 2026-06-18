@@ -13,13 +13,13 @@ export type JobHunt = typeof jobHunts.$inferSelect;
  * `one_active_job_hunt_per_user` partial unique index — the read behind every shell load.
  */
 export async function getActiveJobHunt(executor: DbExecutor, userId: string) {
-  const [row] = await executor
+  const rows = await executor
     .select()
     .from(jobHunts)
     .where(and(eq(jobHunts.userId, userId), eq(jobHunts.status, 'active')))
     .limit(1);
 
-  return row;
+  return rows.at(0);
 }
 
 /**

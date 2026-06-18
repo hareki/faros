@@ -201,7 +201,7 @@ function FieldError({
 
     const uniqueErrors = [...new Map(errors.map((error) => [error?.message, error])).values()];
 
-    if (uniqueErrors?.length == 1) {
+    if (uniqueErrors.length == 1) {
       return uniqueErrors[0]?.message;
     }
 
@@ -219,10 +219,20 @@ function FieldError({
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (content) {
+    if (!content) {
+      return;
+    }
+
+    // Defer to the next frame so the wrapper mounts in its collapsed state
+    // before `open` flips — that two-step is what kicks off the enter transition.
+    const frame = requestAnimationFrame(() => {
       setRenderedContent(content);
       setMounted(true);
-    }
+    });
+
+    return () => {
+      cancelAnimationFrame(frame);
+    };
   }, [content]);
 
   useEffect(() => {
@@ -233,12 +243,22 @@ function FieldError({
     // The collapse transition (and its transitionend) never fires under
     // reduced motion, so unmount immediately when the error clears.
     if (!content && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setMounted(false);
+      const frame = requestAnimationFrame(() => {
+        setMounted(false);
+      });
 
-      return;
+      return () => {
+        cancelAnimationFrame(frame);
+      };
     }
 
-    setOpen(!!content);
+    const frame = requestAnimationFrame(() => {
+      setOpen(!!content);
+    });
+
+    return () => {
+      cancelAnimationFrame(frame);
+    };
   }, [mounted, content]);
 
   if (!mounted) {

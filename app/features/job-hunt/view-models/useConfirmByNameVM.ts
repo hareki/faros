@@ -11,7 +11,7 @@ export function useConfirmByNameVM(jobHuntName: string, isPending: boolean, onCo
   });
 
   const typedName = useWatch({ control, name: 'name', defaultValue: '' });
-  const confirmed = (typedName ?? '').trim() === jobHuntName;
+  const confirmed = typedName.trim() === jobHuntName;
 
   const onSubmit = () => {
     if (confirmed && !isPending) {

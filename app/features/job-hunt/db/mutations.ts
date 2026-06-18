@@ -32,13 +32,13 @@ export async function renameJobHunt(
   executor: DbExecutor,
   { userId, id, name }: RenameJobHuntParams,
 ) {
-  const [row] = await executor
+  const rows = await executor
     .update(jobHunts)
     .set({ name, updatedAt: new Date() })
     .where(and(eq(jobHunts.id, id), eq(jobHunts.userId, userId)))
     .returning();
 
-  return row;
+  return rows.at(0);
 }
 
 /**
@@ -49,13 +49,13 @@ export async function renameJobHunt(
 export async function endJobHunt(executor: DbExecutor, { userId, id }: EndJobHuntParams) {
   const now = new Date();
 
-  const [row] = await executor
+  const rows = await executor
     .update(jobHunts)
     .set({ status: 'ended', endedAt: now, updatedAt: now })
     .where(and(eq(jobHunts.id, id), eq(jobHunts.userId, userId), eq(jobHunts.status, 'active')))
     .returning();
 
-  return row;
+  return rows.at(0);
 }
 
 /**
@@ -65,10 +65,10 @@ export async function endJobHunt(executor: DbExecutor, { userId, id }: EndJobHun
  * `undefined` when no ended hunt matches (wrong id, not the owner, or still active).
  */
 export async function deleteJobHunt(executor: DbExecutor, { userId, id }: DeleteJobHuntParams) {
-  const [row] = await executor
+  const rows = await executor
     .delete(jobHunts)
     .where(and(eq(jobHunts.id, id), eq(jobHunts.userId, userId), eq(jobHunts.status, 'ended')))
     .returning();
 
-  return row;
+  return rows.at(0);
 }

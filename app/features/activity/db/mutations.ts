@@ -62,13 +62,13 @@ async function hasActivity(
   applicationId: string,
   type: ActivityInput['type'],
 ) {
-  const [row] = await executor
+  const rows = await executor
     .select({ id: activityLog.id })
     .from(activityLog)
     .where(and(eq(activityLog.applicationId, applicationId), eq(activityLog.type, type)))
     .limit(1);
 
-  return row !== undefined;
+  return rows.length > 0;
 }
 
 /**

@@ -72,7 +72,8 @@ const eslintConfig = defineConfig([
       'better-tailwindcss/no-unknown-classes': [
         'error',
         {
-          ignore: [],
+          // Marker class applied by `createIcon`; not a Tailwind utility.
+          ignore: ['^tabler-icon$'],
         },
       ],
 

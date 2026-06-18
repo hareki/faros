@@ -99,9 +99,7 @@ export function JobHuntActionGroup({ dialogMessages, actionMessages }: JobHuntAc
       cancelText: dialogMessages.startBlocked.cancel,
       confirmText: dialogMessages.startBlocked.endCurrent,
       onConfirm: () => {
-        if (activeJobHunt) {
-          setDialog({ kind: 'end', jobHunt: activeJobHunt });
-        }
+        setDialog({ kind: 'end', jobHunt: activeJobHunt });
       },
     });
   };

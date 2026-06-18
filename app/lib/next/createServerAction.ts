@@ -31,7 +31,7 @@ export function createServerAction(config: {
   schema?: () => ZodType | Promise<ZodType>;
   handler: (data: unknown) => Promise<unknown>;
 }) {
-  const actionName = config.name ?? config.handler.name ?? 'anonymousAction';
+  const actionName = config.name ?? (config.handler.name || 'anonymousAction');
 
   return async (input: unknown) => {
     try {
