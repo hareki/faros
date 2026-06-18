@@ -1,9 +1,13 @@
-import { IconCalendar, IconMessages } from '@tabler/icons-react';
+import { useState } from 'react';
+
+import { IconCalendar, IconMessages, IconStar, IconStarFilled } from '@tabler/icons-react';
 import { useLocale } from 'next-intl';
 
 import { Badge } from '@/app/components/ui/Badge';
+import { Button } from '@/app/components/ui/Button';
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -23,6 +27,7 @@ type ApplicationCardProps = {
   appliedVia: string;
   appliedOn: string;
   sources: ClientMessages['trackerBoard']['sources'];
+  favoriteLabels: ClientMessages['trackerBoard']['favorite'];
 };
 
 export function ApplicationCard({
@@ -30,9 +35,14 @@ export function ApplicationCard({
   appliedVia,
   appliedOn,
   sources,
+  favoriteLabels,
 }: ApplicationCardProps) {
   const { company, role, stage, subStage, tags, source, appliedAt } = application;
   const locale = useLocale();
+
+  // Local-only until the toggleFavorite server action lands (see ADR-0007); the board is not
+  // yet wired to real data, so this just flips the visual state for the session.
+  const [favorite, setFavorite] = useState(application.favorite);
 
   // Word order around the source/date differs per locale, so the footer fills a localized
   // template ("Applied via {source} on {date}") rather than concatenating fixed fragments.
@@ -42,11 +52,44 @@ export function ApplicationCard({
   // (ADR-0001), so the card never paints it for Applied/Closed cards.
   const showSubStage = (stage === 'active' || stage === 'final_stages') && subStage !== null;
 
+  const favoriteLabel = favorite ? favoriteLabels.remove : favoriteLabels.add;
+
   return (
     <Card size='sm' className='shrink-0 cursor-pointer rounded-3xl'>
       <CardHeader>
-        <CardTitle className='font-semibold'>{company}</CardTitle>
-        <CardDescription className='text-base'>{role}</CardDescription>
+        <CardTitle className='font-semibold text-pretty'>{company}</CardTitle>
+        <CardDescription className='text-base text-pretty'>{role}</CardDescription>
+
+        <CardAction>
+          <Button
+            size='icon-sm'
+            variant='ghost'
+            tooltip={favoriteLabel}
+            aria-label={favoriteLabel}
+            aria-pressed={favorite}
+            onClick={(event) => {
+              event.stopPropagation(); // the card itself becomes clickable (opens drawer) later
+              setFavorite((prev) => !prev);
+              // TODO(favorite): call the toggleFavorite server action once the BE lands
+              // (todos §2, ADR-0007).
+            }}
+            className={cn(
+              'transition-opacity',
+              favorite
+                ? `
+                  text-warning opacity-100
+                  hover:text-warning
+                `
+                : `
+                  text-muted-foreground opacity-0
+                  group-focus-within/card:opacity-100
+                  group-hover/card:opacity-100
+                `,
+            )}
+          >
+            {favorite ? <IconStarFilled /> : <IconStar />}
+          </Button>
+        </CardAction>
       </CardHeader>
 
       <CardContent className='flex items-center gap-1.5'>

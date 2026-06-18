@@ -23,6 +23,7 @@ export function TrackerBoardView({ messages, applications }: TrackerBoardViewPro
           appliedVia={messages.appliedVia}
           appliedOn={messages.appliedOn}
           sources={messages.sources}
+          favoriteLabels={messages.favorite}
           applications={applications.filter((application) => application.stage === stage)}
         />
       ))}

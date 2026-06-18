@@ -152,6 +152,10 @@
       "direct": "Direct",
       "recruiter": "Recruiter",
       "other": "Other"
+    },
+    "favorite": {
+      "add": "Mark as favorite",
+      "remove": "Remove from favorites"
     }
   },
   "auth": {

@@ -81,6 +81,10 @@ Dependency-ordered. Each feature: sketch static UI → build BE → wire FE.
 
 - [x] [FE] Sketch board route: 4 fixed columns (Applied / Active / Final Stages / Closed) with static cards → screens.md: Tracker Board (Kanban)
 - [x] [FE] Sketch card: company, role, sub-stage chip, tag chips, source footer → screens.md: Tracker Board (Cards)
+- [x] [BE] Add `favorite` boolean to `applications` (not null, default false) + migration → ADR-0007
+- [x] [FE] Favorite star toggle on card (local-only; reveal-on-hover/focus) → screens.md: Tracker Board (Cards)
+- [ ] [BE] Server action `toggleFavorite` — updates `applications.favorite`; no activity-log write (ADR-0007)
+- [ ] [FE] Wire favorite star to `toggleFavorite` (replace local state)
 - [ ] [FE] Sketch card detail drawer: all metadata, activity-log timeline, resume-picker slot, notes (Lexical), event-list slot → screens.md: Application Detail Drawer
 - [ ] [BE] Sub-stage CRUD per user per stage (settings screen)
 - [ ] [BE] Tag CRUD per user

@@ -28,5 +28,6 @@ export type BoardApplication = {
   subStage: BoardSubStage | null;
   tags: BoardTag[];
   source: ApplicationSource | null;
+  favorite: boolean;
   appliedAt: Date;
 };

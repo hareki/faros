@@ -19,6 +19,7 @@ type BoardColumnProps = {
   appliedVia: string;
   appliedOn: string;
   sources: ClientMessages['trackerBoard']['sources'];
+  favoriteLabels: ClientMessages['trackerBoard']['favorite'];
 };
 
 export function BoardColumn({
@@ -30,6 +31,7 @@ export function BoardColumn({
   appliedVia,
   appliedOn,
   sources,
+  favoriteLabels,
 }: BoardColumnProps) {
   return (
     <section
@@ -68,6 +70,7 @@ export function BoardColumn({
               appliedVia={appliedVia}
               appliedOn={appliedOn}
               sources={sources}
+              favoriteLabels={favoriteLabels}
             />
           ))}
         </div>

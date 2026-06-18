@@ -152,6 +152,10 @@
       "direct": "Trực tiếp",
       "recruiter": "Nhà tuyển dụng",
       "other": "Khác"
+    },
+    "favorite": {
+      "add": "Đánh dấu yêu thích",
+      "remove": "Bỏ đánh dấu yêu thích"
     }
   },
   "auth": {

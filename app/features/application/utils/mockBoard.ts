@@ -5,7 +5,7 @@ import { type BoardApplication } from '../types';
 export const MOCK_BOARD_APPLICATIONS: BoardApplication[] = [
   {
     id: 'mock-applied-1',
-    company: 'Acme',
+    company: 'First Great Western',
     role: 'Senior FE Engineer',
     stage: 'applied',
     subStage: null,
@@ -14,6 +14,7 @@ export const MOCK_BOARD_APPLICATIONS: BoardApplication[] = [
       { id: 'tag-remote', name: 'Remote', color: '#a6e3a1' },
     ],
     source: 'linkedin',
+    favorite: true,
     appliedAt: new Date('2026-06-10'),
   },
   {
@@ -24,6 +25,7 @@ export const MOCK_BOARD_APPLICATIONS: BoardApplication[] = [
     subStage: null,
     tags: [{ id: 'tag-frontend', name: 'Frontend', color: '#89b4fa' }],
     source: 'direct',
+    favorite: false,
     appliedAt: new Date('2026-06-08'),
   },
   {
@@ -34,6 +36,7 @@ export const MOCK_BOARD_APPLICATIONS: BoardApplication[] = [
     subStage: null,
     tags: [{ id: 'tag-startup', name: 'Startup', color: '#f9e2af' }],
     source: 'referral',
+    favorite: false,
     appliedAt: new Date('2026-06-05'),
   },
   {
@@ -44,6 +47,7 @@ export const MOCK_BOARD_APPLICATIONS: BoardApplication[] = [
     subStage: { id: 'sub-tech-screen', name: 'Tech Screen' },
     tags: [{ id: 'tag-frontend', name: 'Frontend', color: '#89b4fa' }],
     source: 'referral',
+    favorite: true,
     appliedAt: new Date('2026-05-28'),
   },
   {
@@ -54,6 +58,7 @@ export const MOCK_BOARD_APPLICATIONS: BoardApplication[] = [
     subStage: { id: 'sub-hr-screen', name: 'HR Screen' },
     tags: [{ id: 'tag-startup', name: 'Startup', color: '#f9e2af' }],
     source: 'recruiter',
+    favorite: false,
     appliedAt: new Date('2026-05-22'),
   },
   {
@@ -64,6 +69,7 @@ export const MOCK_BOARD_APPLICATIONS: BoardApplication[] = [
     subStage: { id: 'sub-onsite', name: 'Onsite' },
     tags: [{ id: 'tag-startup', name: 'Startup', color: '#f9e2af' }],
     source: null,
+    favorite: false,
     appliedAt: new Date('2026-05-15'),
   },
 ];

@@ -233,6 +233,9 @@ Table applications {
   stage board_stage [not null, default: 'applied']
   sub_stage_id uuid [ref: > sub_stages.id, note: 'part of composite FK with stage; cleared on stage move']
 
+  // User flag: high-fit / high-interest marker
+  favorite boolean [not null, default: false, note: 'organizational flag; not activity-logged (ADR-0007)']
+
   // Optional metadata (all nullable on purpose)
   source application_source
   jd_url varchar

@@ -97,7 +97,9 @@ The action-oriented board for the active hunt.
   **Final Stages** (offer pending / post-onsite), **Closed** (rejected / withdrawn /
   accepted / ghosted).
 - **Cards**: company, role, Sub-stage chip (Active & Final Stages only), Tag chips, and an
-  **Applied via {source}** footer.
+  **Applied via {source}** footer. A **favorite** star (top-right, in line with company/role)
+  toggles a high-interest flag; the star is
+  reveal-on-hover/focus otherwise (see ADR-0007).
 - **Drag & drop** (dnd-kit) between columns writes a `stage_change` Activity and clears
   the Sub-stage; dropping into **Closed** opens the Closed-outcome prompt.
 - **Filter bar**: filter by Tag, Sub-stage, source, working model — state lives in the URL

@@ -1,6 +1,7 @@
 import { sql } from 'drizzle-orm';
 import {
   type AnyPgColumn,
+  boolean,
   check,
   foreignKey,
   index,
@@ -78,6 +79,10 @@ export const applications = pgTable(
     // Board position
     stage: boardStage().notNull().default('applied'),
     subStageId: uuid('sub_stage_id').references(() => subStages.id, { onDelete: 'set null' }),
+
+    // User flag: marks a high-fit / high-interest application. Purely organizational —
+    // not activity-logged and excluded from analytics (ADR-0007).
+    favorite: boolean().notNull().default(false),
 
     // Optional metadata (all nullable on purpose)
     source: applicationSource(),
