@@ -1,9 +1,9 @@
-import { ExistingAccountEmail, ResetPasswordEmail, VerifyEmail } from '@faros/emails';
 import { getTranslations } from 'next-intl/server';
 
 import { getUserLocale } from '@/app/lib/next-intl/utils/locale';
 import { sendEmail } from '@/app/lib/resend';
 import { serverEnv } from '@/app/lib/t3-env/server';
+import { ExistingAccountEmail, ResetPasswordEmail, VerifyEmail } from '@faros/emails';
 
 type SendParams = {
   to: string;
