@@ -13,7 +13,7 @@ import {
 
 // Type cycles are broken via AnyPgColumn, and the FK
 // references are lazy callbacks resolved after all modules load.
-// eslint-disable-next-line import/no-cycle
+// eslint-disable-next-line import-x/no-cycle
 import { applications } from '@/app/features/application/db/schema';
 import { users } from '@/app/features/auth/db/schema';
 

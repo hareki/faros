@@ -20,7 +20,7 @@ import { users } from '@/app/features/auth/db/schema';
 import { jobHunts } from '@/app/features/job-hunt/db/schema';
 // Type cycles are broken via AnyPgColumn, and the FK
 // references are lazy callbacks resolved after all modules load.
-// eslint-disable-next-line import/no-cycle
+// eslint-disable-next-line import-x/no-cycle
 import { resumes } from '@/app/features/resume/db/schema';
 
 /** Top-level board stages. Rendered as columns in the UI, but they are stages. */
