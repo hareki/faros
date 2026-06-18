@@ -6,6 +6,7 @@ import { EmptyJobHunt } from '@/app/features/job-hunt/components/EmptyJobHunt';
 import { getClientMessages } from '@/app/lib/next-intl/utils/getClientMessages';
 
 import { PageTitle } from './PageTitle';
+import { PageTransition } from './PageTransition';
 import { type Routes } from '../../ui/Link';
 
 type PageWrapperProps = PropsWithChildren<{
@@ -31,7 +32,7 @@ export async function PageWrapper({ children, firstRun }: PageWrapperProps) {
       {!firstRun ? (
         <div className='scroll-layer gap-6'>
           <PageTitle titles={titles} />
-          <div className='scroll-layer'>{children}</div>
+          <PageTransition>{children}</PageTransition>
         </div>
       ) : (
         <EmptyJobHunt
