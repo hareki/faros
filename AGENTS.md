@@ -12,7 +12,7 @@ Run package.json scripts with `pnpm`, never `bun` (the scripts already shell out
 
 - `pnpm dev` — dev server. `pnpm inngest:dev` and `pnpm email:dev` run the Inngest and email-preview servers.
 - `pnpm typecheck` — `tsc` (noEmit). After editing any `messages/**/*.json`, run `pnpm i18n:generate` first or the message types go stale.
-- `pnpm lint` — oxlint (`--fix`); `pnpm fmt` — oxfmt. There is **no ESLint/Prettier** despite the `eslint-plugin-*` devDeps. `pnpm cleanup` chains typecheck + fmt + lint.
+- `pnpm lint` — ESLint (`--fix`); `pnpm fmt` — oxfmt (the formatter; **no Prettier** — `eslint-config-prettier` only switches off ESLint's own formatting rules so oxfmt owns layout). `pnpm cleanup` chains typecheck + fmt + lint.
 - `pnpm test` — Vitest (`run`); `pnpm test:watch` to watch. Tests are co-located with their source in `app/features/<feature>/__tests__/` (and `app/lib/<module>/__tests__/` for shared modules); shared test infra lives in `app/lib/vitest/` (`setup.ts`, `helpers/`, `stubs/`). Run one file with `pnpm test app/features/auth/__tests__/signIn.test.ts`, or filter by name with `pnpm test -t 'name'`.
 - `pnpm db:generate` — make a migration from schema changes; `pnpm db:migrate:dev|test|prod` — apply; plus `pnpm db:studio`, `pnpm db:seed`, `pnpm db:push`.
 
