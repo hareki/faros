@@ -258,7 +258,7 @@ function Sidebar({
           data-slot='sidebar-inner'
           className={`
             flex size-full flex-col bg-sidebar
-            group-data-[variant=floating]:rounded-2xl group-data-[variant=floating]:border
+            group-data-[variant=floating]:rounded-4xl group-data-[variant=floating]:border
             group-data-[variant=floating]:border-sidebar-border
             light:group-data-[variant=floating]:shadow-md
           `}
