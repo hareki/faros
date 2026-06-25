@@ -3,16 +3,18 @@
     "vercel@claude-plugins-official": true
   },
   "permissions": {
-    "allow": [
-      "mcp__better-auth__search_docs",
-      "mcp__better-auth__get_doc",
-      "mcp__codegraph__codegraph_search",
-      "mcp__codegraph__codegraph_context",
-      "mcp__codegraph__codegraph_callers",
-      "mcp__codegraph__codegraph_callees",
-      "mcp__codegraph__codegraph_impact",
-      "mcp__codegraph__codegraph_node",
-      "mcp__codegraph__codegraph_status"
+    "allow": ["mcp__better-auth__search_docs", "mcp__better-auth__get_doc", "mcp__codegraph__*"]
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "codegraph prompt-hook"
+          }
+        ]
+      }
     ]
   }
 }
