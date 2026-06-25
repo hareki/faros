@@ -17,13 +17,13 @@ Build-order roadmap derived from `high-level-design.md`, `database.dbml`, and `t
 ### B. Design system, theming & i18n
 
 - [x] [FE] Integrate Catppuccin palette
-- [x] [FE] Set up Tailwind v4 + shadcn theme tokens; create global `<ThemeProvider>` and Sonner `<Toaster>` in `app/layout.tsx`
+- [x] [FE] Set up Tailwind v4 + shadcn theme tokens; create global `<ThemeProvider>` and Sonner `<Toaster>` in `src/layout.tsx`
 - [x] [FE] Integrate i18n with `next-intl`
 
 ### C. Database layer
 
-- [x] [BE] Translate `docs/database.dbml` into Drizzle schema modules under `app/db/schema/` (auth, job_hunt, application, resume, event, activity, notification)
-- [x] [BE] Create Neon-backed db client singleton (`app/db/client.ts`)
+- [x] [BE] Translate `docs/database.dbml` into Drizzle schema modules under `src/db/schema/` (auth, job_hunt, application, resume, event, activity, notification)
+- [x] [BE] Create Neon-backed db client singleton (`src/db/client.ts`)
 - [x] [BE] Generate initial migration with `drizzle-kit`
 - [x] [BE] Add DB-level constraints (expressed natively in Drizzle via `check()` + partial unique index):
   - Partial unique index `one_active_job_hunt_per_user` on `job_hunts(user_id) WHERE status = 'active'`
@@ -42,7 +42,7 @@ BE config → flows → FE pages; the data model is dictated by Better Auth, so 
 
 - [x] [BE] Configure Better Auth with the table/field mappings shown in `database.dbml` header comment
 - [x] [BE] Enable DB-backed sessions with a short-lived signed cookie cache (`cookieCache`, `strategy: 'compact'`); `version` bump = global revocation
-- [x] [BE] Add Google + GitHub OAuth providers + Vercel env vars (provider blocks wired in `app/lib/auth`; pending real OAuth app credentials + Vercel env vars)
+- [x] [BE] Add Google + GitHub OAuth providers + Vercel env vars (provider blocks wired in `src/lib/auth`; pending real OAuth app credentials + Vercel env vars)
 - [x] [BE] `requireUser()` helper for server actions and `getUser()` for RSC reads
 - [x] [BE] Email verification flow (token write → email via Resend → confirm route) → screens.md: Email verification confirm
 - [x] [BE] Password reset flow (request → email → reset form) → screens.md: Reset Password

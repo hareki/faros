@@ -27,7 +27,7 @@
 //   emailVerified: boolean("email_verified").notNull()
 // so the adapter matches fields by property name automatically.
 //
-// Config lives in app/lib/auth:
+// Config lives in src/lib/auth:
 //
 //   export const auth = betterAuth({
 //     database: drizzleAdapter(db, { provider: "pg", schema, usePlural: true }),
@@ -70,7 +70,7 @@ Table users {
 // provider whose verified email matches an existing user adds a row to that
 // user instead of creating a second user. Verified-email only (no forced
 // trusted-provider linking). Configured via account.accountLinking in
-// app/lib/better-auth.
+// src/lib/better-auth.
 Table accounts {
   id uuid [pk, default: `gen_random_uuid()`]
   user_id uuid [ref: > users.id, not null, note: 'ON DELETE CASCADE']

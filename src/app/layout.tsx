@@ -1,0 +1,82 @@
+import { Suspense, type PropsWithChildren } from 'react';
+
+// Use this instead of 'next-themes'
+// https://github.com/pacocoursey/next-themes/issues/387#issuecomment-4181891723
+import { ThemeProvider } from '@teispace/next-themes';
+import { type Metadata } from 'next';
+import Script from 'next/script';
+import { getLocale, getTranslations } from 'next-intl/server';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
+
+import { ConfirmDialog } from '@/src/lib/confirm/components/ConfirmDialog';
+import { cn } from '@/src/lib/tailwind/utils';
+
+import { rubik } from '../fonts';
+import { GlobalClientIntlProvider } from '../lib/next-intl/components/GlobalClientIntlProvider';
+import { Sonner } from '../lib/sonner/components/Sonner';
+import { serverEnv } from '../lib/t3-env/server';
+
+import '../styles/globals.css';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('metadata');
+
+  return {
+    title: {
+      template: '%s | Faros',
+      default: 'Faros',
+    },
+    description: t('description'),
+    metadataBase: new URL(serverEnv.APP_URL),
+  };
+}
+
+type RootLayoutProps = PropsWithChildren;
+
+async function InnerRootLayout({ children }: RootLayoutProps) {
+  const locale = await getLocale();
+
+  return (
+    <html
+      lang={locale}
+      className={cn(
+        'font-sans antialiased',
+        /* Enable using font-sans className*/
+        rubik.variable,
+      )}
+      // https://github.com/pacocoursey/next-themes#with-app
+      suppressHydrationWarning
+    >
+      <head>
+        {serverEnv.STAGE === 'development' && (
+          <Script
+            src='//unpkg.com/react-scan/dist/auto.global.js'
+            crossOrigin='anonymous'
+            strategy='beforeInteractive'
+          />
+        )}
+      </head>
+      <body className='size-screen overflow-auto bg-background'>
+        <ThemeProvider attribute='data-theme' defaultTheme='system'>
+          <Suspense>
+            <NuqsAdapter>
+              <GlobalClientIntlProvider>
+                <ConfirmDialog />
+                <Sonner />
+                {children}
+              </GlobalClientIntlProvider>
+            </NuqsAdapter>
+          </Suspense>
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}
+
+export default function RootLayout({ children }: RootLayoutProps) {
+  return (
+    <Suspense>
+      <InnerRootLayout>{children}</InnerRootLayout>
+    </Suspense>
+  );
+}

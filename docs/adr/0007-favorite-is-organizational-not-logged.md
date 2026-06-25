@@ -25,5 +25,5 @@ would never be consumed.
 
 - Toggling favorite is cheap and side-effect-free; no migration of historical log rows is ever
   needed, and re-deriving analytics never has to account for it.
-- If a future feature genuinely needs favorite *history* (e.g. "what did you star this week"),
+- If a future feature genuinely needs favorite _history_ (e.g. "what did you star this week"),
   that is a new decision — revisit then rather than pre-logging now.

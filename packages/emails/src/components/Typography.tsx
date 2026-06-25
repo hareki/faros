@@ -4,7 +4,7 @@ import { Heading as HeadingPrimitive, Text as TextPrimitive } from 'react-email'
 
 import { cn } from '../utils';
 
-// Mimics app/components/ui/Typography.tsx, reusing its class vocabulary minus the bits
+// Mimics src/components/ui/Typography.tsx, reusing its class vocabulary minus the bits
 // email can't render (scroll-m-20, border-b, text-balance, first:/not-first: pseudos).
 // All default to text-foreground.
 

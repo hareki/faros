@@ -23,7 +23,7 @@ fi
 
 npx lint-staged
 
-if git diff --cached --name-only --diff-filter=ACMR | grep -qE '^app/lib/next-intl/messages/.*\.json$'; then
+if git diff --cached --name-only --diff-filter=ACMR | grep -qE '^src/lib/next-intl/messages/.*\.json$'; then
     echo "\033[0;34m\nvalidating i18n messages...\n\033[0m"
     npx pnpm i18n:check
     if [ $? -ne 0 ]; then

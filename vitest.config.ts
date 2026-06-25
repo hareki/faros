@@ -8,13 +8,13 @@ export default defineConfig({
     tsconfigPaths: true,
     alias: {
       // `server-only` throws outside an RSC bundler; swap it for an empty module.
-      'server-only': path.resolve(__dirname, 'app/lib/vitest/stubs/server-only.ts'),
+      'server-only': path.resolve(__dirname, 'src/lib/vitest/stubs/server-only.ts'),
     },
   },
   test: {
     environment: 'node',
     globals: true,
-    setupFiles: ['./app/lib/vitest/setup.ts'],
+    setupFiles: ['./src/lib/vitest/setup.ts'],
     // The auth suite shares one Neon branch and truncates between tests, so test
     // files must not run in parallel.
     fileParallelism: false,

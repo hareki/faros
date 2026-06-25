@@ -4,7 +4,7 @@ import { Link as LinkPrimitive } from 'react-email';
 
 import { cn } from '../utils';
 
-// Mimics app/components/ui/Link/variants.ts. The app's `hover:text-primary` collapses
+// Mimics src/components/ui/Link/variants.ts. The app's `hover:text-primary` collapses
 // to a static color for email (no hover state).
 
 type LinkVariant = 'default' | 'action';

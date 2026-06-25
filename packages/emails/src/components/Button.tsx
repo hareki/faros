@@ -4,7 +4,7 @@ import { Button as ButtonPrimitive } from 'react-email';
 
 import { cn } from '../utils';
 
-// Mimics app/components/ui/Button/variants.ts, filtered to email-safe styles
+// Mimics src/components/ui/Button/variants.ts, filtered to email-safe styles
 // (no hover/focus/dark/aria/svg). Height-based app sizes become padding for email.
 
 type ButtonVariant = 'default' | 'secondary' | 'outline' | 'ghost' | 'destructive';

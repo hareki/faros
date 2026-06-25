@@ -11,5 +11,5 @@
   "useTabs": false,
   "endOfLine": "lf",
   "sortPackageJson": true,
-  "ignorePatterns": [".agents/**", "pnpm-*", "app/db/migrations/**"]
+  "ignorePatterns": [".agents/**", "pnpm-*", "src/db/migrations/**"]
 }

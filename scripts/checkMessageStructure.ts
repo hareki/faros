@@ -1,4 +1,4 @@
-import { locales } from '@/app/lib/next-intl/config';
+import { locales } from '@/src/lib/next-intl/config';
 
 type MessageTree = { [key: string]: string | MessageTree };
 
@@ -24,9 +24,9 @@ function conflicts(clientPath: string, serverPath: string): boolean {
 let failed = false;
 
 for (const locale of locales) {
-  const client: MessageTree = (await import(`../app/lib/next-intl/messages/${locale}/client.json`))
+  const client: MessageTree = (await import(`../src/lib/next-intl/messages/${locale}/client.json`))
     .default;
-  const server: MessageTree = (await import(`../app/lib/next-intl/messages/${locale}/server.json`))
+  const server: MessageTree = (await import(`../src/lib/next-intl/messages/${locale}/server.json`))
     .default;
 
   const clientLeaves = leafPaths(client);

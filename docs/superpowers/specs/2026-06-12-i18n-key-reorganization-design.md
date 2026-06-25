@@ -21,7 +21,7 @@ Namespaces are organized by feature or component (next-intl's official recommend
 Each locale has two files:
 
 ```
-app/lib/next-intl/messages/
+src/lib/next-intl/messages/
   en-US/
     client.json   ← the only file whose contents may ever reach the browser
     server.json

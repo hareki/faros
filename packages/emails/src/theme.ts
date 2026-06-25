@@ -3,13 +3,13 @@ import { type ComponentProps } from 'react';
 import { type Tailwind, pixelBasedPreset } from 'react-email';
 
 // Email-safe mirror of the app design system. Email clients can't read the app's
-// CSS custom properties (app/styles/theme.css) or its local SVN-Rubik font, so the
+// CSS custom properties (src/styles/theme.css) or its local SVN-Rubik font, so the
 // semantic tokens below are hardcoded to the Catppuccin Latte (light) palette and the
 // font is the Vietnamese-capable Google Roboto. The shape intentionally mirrors the
 // app's semantic names so the wrapper components can reuse the same class vocabulary
-// (text-foreground, bg-primary, rounded-4xl, …) as app/components/ui.
+// (text-foreground, bg-primary, rounded-4xl, …) as src/components/ui.
 
-// --- Catppuccin Latte (light) — subset used, from app/styles/catppuccin.css ---
+// --- Catppuccin Latte (light) — subset used, from src/styles/catppuccin.css ---
 export const latte = {
   base: '#fff',
   text: '#4c4f69',
@@ -21,7 +21,7 @@ export const latte = {
   red: '#d20f39',
 } as const;
 
-// --- Semantic tokens — mirrors the :root mapping in app/styles/theme.css (light) ---
+// --- Semantic tokens — mirrors the :root mapping in src/styles/theme.css (light) ---
 export const tokens = {
   background: latte.base,
   foreground: latte.text,
@@ -44,7 +44,7 @@ export const tokens = {
 } as const;
 
 // --- Radius — app scale (--radius: 0.625rem) converted to px. pixelBasedPreset
-// requires no rem. rounded-4xl (26px) matches app/components/ui/Button/variants.ts. ---
+// requires no rem. rounded-4xl (26px) matches src/components/ui/Button/variants.ts. ---
 export const radius = {
   sm: '6px',
   md: '8px',
@@ -60,7 +60,7 @@ export const fontFamily = 'Roboto, Helvetica, Arial, sans-serif';
 type TailwindConfig = NonNullable<ComponentProps<typeof Tailwind>['config']>;
 
 // The single <Tailwind config> shared by every email — re-declares the app's semantic
-// color names + radius scale so wrapper components can mimic app/components/ui classes.
+// color names + radius scale so wrapper components can mimic src/components/ui classes.
 export const tailwindConfig: TailwindConfig = {
   presets: [pixelBasedPreset],
   theme: {

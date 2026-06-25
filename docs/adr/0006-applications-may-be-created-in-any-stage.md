@@ -35,5 +35,5 @@ milestones the equivalent Applied→advance path would have:
   denormalizing milestone timestamps onto `applications` (ADR-0002 preserved).
 - The Closed column's quick-add needs an outcome field, unlike the minimal company+role add for
   the other three columns.
-- The dev seed (`app/db/seed.ts`), which inserts non-applied apps with hand-written activity rows,
+- The dev seed (`src/db/seed.ts`), which inserts non-applied apps with hand-written activity rows,
   should mirror this backfill so seeded data is funnel-consistent.

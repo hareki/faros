@@ -1,14 +1,14 @@
-import './app/lib/t3-env/load-env';
+import './src/lib/t3-env/load-env';
 // Validate env variables at buildtime
-import './app/lib/t3-env/client';
-import './app/lib/t3-env/server';
+import './src/lib/t3-env/client';
+import './src/lib/t3-env/server';
 
 import { type NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
 
 export const MESSAGE_PATHS = [
-  './app/lib/next-intl/messages/en-US/client.json',
-  './app/lib/next-intl/messages/en-US/server.json',
+  './src/lib/next-intl/messages/en-US/client.json',
+  './src/lib/next-intl/messages/en-US/server.json',
 ];
 
 const nextConfig: NextConfig = {
@@ -23,7 +23,7 @@ const nextConfig: NextConfig = {
 };
 
 const withNextIntl = createNextIntlPlugin({
-  requestConfig: './app/lib/next-intl/request.ts',
+  requestConfig: './src/lib/next-intl/request.ts',
   experimental: {
     // Not using a `src` folder
     srcPath: './',
