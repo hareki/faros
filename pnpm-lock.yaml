@@ -56,6 +56,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^5.4.0
         version: 5.4.0(react-hook-form@7.78.0(react@19.2.6))
+      '@lexical/list':
+        specifier: ^0.45.0
+        version: 0.45.0
       '@lexical/react':
         specifier: ^0.45.0
         version: 0.45.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(yjs@13.6.30)

@@ -38,6 +38,7 @@
     "@epic-web/remember": "^1.1.0",
     "@faros/emails": "workspace:*",
     "@hookform/resolvers": "^5.4.0",
+    "@lexical/list": "^0.45.0",
     "@lexical/react": "^0.45.0",
     "@neondatabase/serverless": "^1.1.0",
     "@next/env": "16.2.9",

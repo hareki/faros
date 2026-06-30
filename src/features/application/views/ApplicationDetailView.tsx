@@ -6,6 +6,7 @@ import NextLink from 'next/link';
 import { Button } from '@/src/components/ui/Button';
 import { DialogClose } from '@/src/components/ui/Dialog';
 import { H3, H4, Muted } from '@/src/components/ui/Typography';
+import { ApplicationMetadataForm } from '@/src/features/application/components/ApplicationMetadataForm';
 import {
   type ActivityEntry,
   type ApplicationDetail,
@@ -38,6 +39,7 @@ export function ApplicationDetailView({
   variant,
   detail,
   messages,
+  sourceMessages,
   favoriteLabels,
 }: ApplicationDetailViewProps) {
   const readOnly = detail.readOnly;
@@ -87,9 +89,9 @@ export function ApplicationDetailView({
               'transition-opacity',
               favorite
                 ? `
-                text-warning opacity-100
-                hover:text-warning
-              `
+                  text-warning opacity-100
+                  hover:text-warning
+                `
                 : 'text-muted-foreground',
             )}
           >
@@ -110,14 +112,18 @@ export function ApplicationDetailView({
       {/* Two-column body: single column on small screens, two on large */}
       <div
         className='
-        grid grid-cols-1 gap-6
-        lg:grid-cols-[2fr_1fr]
-      '
+          grid grid-cols-1 gap-6
+          lg:grid-cols-[2fr_1fr]
+        '
       >
         {/* LEFT column */}
         <div className='flex flex-col gap-6'>
-          {/* Task 4.5: metadata form (readOnly prop) */}
-          {/* Task 4.5: notes (readOnly prop) */}
+          <ApplicationMetadataForm
+            detail={detail}
+            messages={messages}
+            sourceMessages={sourceMessages}
+            readOnly={readOnly}
+          />
           {/* Task 4.6: sub-stage picker (readOnly prop) */}
           {/* Task 4.6: tags (readOnly prop) */}
 
