@@ -39,12 +39,17 @@ export async function createSubStage(
 export async function renameSubStage(
   executor: DbExecutor,
   { userId, id, name }: { userId: string; id: string; name: string },
-) {
+): Promise<SubStageRow | undefined> {
   const rows = await executor
     .update(subStages)
     .set({ name })
     .where(and(eq(subStages.id, id), eq(subStages.userId, userId)))
-    .returning({ id: subStages.id, name: subStages.name });
+    .returning({
+      id: subStages.id,
+      stage: subStages.stage,
+      name: subStages.name,
+      sortOrder: subStages.sortOrder,
+    });
 
   return rows.at(0);
 }

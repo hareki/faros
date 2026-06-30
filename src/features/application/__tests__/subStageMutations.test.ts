@@ -39,7 +39,7 @@ describe('renameSubStage / deleteSubStage', () => {
 
     const renamed = await renameSubStage(db, { userId: user.id, id: sub.id, name: 'HR Screen' });
 
-    expect(renamed?.name).toBe('HR Screen');
+    expect(renamed).toEqual({ id: sub.id, stage: 'active', name: 'HR Screen', sortOrder: 0 });
   });
 
   it('returns undefined when renaming a foreign sub-stage', async () => {
@@ -54,7 +54,7 @@ describe('renameSubStage / deleteSubStage', () => {
     const user = await createUser();
     const sub = await createSubStage(db, { userId: user.id, stage: 'active', name: 'HR' });
 
-    await deleteSubStage(db, { userId: user.id, id: sub.id });
+    expect((await deleteSubStage(db, { userId: user.id, id: sub.id }))?.id).toBe(sub.id);
 
     const rows = await db
       .select()
