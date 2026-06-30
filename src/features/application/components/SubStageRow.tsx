@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 
+import { useSortable } from '@dnd-kit/react/sortable';
+import { IconGripVertical } from '@tabler/icons-react';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,9 +29,17 @@ type SubStageRowProps = {
   subStage: SubStageRecord;
   vm: ReturnType<typeof useSubStageCrudVM>;
   messages: SubStageMessages;
+  index: number;
+  stage: 'active' | 'final_stages';
 };
 
-export function SubStageRow({ subStage, vm, messages }: SubStageRowProps) {
+export function SubStageRow({ subStage, vm, messages, index, stage }: SubStageRowProps) {
+  const { ref, handleRef, isDragging } = useSortable({
+    id: subStage.id,
+    index,
+    group: stage,
+  });
+
   const [isRenaming, setIsRenaming] = useState(false);
   const [renameValue, setRenameValue] = useState(subStage.name);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -67,7 +78,22 @@ export function SubStageRow({ subStage, vm, messages }: SubStageRowProps) {
   };
 
   return (
-    <div className='flex items-center gap-2 rounded-lg border px-3 py-2'>
+    <div
+      ref={ref}
+      className={`
+        flex items-center gap-2 rounded-lg border px-3 py-2
+        ${isDragging ? 'opacity-50' : ''}
+      `}
+    >
+      <button
+        ref={handleRef}
+        type='button'
+        className='cursor-grab touch-none text-muted-foreground'
+        aria-label='Drag to reorder'
+      >
+        <IconGripVertical className='size-4' />
+      </button>
+
       {isRenaming ? (
         <Input
           value={renameValue}

@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 
+import { DragDropProvider } from '@dnd-kit/react';
+import { useTranslations } from 'next-intl';
+
 import { Button } from '@/src/components/ui/Button';
 import { Input } from '@/src/components/ui/Input';
 import { H3, H4, Muted } from '@/src/components/ui/Typography';
@@ -10,6 +13,7 @@ import { type ClientMessages } from '@/src/lib/next-intl/utils/clientMessages';
 
 import { SubStageRow } from '../components/SubStageRow';
 import { useSubStageCrudVM } from '../view-models/useSubStageCrudVM';
+import { useSubStageReorderVM } from '../view-models/useSubStageReorderVM';
 
 type SubStageMessages = ClientMessages['settings']['subStages'];
 type Stage = 'active' | 'final_stages';
@@ -22,10 +26,18 @@ type SubStagesViewProps = {
 };
 
 export function SubStagesView({ messages, subStages }: SubStagesViewProps) {
+  const t = useTranslations('validation');
   const vm = useSubStageCrudVM(messages);
+  const errorMessage = t('errorGeneric');
 
   const [addingStage, setAddingStage] = useState<Stage | null>(null);
   const [addName, setAddName] = useState('');
+
+  const activeSubStages = subStages.filter((ss) => ss.stage === 'active');
+  const finalSubStages = subStages.filter((ss) => ss.stage === 'final_stages');
+
+  const activeReorderVm = useSubStageReorderVM('active', activeSubStages, errorMessage);
+  const finalReorderVm = useSubStageReorderVM('final_stages', finalSubStages, errorMessage);
 
   const handleStartAdd = (stage: Stage) => {
     setAddingStage(stage);
@@ -59,20 +71,29 @@ export function SubStagesView({ messages, subStages }: SubStagesViewProps) {
         '
       >
         {SUB_STAGE_STAGES.map((stage) => {
-          const stageSubStages = subStages.filter((ss) => ss.stage === stage);
+          const reorderVm = stage === 'active' ? activeReorderVm : finalReorderVm;
 
           return (
             <section key={stage} className='flex flex-col gap-3'>
               <H4>{messages.stages[stage]}</H4>
-              <div className='flex flex-col gap-2'>
-                {stageSubStages.length === 0 ? (
-                  <Muted as='p'>{messages.empty}</Muted>
-                ) : (
-                  stageSubStages.map((ss) => (
-                    <SubStageRow key={ss.id} subStage={ss} vm={vm} messages={messages} />
-                  ))
-                )}
-              </div>
+              <DragDropProvider onDragEnd={reorderVm.onDragEnd}>
+                <div className='flex flex-col gap-2'>
+                  {reorderVm.items.length === 0 ? (
+                    <Muted as='p'>{messages.empty}</Muted>
+                  ) : (
+                    reorderVm.items.map((ss, index) => (
+                      <SubStageRow
+                        key={ss.id}
+                        subStage={ss}
+                        vm={vm}
+                        messages={messages}
+                        index={index}
+                        stage={stage}
+                      />
+                    ))
+                  )}
+                </div>
+              </DragDropProvider>
               {addingStage === stage ? (
                 <div className='flex items-center gap-2'>
                   <Input
