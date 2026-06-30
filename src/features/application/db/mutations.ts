@@ -80,6 +80,10 @@ export async function createApplication(
   executor: DbExecutor,
   params: CreateApplicationParams,
 ): Promise<{ id: string }> {
+  if (params.stage === 'closed' && !params.closedOutcome) {
+    throw new Error('createApplication: a closed stage requires a closedOutcome');
+  }
+
   const isClosed = params.stage === 'closed';
 
   const [row] = await executor

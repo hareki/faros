@@ -6,8 +6,9 @@ import { activityLog, applications } from '@/src/db/schema';
 import { createApplication, setFavorite } from '@/src/features/application/db/mutations';
 import { createJobHunt, createUser } from '@/src/lib/vitest/helpers/db';
 
-// The shared createApplication helper owns its user internally and returns only the id, so the
-// chain is built by hand here where ownership (userId) needs to be controlled.
+// This local helper builds the user => hunt => application chain itself so the test can
+// control which userId owns the application. The real createApplication mutation takes
+// jobHuntId externally and does not manage user ownership internally.
 async function createApp(userId: string, overrides: { favorite?: boolean } = {}) {
   const hunt = await createJobHunt(userId);
   const [app] = await db
