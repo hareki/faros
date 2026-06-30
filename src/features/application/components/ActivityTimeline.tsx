@@ -18,7 +18,7 @@ export function ActivityTimeline({ activity, messages }: ActivityTimelineProps) 
   const locale = useLocale();
 
   if (activity.length === 0) {
-    return <Muted as='p'>No activity yet.</Muted>;
+    return null;
   }
 
   return (
