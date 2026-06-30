@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 import { describe, expect, it } from 'vitest';
 
 import { db } from '@/src/db/client';
-import { activityLog, applications } from '@/src/db/schema';
+import { activityLog, applications, subStages } from '@/src/db/schema';
 import {
   createApplication,
   moveStage,
@@ -259,7 +259,7 @@ describe('moveStage', () => {
     expect(await activityTypes(app.id)).toEqual(['response_received', 'stage_change']);
   });
 
-  it('re-opening from closed clears closed columns', async () => {
+  it('re-opening from closed clears closed columns and logs stage_change', async () => {
     const user = await createUser();
     const app = await ownedAppAt(user.id, 'closed');
 
@@ -268,6 +268,7 @@ describe('moveStage', () => {
     expect(updated?.stage).toBe('active');
     expect(updated?.closedOutcome).toBeNull();
     expect(updated?.closedAt).toBeNull();
+    expect(await activityTypes(app.id)).toContain('stage_change');
   });
 
   it('returns undefined for a foreign app', async () => {
@@ -278,13 +279,24 @@ describe('moveStage', () => {
     expect(await moveStage(db, { userId: other.id, id: app.id, to: 'active' })).toBeUndefined();
   });
 
-  it('same-stage no-op returns the row and writes no stage_change', async () => {
+  it('same-stage no-op preserves sub-stage and writes no stage_change', async () => {
     const user = await createUser();
+    const [subStage] = await db
+      .insert(subStages)
+      .values({ userId: user.id, name: 'HR Screen', stage: 'active' })
+      .returning();
+
     const app = await ownedAppAt(user.id, 'active');
+
+    await db
+      .update(applications)
+      .set({ subStageId: subStage.id })
+      .where(eq(applications.id, app.id));
 
     const updated = await moveStage(db, { userId: user.id, id: app.id, to: 'active' });
 
     expect(updated?.stage).toBe('active');
+    expect(updated?.subStageId).toBe(subStage.id);
     expect(await activityTypes(app.id)).not.toContain('stage_change');
   });
 });

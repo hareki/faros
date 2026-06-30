@@ -54,18 +54,14 @@ describe('moveStageAction', () => {
 
   it('rejects to: closed with errorValidation (schema only allows applied/active/final_stages)', async () => {
     const email = 'move-stage-closed@example.com';
-    const user = await createVerifiedUser({ email, password: PASSWORD });
-    const hunt = await createJobHunt(user.id);
-    const [app] = await db
-      .insert(applications)
-      .values({ jobHuntId: hunt.id, company: 'Acme', role: 'Eng', stage: 'applied' })
-      .returning();
+
+    await createVerifiedUser({ email, password: PASSWORD });
 
     await signInAs(email, PASSWORD);
 
     const { moveStageAction } = await importAction();
     // @ts-expect-error - deliberately passing an invalid value to test schema rejection
-    const result = await moveStageAction({ id: app.id, to: 'closed' });
+    const result = await moveStageAction({ id: crypto.randomUUID(), to: 'closed' });
 
     expect(result).toEqual({ status: 'error', errorKey: 'errorValidation' });
   });
