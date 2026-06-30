@@ -199,5 +199,13 @@
       "passwordsMustMatch": "Passwords don't match",
       "resetSuccess": "Your password has been reset. Please log in."
     }
+  },
+  "application": {
+    "errors": {
+      "errorApplicationNotFound": "We couldn't find that application.",
+      "errorNoActiveJobHunt": "Start a hunt before adding applications.",
+      "errorSubStageInvalid": "That sub-stage isn't valid for this stage.",
+      "errorTagInvalid": "One of those tags is no longer available."
+    }
   }
 }

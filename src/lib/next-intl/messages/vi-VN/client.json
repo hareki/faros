@@ -199,5 +199,13 @@
       "passwordsMustMatch": "Mật khẩu không khớp",
       "resetSuccess": "Mật khẩu của bạn đã được đặt lại. Vui lòng đăng nhập."
     }
+  },
+  "application": {
+    "errors": {
+      "errorApplicationNotFound": "Không tìm thấy đơn ứng tuyển đó.",
+      "errorNoActiveJobHunt": "Hãy bắt đầu một đợt tìm việc trước khi thêm đơn.",
+      "errorSubStageInvalid": "Giai đoạn phụ đó không hợp lệ cho giai đoạn này.",
+      "errorTagInvalid": "Một trong các thẻ đó không còn khả dụng."
+    }
   }
 }
