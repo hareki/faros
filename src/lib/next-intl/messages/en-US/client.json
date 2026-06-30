@@ -157,6 +157,19 @@
       "add": "Mark as favorite",
       "remove": "Remove from favorites",
       "error": "Couldn't update favorite"
+    },
+    "filters": {
+      "tags": "Tags",
+      "subStage": "Sub-stage",
+      "source": "Source",
+      "workingModel": "Working model",
+      "clear": "Clear filters",
+      "all": "All"
+    },
+    "workingModels": {
+      "remote": "Remote",
+      "hybrid": "Hybrid",
+      "onsite": "Onsite"
     }
   },
   "auth": {

@@ -157,6 +157,19 @@
       "add": "Đánh dấu yêu thích",
       "remove": "Bỏ đánh dấu yêu thích",
       "error": "Không thể cập nhật mục yêu thích"
+    },
+    "filters": {
+      "tags": "Thẻ",
+      "subStage": "Giai đoạn phụ",
+      "source": "Nguồn",
+      "workingModel": "Hình thức làm việc",
+      "clear": "Xóa bộ lọc",
+      "all": "Tất cả"
+    },
+    "workingModels": {
+      "remote": "Từ xa",
+      "hybrid": "Kết hợp",
+      "onsite": "Tại văn phòng"
     }
   },
   "auth": {
