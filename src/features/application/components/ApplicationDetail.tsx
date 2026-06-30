@@ -44,6 +44,7 @@ export async function ApplicationDetail({ applicationId, variant }: ApplicationD
       messages={messages.applicationDetail}
       activityMessages={messages.activity}
       sourceMessages={messages.trackerBoard.sources}
+      favoriteLabels={messages.trackerBoard.favorite}
     />
   );
 }
