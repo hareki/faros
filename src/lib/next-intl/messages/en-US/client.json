@@ -208,6 +208,61 @@
       "errorTagInvalid": "One of those tags is no longer available."
     }
   },
+  "applicationDetail": {
+    "close": "Close",
+    "readOnlyBanner": "This hunt has ended. The application is read-only.",
+    "fields": {
+      "company": "Company",
+      "role": "Role",
+      "source": "Source",
+      "jdUrl": "Job posting URL",
+      "jdText": "Job description",
+      "location": "Location",
+      "workingModel": "Working model",
+      "salaryMin": "Salary min",
+      "salaryMax": "Salary max",
+      "salaryCurrency": "Currency",
+      "notes": "Notes"
+    },
+    "workingModels": { "remote": "Remote", "hybrid": "Hybrid", "onsite": "Onsite" },
+    "subStage": { "label": "Sub-stage", "placeholder": "No sub-stage", "none": "None" },
+    "tags": { "label": "Tags", "placeholder": "Add tags" },
+    "save": "Save",
+    "saved": "Saved",
+    "timelineTitle": "Activity",
+    "slots": { "resume": "Resume picker (coming soon)", "events": "Events (coming soon)" },
+    "errors": {
+      "errorApplicationNotFound": "We couldn't find that application.",
+      "errorSubStageInvalid": "That sub-stage isn't valid for this stage.",
+      "errorTagInvalid": "One of those tags is no longer available."
+    }
+  },
+  "activity": {
+    "created": "Application created",
+    "stage_change": "Moved from {from} to {to}",
+    "sub_stage_change": "Sub-stage set to {to}",
+    "sub_stage_cleared": "Sub-stage cleared",
+    "note_added": "Note added",
+    "response_received": "Response received",
+    "offer_received": "Offer received",
+    "event_scheduled": "Event scheduled",
+    "event_completed": "Event completed",
+    "event_cancelled": "Event cancelled",
+    "resume_changed": "Resume changed",
+    "closed": "Closed as {outcome}",
+    "stages": {
+      "applied": "Applied",
+      "active": "Active",
+      "final_stages": "Final Stages",
+      "closed": "Closed"
+    },
+    "outcomes": {
+      "rejected": "rejected",
+      "withdrawn": "withdrawn",
+      "accepted": "accepted",
+      "ghosted": "ghosted"
+    }
+  },
   "settings": {
     "subStages": {
       "title": "Sub-stages",

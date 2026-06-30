@@ -208,6 +208,65 @@
       "errorTagInvalid": "Một trong các thẻ đó không còn khả dụng."
     }
   },
+  "applicationDetail": {
+    "close": "Đóng",
+    "readOnlyBanner": "Đợt tìm việc này đã kết thúc. Đơn ứng tuyển ở chế độ chỉ đọc.",
+    "fields": {
+      "company": "Công ty",
+      "role": "Vị trí",
+      "source": "Nguồn",
+      "jdUrl": "URL tin tuyển dụng",
+      "jdText": "Mô tả công việc",
+      "location": "Địa điểm",
+      "workingModel": "Hình thức làm việc",
+      "salaryMin": "Lương tối thiểu",
+      "salaryMax": "Lương tối đa",
+      "salaryCurrency": "Đơn vị tiền tệ",
+      "notes": "Ghi chú"
+    },
+    "workingModels": { "remote": "Từ xa", "hybrid": "Kết hợp", "onsite": "Tại văn phòng" },
+    "subStage": {
+      "label": "Giai đoạn phụ",
+      "placeholder": "Không có giai đoạn phụ",
+      "none": "Không có"
+    },
+    "tags": { "label": "Thẻ", "placeholder": "Thêm thẻ" },
+    "save": "Lưu",
+    "saved": "Đã lưu",
+    "timelineTitle": "Hoạt động",
+    "slots": { "resume": "Chọn hồ sơ (sắp ra mắt)", "events": "Sự kiện (sắp ra mắt)" },
+    "errors": {
+      "errorApplicationNotFound": "Không tìm thấy đơn ứng tuyển đó.",
+      "errorSubStageInvalid": "Giai đoạn phụ đó không hợp lệ cho giai đoạn này.",
+      "errorTagInvalid": "Một trong các thẻ đó không còn khả dụng."
+    }
+  },
+  "activity": {
+    "created": "Đã tạo đơn ứng tuyển",
+    "stage_change": "Chuyển từ {from} sang {to}",
+    "sub_stage_change": "Giai đoạn phụ chuyển sang {to}",
+    "sub_stage_cleared": "Đã xóa giai đoạn phụ",
+    "note_added": "Đã thêm ghi chú",
+    "response_received": "Đã nhận phản hồi",
+    "offer_received": "Đã nhận offer",
+    "event_scheduled": "Đã lên lịch sự kiện",
+    "event_completed": "Sự kiện đã hoàn thành",
+    "event_cancelled": "Sự kiện đã bị hủy",
+    "resume_changed": "Đã thay đổi hồ sơ",
+    "closed": "Đã đóng - {outcome}",
+    "stages": {
+      "applied": "Đã nộp",
+      "active": "Đang phỏng vấn",
+      "final_stages": "Vòng cuối",
+      "closed": "Đã đóng"
+    },
+    "outcomes": {
+      "rejected": "bị từ chối",
+      "withdrawn": "đã rút",
+      "accepted": "được nhận",
+      "ghosted": "bị ghost"
+    }
+  },
   "settings": {
     "subStages": {
       "title": "Giai đoạn phụ",
