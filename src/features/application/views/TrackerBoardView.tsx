@@ -8,9 +8,10 @@ import { BOARD_STAGES, type BoardApplication } from '../types';
 type TrackerBoardViewProps = {
   messages: ClientMessages['trackerBoard'];
   applications: BoardApplication[];
+  jobHuntId: string | null;
 };
 
-export function TrackerBoardView({ messages, applications }: TrackerBoardViewProps) {
+export function TrackerBoardView({ messages, applications, jobHuntId }: TrackerBoardViewProps) {
   return (
     <div className='flex flex-1 items-start gap-4 overflow-x-auto overflow-y-hidden'>
       {BOARD_STAGES.map((stage) => (
@@ -25,6 +26,7 @@ export function TrackerBoardView({ messages, applications }: TrackerBoardViewPro
           sources={messages.sources}
           favoriteLabels={messages.favorite}
           applications={applications.filter((application) => application.stage === stage)}
+          jobHuntId={jobHuntId}
         />
       ))}
     </div>

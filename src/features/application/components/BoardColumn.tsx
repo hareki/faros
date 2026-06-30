@@ -20,6 +20,7 @@ type BoardColumnProps = {
   appliedOn: string;
   sources: ClientMessages['trackerBoard']['sources'];
   favoriteLabels: ClientMessages['trackerBoard']['favorite'];
+  jobHuntId: string | null;
 };
 
 export function BoardColumn({
@@ -32,6 +33,7 @@ export function BoardColumn({
   appliedOn,
   sources,
   favoriteLabels,
+  jobHuntId,
 }: BoardColumnProps) {
   return (
     <section
@@ -71,6 +73,7 @@ export function BoardColumn({
               appliedOn={appliedOn}
               sources={sources}
               favoriteLabels={favoriteLabels}
+              jobHuntId={jobHuntId}
             />
           ))}
         </div>

@@ -1,4 +1,5 @@
 import { IconCalendar, IconMessages, IconStar, IconStarFilled } from '@tabler/icons-react';
+import Link from 'next/link';
 import { useLocale } from 'next-intl';
 
 import { Badge } from '@/src/components/ui/Badge';
@@ -27,6 +28,7 @@ type ApplicationCardProps = {
   appliedOn: string;
   sources: ClientMessages['trackerBoard']['sources'];
   favoriteLabels: ClientMessages['trackerBoard']['favorite'];
+  jobHuntId: string | null;
 };
 
 export function ApplicationCard({
@@ -35,6 +37,7 @@ export function ApplicationCard({
   appliedOn,
   sources,
   favoriteLabels,
+  jobHuntId,
 }: ApplicationCardProps) {
   const { company, role, stage, subStage, tags, source, appliedAt } = application;
   const locale = useLocale();
@@ -54,7 +57,7 @@ export function ApplicationCard({
 
   const favoriteLabel = favorite ? favoriteLabels.remove : favoriteLabels.add;
 
-  return (
+  const card = (
     <Card size='sm' className='shrink-0 cursor-pointer rounded-3xl'>
       <CardHeader>
         <CardTitle className='font-semibold text-pretty'>{company}</CardTitle>
@@ -68,7 +71,8 @@ export function ApplicationCard({
             aria-label={favoriteLabel}
             aria-pressed={favorite}
             onClick={(event) => {
-              event.stopPropagation(); // the card itself becomes clickable (opens drawer) later
+              event.preventDefault(); // stop the anchor's default navigation
+              event.stopPropagation(); // stop bubbling to the card link
               toggle();
             }}
             className={cn(
@@ -152,4 +156,14 @@ export function ApplicationCard({
       </CardFooter>
     </Card>
   );
+
+  if (jobHuntId !== null) {
+    return (
+      <Link href={`/tracker-board/${application.id}?job_hunt=${jobHuntId}`} className='block'>
+        {card}
+      </Link>
+    );
+  }
+
+  return card;
 }

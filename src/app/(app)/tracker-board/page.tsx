@@ -36,5 +36,11 @@ export default async function TrackerBoard({ searchParams }: TrackerBoardProps) 
   const messages = await getClientMessages();
   const applications = selectedJobHunt ? await getBoardApplications(db, selectedJobHunt.id) : [];
 
-  return <TrackerBoardView messages={messages.trackerBoard} applications={applications} />;
+  return (
+    <TrackerBoardView
+      messages={messages.trackerBoard}
+      applications={applications}
+      jobHuntId={selectedJobHunt?.id ?? null}
+    />
+  );
 }
