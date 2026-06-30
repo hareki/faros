@@ -6,6 +6,7 @@ import NextLink from 'next/link';
 import { Button } from '@/src/components/ui/Button';
 import { DialogClose } from '@/src/components/ui/Dialog';
 import { H3, H4, Muted } from '@/src/components/ui/Typography';
+import { ActivityTimeline } from '@/src/features/application/components/ActivityTimeline';
 import { ApplicationMetadataForm } from '@/src/features/application/components/ApplicationMetadataForm';
 import { SubStagePicker } from '@/src/features/application/components/SubStagePicker';
 import { TagPicker } from '@/src/features/application/components/TagPicker';
@@ -40,9 +41,11 @@ type ApplicationDetailViewProps = {
 export function ApplicationDetailView({
   variant,
   detail,
+  activity,
   subStages,
   tags,
   messages,
+  activityMessages,
   sourceMessages,
   favoriteLabels,
 }: ApplicationDetailViewProps) {
@@ -148,7 +151,7 @@ export function ApplicationDetailView({
         {/* RIGHT column */}
         <div className='flex flex-col gap-4'>
           <H4>{messages.timelineTitle}</H4>
-          {/* Task 4.7: activity timeline (readOnly prop) */}
+          <ActivityTimeline activity={activity} messages={activityMessages} />
         </div>
       </div>
     </div>
