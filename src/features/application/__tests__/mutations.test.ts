@@ -5,6 +5,7 @@ import { db } from '@/src/db/client';
 import { activityLog, applications } from '@/src/db/schema';
 import {
   createApplication,
+  moveStage,
   setFavorite,
   updateApplication,
 } from '@/src/features/application/db/mutations';
@@ -222,5 +223,68 @@ describe('updateApplication', () => {
     await updateApplication(db, { userId: user.id, id: app.id, data: { notes: null } });
 
     expect(await activityTypes(app.id)).toEqual(['note_added']);
+  });
+});
+
+describe('moveStage', () => {
+  async function ownedAppAt(
+    userId: string,
+    stage: 'applied' | 'active' | 'final_stages' | 'closed',
+  ) {
+    const hunt = await createJobHunt(userId);
+    const [app] = await db
+      .insert(applications)
+      .values({
+        jobHuntId: hunt.id,
+        company: 'Acme',
+        role: 'Eng',
+        stage,
+        ...(stage === 'closed'
+          ? { closedOutcome: 'withdrawn' as const, closedAt: new Date() }
+          : {}),
+      })
+      .returning();
+
+    return app;
+  }
+
+  it('moves applied => active, clears sub-stage, derives first response', async () => {
+    const user = await createUser();
+    const app = await ownedAppAt(user.id, 'applied');
+
+    const updated = await moveStage(db, { userId: user.id, id: app.id, to: 'active' });
+
+    expect(updated?.stage).toBe('active');
+    expect(updated?.subStageId).toBeNull();
+    expect(await activityTypes(app.id)).toEqual(['response_received', 'stage_change']);
+  });
+
+  it('re-opening from closed clears closed columns', async () => {
+    const user = await createUser();
+    const app = await ownedAppAt(user.id, 'closed');
+
+    const updated = await moveStage(db, { userId: user.id, id: app.id, to: 'active' });
+
+    expect(updated?.stage).toBe('active');
+    expect(updated?.closedOutcome).toBeNull();
+    expect(updated?.closedAt).toBeNull();
+  });
+
+  it('returns undefined for a foreign app', async () => {
+    const owner = await createUser();
+    const other = await createUser();
+    const app = await ownedAppAt(owner.id, 'applied');
+
+    expect(await moveStage(db, { userId: other.id, id: app.id, to: 'active' })).toBeUndefined();
+  });
+
+  it('same-stage no-op returns the row and writes no stage_change', async () => {
+    const user = await createUser();
+    const app = await ownedAppAt(user.id, 'active');
+
+    const updated = await moveStage(db, { userId: user.id, id: app.id, to: 'active' });
+
+    expect(updated?.stage).toBe('active');
+    expect(await activityTypes(app.id)).not.toContain('stage_change');
   });
 });

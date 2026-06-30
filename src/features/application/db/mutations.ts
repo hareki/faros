@@ -7,6 +7,7 @@ import {
   ensureResponseReceived,
   logActivity,
   recordClose,
+  recordStageChange,
 } from '@/src/features/activity/db/mutations';
 import { applications } from '@/src/features/application/db/schema';
 import {
@@ -176,4 +177,48 @@ export async function createApplication(
   }
 
   return row;
+}
+
+type MoveStageParams = { userId: string; id: string; to: Exclude<BoardStage, 'closed'> };
+
+/**
+ * Moves an owned application between non-closed stages (or re-opens it from Closed). Clears
+ * `sub_stage_id` (a stage move invalidates the stage-bound sub-stage, ADR-0001) and any closed
+ * columns, then stamps `stage_change` via `recordStageChange`, which auto-derives the first
+ * `response_received` on `applied => active/final_stages`. Closing is `closeApplication`'s job,
+ * never this one. Returns the updated row, or `undefined` when no owned app matches.
+ */
+export async function moveStage(executor: DbExecutor, { userId, id, to }: MoveStageParams) {
+  const current = await executor
+    .select({ stage: applications.stage })
+    .from(applications)
+    .where(
+      and(
+        eq(applications.id, id),
+        inArray(applications.jobHuntId, ownedJobHuntIds(executor, userId)),
+      ),
+    )
+    .then((rows) => rows.at(0));
+
+  if (!current) {
+    return undefined;
+  }
+
+  const [updated] = await executor
+    .update(applications)
+    .set({
+      stage: to,
+      subStageId: null,
+      closedOutcome: null,
+      closedAt: null,
+      updatedAt: new Date(),
+    })
+    .where(eq(applications.id, id))
+    .returning();
+
+  if (current.stage !== to) {
+    await recordStageChange(executor, { applicationId: id, from: current.stage, to });
+  }
+
+  return updated;
 }
