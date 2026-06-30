@@ -7,6 +7,8 @@ import { Button } from '@/src/components/ui/Button';
 import { DialogClose } from '@/src/components/ui/Dialog';
 import { H3, H4, Muted } from '@/src/components/ui/Typography';
 import { ApplicationMetadataForm } from '@/src/features/application/components/ApplicationMetadataForm';
+import { SubStagePicker } from '@/src/features/application/components/SubStagePicker';
+import { TagPicker } from '@/src/features/application/components/TagPicker';
 import {
   type ActivityEntry,
   type ApplicationDetail,
@@ -38,6 +40,8 @@ type ApplicationDetailViewProps = {
 export function ApplicationDetailView({
   variant,
   detail,
+  subStages,
+  tags,
   messages,
   sourceMessages,
   favoriteLabels,
@@ -124,8 +128,13 @@ export function ApplicationDetailView({
             sourceMessages={sourceMessages}
             readOnly={readOnly}
           />
-          {/* Task 4.6: sub-stage picker (readOnly prop) */}
-          {/* Task 4.6: tags (readOnly prop) */}
+          <SubStagePicker
+            detail={detail}
+            subStages={subStages}
+            messages={messages}
+            readOnly={readOnly}
+          />
+          <TagPicker detail={detail} tags={tags} messages={messages} readOnly={readOnly} />
 
           {/* Static coming-soon placeholders */}
           <div className='rounded-lg border border-dashed border-border px-4 py-3'>
