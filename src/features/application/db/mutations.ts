@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { and, eq, inArray } from 'drizzle-orm';
+import { and, eq, inArray, ne } from 'drizzle-orm';
 
 import { type DbExecutor } from '@/src/db/client';
 import {
@@ -23,35 +23,57 @@ import {
 } from '@/src/features/application/types';
 import { jobHunts } from '@/src/features/job-hunt/db/schema';
 
-// All applications whose hunt belongs to the user - the ownership predicate every
-// application mutation filters by (subquery form, like the original setFavorite).
-function ownedJobHuntIds(executor: DbExecutor, userId: string) {
-  return executor.select({ id: jobHunts.id }).from(jobHunts).where(eq(jobHunts.userId, userId));
+// The user's hunts that still accept writes. An ended hunt is frozen history (ADR-0002/ADR-0008),
+// so its applications are excluded - that is what makes the editing mutations reject writes to an
+// ended hunt at the database level, not just in the UI.
+function writableJobHuntIds(executor: DbExecutor, userId: string) {
+  return executor
+    .select({ id: jobHunts.id })
+    .from(jobHunts)
+    .where(and(eq(jobHunts.userId, userId), ne(jobHunts.status, 'ended')));
+}
+
+// Loads the full application row only when it exists, is owned by `userId`, and its hunt still
+// accepts writes. A single `undefined` therefore covers all three "not writable" cases (missing,
+// foreign, or ended-hunt), so every editing mutation can keep mapping it to its existing
+// not-found result. Returning the full row lets callers read current-state columns from it.
+function requireWritableApplication(executor: DbExecutor, userId: string, id: string) {
+  return executor
+    .select()
+    .from(applications)
+    .where(
+      and(
+        eq(applications.id, id),
+        inArray(applications.jobHuntId, writableJobHuntIds(executor, userId)),
+      ),
+    )
+    .then((rows) => rows.at(0));
 }
 
 type SetFavoriteParams = { userId: string; id: string; favorite: boolean };
 
 /**
- * Sets `favorite` to an explicit target value on an application the user owns. Ownership flows
- * application => job_hunt => user, so the update is scoped to applications whose `job_hunt_id`
- * belongs to the caller (the subquery is the ownership check). Takes the target value rather than
- * blindly flipping, so an optimistic UI stays idempotent and race-safe (last write wins). Does
- * not write to `activity_log` — favorite is organizational, not a milestone (ADR-0007). Returns
- * the updated row, or `undefined` when no owned application matches (wrong id or not the owner).
+ * Sets `favorite` to an explicit target value on an application the user owns. Ownership and
+ * writability flow application => job_hunt => user via {@link requireWritableApplication}. Takes
+ * the target value rather than blindly flipping, so an optimistic UI stays idempotent and
+ * race-safe (last write wins). Does not write to `activity_log` — favorite is organizational, not
+ * a milestone (ADR-0007). Returns the updated row, or `undefined` when no writable application
+ * matches (wrong id, not the owner, or the owning hunt has ended).
  */
 export async function setFavorite(
   executor: DbExecutor,
   { userId, id, favorite }: SetFavoriteParams,
 ) {
+  const app = await requireWritableApplication(executor, userId, id);
+
+  if (!app) {
+    return undefined;
+  }
+
   const rows = await executor
     .update(applications)
     .set({ favorite, updatedAt: new Date() })
-    .where(
-      and(
-        eq(applications.id, id),
-        inArray(applications.jobHuntId, ownedJobHuntIds(executor, userId)),
-      ),
-    )
+    .where(eq(applications.id, id))
     .returning();
 
   return rows.at(0);
@@ -82,23 +104,14 @@ function hasNoteContent(notes: string | null | undefined): boolean {
 /**
  * Owner-scoped update of an application's editable metadata. Writes a single `note_added`
  * activity only on the empty => non-empty `notes` transition (other metadata edits are not
- * milestones, so they log nothing). Returns the updated row, or `undefined` when no owned app
- * matches.
+ * milestones, so they log nothing). Returns the updated row, or `undefined` when no writable app
+ * matches (wrong id, not the owner, or the owning hunt has ended).
  */
 export async function updateApplication(
   executor: DbExecutor,
   { userId, id, data }: UpdateApplicationParams,
 ) {
-  const current = await executor
-    .select({ notes: applications.notes })
-    .from(applications)
-    .where(
-      and(
-        eq(applications.id, id),
-        inArray(applications.jobHuntId, ownedJobHuntIds(executor, userId)),
-      ),
-    )
-    .then((rows) => rows.at(0));
+  const current = await requireWritableApplication(executor, userId, id);
 
   if (!current) {
     return undefined;
@@ -194,19 +207,10 @@ type MoveStageParams = { userId: string; id: string; to: Exclude<BoardStage, 'cl
  * columns, then stamps `stage_change` via `recordStageChange`, which auto-derives the first
  * `response_received` on `applied => active/final_stages`. Closing is `closeApplication`'s job,
  * never this one. Returns the updated row (or unchanged row on same-stage), or `undefined` when
- * no owned app matches.
+ * no writable app matches (wrong id, not the owner, or the owning hunt has ended).
  */
 export async function moveStage(executor: DbExecutor, { userId, id, to }: MoveStageParams) {
-  const current = await executor
-    .select()
-    .from(applications)
-    .where(
-      and(
-        eq(applications.id, id),
-        inArray(applications.jobHuntId, ownedJobHuntIds(executor, userId)),
-      ),
-    )
-    .then((rows) => rows.at(0));
+  const current = await requireWritableApplication(executor, userId, id);
 
   if (!current) {
     return undefined;
@@ -244,22 +248,14 @@ type SetSubStageParams = { userId: string; id: string; subStageId: string | null
  * Sets (or clears, with `null`) an owned application's sub-stage. The target sub-stage must
  * belong to the user and match the app's current stage (the composite FK is the DB backstop,
  * ADR-0001). Logs `sub_stage_change` with sub-stage names - not ids - so the timeline reads
- * correctly after a later rename or delete.
+ * correctly after a later rename or delete. Yields `application_not_found` when no writable app
+ * matches (wrong id, not the owner, or the owning hunt has ended).
  */
 export async function setSubStage(
   executor: DbExecutor,
   { userId, id, subStageId }: SetSubStageParams,
 ): Promise<SetSubStageResult> {
-  const app = await executor
-    .select({ stage: applications.stage, subStageId: applications.subStageId })
-    .from(applications)
-    .where(
-      and(
-        eq(applications.id, id),
-        inArray(applications.jobHuntId, ownedJobHuntIds(executor, userId)),
-      ),
-    )
-    .then((rows) => rows.at(0));
+  const app = await requireWritableApplication(executor, userId, id);
 
   if (!app) {
     return { status: 'application_not_found' };
@@ -312,23 +308,14 @@ type CloseApplicationParams = { userId: string; id: string; outcome: ClosedOutco
 /**
  * Closes an owned application: sets `stage='closed'` with the outcome + `closedAt`, clears the
  * sub-stage, and records the `closed` activity via `recordClose` (which derives the
- * outcome-implied response/offer). Returns the updated row, or `undefined` when no owned app
- * matches.
+ * outcome-implied response/offer). Returns the updated row, or `undefined` when no writable app
+ * matches (wrong id, not the owner, or the owning hunt has ended).
  */
 export async function closeApplication(
   executor: DbExecutor,
   { userId, id, outcome }: CloseApplicationParams,
 ) {
-  const current = await executor
-    .select({ id: applications.id })
-    .from(applications)
-    .where(
-      and(
-        eq(applications.id, id),
-        inArray(applications.jobHuntId, ownedJobHuntIds(executor, userId)),
-      ),
-    )
-    .then((rows) => rows.at(0));
+  const current = await requireWritableApplication(executor, userId, id);
 
   if (!current) {
     return undefined;
@@ -363,21 +350,14 @@ type SetTagsParams = { userId: string; id: string; tagIds: string[] };
 /**
  * Replaces an owned application's tag set. Every tag id must belong to the user. Tags are
  * filter-only/organizational, so this writes no activity (mirrors `setFavorite`, ADR-0007).
+ * Yields `application_not_found` when no writable app matches (wrong id, not the owner, or the
+ * owning hunt has ended).
  */
 export async function setTags(
   executor: DbExecutor,
   { userId, id, tagIds }: SetTagsParams,
 ): Promise<SetTagsResult> {
-  const app = await executor
-    .select({ id: applications.id })
-    .from(applications)
-    .where(
-      and(
-        eq(applications.id, id),
-        inArray(applications.jobHuntId, ownedJobHuntIds(executor, userId)),
-      ),
-    )
-    .then((rows) => rows.at(0));
+  const app = await requireWritableApplication(executor, userId, id);
 
   if (!app) {
     return { status: 'application_not_found' };

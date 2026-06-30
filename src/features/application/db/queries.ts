@@ -209,7 +209,13 @@ export async function getApplicationDetail(
   return { ...rest, tagIds: tagRows.map((t) => t.tagId), readOnly: huntStatus === 'ended' };
 }
 
-/** An application's activity timeline, newest first, for the detail surface. */
+/**
+ * An application's activity timeline, newest first, for the detail surface.
+ *
+ * Precondition: this selects by `applicationId` alone and does no ownership check, so callers
+ * MUST first verify the current user owns `applicationId` (e.g. via {@link getApplicationDetail})
+ * before calling it.
+ */
 export async function getApplicationActivity(
   executor: DbExecutor,
   applicationId: string,

@@ -19,7 +19,10 @@ The detail is a Next.js parallel + intercepting route under `tracker-board/`:
   timeline, and the user's sub-stages/tags, then pass typed props to the client editing view.
   A Suspense boundary streams a skeleton while the fetch resolves (no spinner, no client-side
   read round-trip), consistent with the codebase's RSC-fetch-then-props convention.
-- An ended hunt's detail is read-only (its board is already a frozen snapshot).
+- An ended hunt's detail is read-only (its board is already a frozen snapshot). This read-only
+  rule is enforced server-side, not only in the UI: the editing mutations reject any write to an
+  application whose hunt has ended via `requireWritableApplication`, so a stale client cannot
+  mutate frozen history.
 
 ## Consequences
 

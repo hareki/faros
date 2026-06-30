@@ -541,3 +541,122 @@ describe('closeApplication', () => {
     ).toBeUndefined();
   });
 });
+
+describe('ended hunt is read-only (server-enforced)', () => {
+  // ADR-0002/ADR-0008: an ended hunt is frozen history, so the editing mutations must reject
+  // writes to an application under it even for the owner - otherwise a stale client could write
+  // activity rows that corrupt the frozen funnel. Each case asserts the not-found result, an
+  // unchanged row, and no new activity.
+  async function endedHuntApp(
+    userId: string,
+    overrides: {
+      stage?: 'applied' | 'active' | 'final_stages' | 'closed';
+      favorite?: boolean;
+    } = {},
+  ) {
+    const hunt = await createJobHunt(userId, { status: 'ended' });
+    const [app] = await db
+      .insert(applications)
+      .values({
+        jobHuntId: hunt.id,
+        company: 'Acme',
+        role: 'Eng',
+        stage: overrides.stage ?? 'active',
+        favorite: overrides.favorite ?? false,
+      })
+      .returning();
+
+    return app;
+  }
+
+  async function reload(id: string) {
+    const [row] = await db.select().from(applications).where(eq(applications.id, id));
+
+    return row;
+  }
+
+  it('setFavorite refuses to toggle and leaves the row unchanged', async () => {
+    const user = await createUser();
+    const app = await endedHuntApp(user.id, { favorite: false });
+
+    const result = await setFavorite(db, { userId: user.id, id: app.id, favorite: true });
+
+    expect(result).toBeUndefined();
+    expect((await reload(app.id)).favorite).toBe(false);
+  });
+
+  it('updateApplication refuses to edit and logs no note_added', async () => {
+    const user = await createUser();
+    const app = await endedHuntApp(user.id);
+
+    const result = await updateApplication(db, {
+      userId: user.id,
+      id: app.id,
+      data: { company: 'NewCo', notes: 'a real note' },
+    });
+
+    expect(result).toBeUndefined();
+    expect((await reload(app.id)).company).toBe('Acme');
+    expect(await activityTypes(app.id)).toEqual([]);
+  });
+
+  it('moveStage refuses to move and logs no stage_change', async () => {
+    const user = await createUser();
+    const app = await endedHuntApp(user.id, { stage: 'applied' });
+
+    const result = await moveStage(db, { userId: user.id, id: app.id, to: 'active' });
+
+    expect(result).toBeUndefined();
+    expect((await reload(app.id)).stage).toBe('applied');
+    expect(await activityTypes(app.id)).toEqual([]);
+  });
+
+  it('setSubStage refuses to set and logs no sub_stage_change', async () => {
+    const user = await createUser();
+    const app = await endedHuntApp(user.id, { stage: 'active' });
+    const [sub] = await db
+      .insert(subStages)
+      .values({ userId: user.id, stage: 'active', name: 'HR Screen', sortOrder: 0 })
+      .returning();
+
+    const result = await setSubStage(db, { userId: user.id, id: app.id, subStageId: sub.id });
+
+    expect(result).toEqual({ status: 'application_not_found' });
+    expect((await reload(app.id)).subStageId).toBeNull();
+    expect(await activityTypes(app.id)).toEqual([]);
+  });
+
+  it('closeApplication refuses to close and logs no closed', async () => {
+    const user = await createUser();
+    const app = await endedHuntApp(user.id, { stage: 'active' });
+
+    const result = await closeApplication(db, {
+      userId: user.id,
+      id: app.id,
+      outcome: 'rejected',
+    });
+
+    expect(result).toBeUndefined();
+    const row = await reload(app.id);
+
+    expect(row.stage).toBe('active');
+    expect(row.closedOutcome).toBeNull();
+    expect(await activityTypes(app.id)).toEqual([]);
+  });
+
+  it('setTags refuses to assign tags', async () => {
+    const user = await createUser();
+    const app = await endedHuntApp(user.id);
+    const [tag] = await db.insert(tags).values({ userId: user.id, name: 'remote' }).returning();
+
+    const result = await setTags(db, { userId: user.id, id: app.id, tagIds: [tag.id] });
+
+    expect(result).toEqual({ status: 'application_not_found' });
+    const joined = await db
+      .select({ tagId: applicationTags.tagId })
+      .from(applicationTags)
+      .where(eq(applicationTags.applicationId, app.id));
+
+    expect(joined).toHaveLength(0);
+  });
+});

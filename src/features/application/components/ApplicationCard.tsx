@@ -80,12 +80,19 @@ export function ApplicationCard({
           <Button
             size='icon-sm'
             variant='ghost'
+            disabled={readOnly}
             tooltip={favoriteLabel}
             aria-label={favoriteLabel}
             aria-pressed={favorite}
             onClick={(event) => {
               event.preventDefault(); // stop the anchor's default navigation
               event.stopPropagation(); // stop bubbling to the card link
+
+              if (readOnly) {
+                // An ended hunt is frozen history (read-only); the server rejects the write too.
+                return;
+              }
+
               toggle();
             }}
             className={cn(
