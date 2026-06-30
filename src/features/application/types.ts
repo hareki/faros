@@ -18,6 +18,23 @@ export const BOARD_STAGES = [
 export type BoardSubStage = { id: string; name: string };
 export type BoardTag = { id: string; name: string; color: string | null };
 
+/** Source enum values as a client-safe literal array (for filters + selects). */
+export const APPLICATION_SOURCES = [
+  'linkedin',
+  'itviec',
+  'referral',
+  'direct',
+  'recruiter',
+  'other',
+] as const satisfies readonly ApplicationSource[];
+
+/** Working-model enum values as a client-safe literal array. */
+export const WORKING_MODELS = [
+  'remote',
+  'hybrid',
+  'onsite',
+] as const satisfies readonly WorkingModel[];
+
 /**
  * Everything a board card needs to render. The card currently paints only company +
  * role; the rest (sub-stage chip, tag chips, source icon) is fleshed out in the card todo.

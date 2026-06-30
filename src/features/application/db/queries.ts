@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { and, asc, desc, eq } from 'drizzle-orm';
+import { and, asc, desc, eq, inArray } from 'drizzle-orm';
 
 import { type DbExecutor } from '@/src/db/client';
 import { activityLog } from '@/src/features/activity/db/schema';
@@ -19,6 +19,13 @@ import {
 } from '@/src/features/application/types';
 import { jobHunts } from '@/src/features/job-hunt/db/schema';
 
+export type BoardFilters = {
+  tagIds?: string[];
+  subStageId?: string | null;
+  source?: ApplicationSource | null;
+  workingModel?: WorkingModel | null;
+};
+
 /**
  * Every application on a hunt's board, newest first, shaped for the card (sub-stage + tags
  * joined). The hunt's ownership is settled upstream — a resolved `JobHuntSummary` only ever
@@ -27,9 +34,36 @@ import { jobHunts } from '@/src/features/job-hunt/db/schema';
 export async function getBoardApplications(
   executor: DbExecutor,
   jobHuntId: string,
+  filters: BoardFilters = {},
 ): Promise<BoardApplication[]> {
+  const conditions = [eq(applications.jobHuntId, jobHuntId)];
+
+  if (filters.source) {
+    conditions.push(eq(applications.source, filters.source));
+  }
+
+  if (filters.workingModel) {
+    conditions.push(eq(applications.workingModel, filters.workingModel));
+  }
+
+  if (filters.subStageId) {
+    conditions.push(eq(applications.subStageId, filters.subStageId));
+  }
+
+  if (filters.tagIds && filters.tagIds.length > 0) {
+    conditions.push(
+      inArray(
+        applications.id,
+        executor
+          .select({ id: applicationTags.applicationId })
+          .from(applicationTags)
+          .where(inArray(applicationTags.tagId, filters.tagIds)),
+      ),
+    );
+  }
+
   const rows = await executor.query.applications.findMany({
-    where: eq(applications.jobHuntId, jobHuntId),
+    where: and(...conditions),
     orderBy: desc(applications.appliedAt),
     columns: {
       id: true,

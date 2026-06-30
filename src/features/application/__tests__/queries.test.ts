@@ -50,7 +50,7 @@ describe('getBoardApplications', () => {
     });
   });
 
-  it('returns only the requested hunt’s applications', async () => {
+  it("returns only the requested hunt's applications", async () => {
     const user = await createUser();
     const huntA = await createJobHunt(user.id, { name: 'A' });
     const huntB = await createJobHunt(user.id, { name: 'B', status: 'ended' });
@@ -60,5 +60,27 @@ describe('getBoardApplications', () => {
     const board = await getBoardApplications(db, huntA.id);
 
     expect(board).toHaveLength(0);
+  });
+});
+
+describe('getBoardApplications filters', () => {
+  it('returns only apps carrying a selected tag', async () => {
+    const user = await createUser();
+    const hunt = await createJobHunt(user.id);
+    const [tagged, _plain] = await db
+      .insert(applications)
+      .values([
+        { jobHuntId: hunt.id, company: 'Tagged', role: 'Eng' },
+        { jobHuntId: hunt.id, company: 'Plain', role: 'Eng' },
+      ])
+      .returning();
+    const [remote] = await db.insert(tags).values({ userId: user.id, name: 'remote' }).returning();
+
+    await db.insert(applicationTags).values({ applicationId: tagged.id, tagId: remote.id });
+
+    const result = await getBoardApplications(db, hunt.id, { tagIds: [remote.id] });
+
+    expect(result.map((a) => a.company)).toEqual(['Tagged']);
+    expect(result.map((a) => a.company)).not.toContain('Plain');
   });
 });

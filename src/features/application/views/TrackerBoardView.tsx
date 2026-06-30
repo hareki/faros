@@ -3,12 +3,16 @@
 import { type ClientMessages } from '@/src/lib/next-intl/utils/clientMessages';
 
 import { BoardColumn } from '../components/BoardColumn';
+import { type SubStageRow, type TagRow } from '../db/queries';
 import { BOARD_STAGES, type BoardApplication } from '../types';
 
 type TrackerBoardViewProps = {
   messages: ClientMessages['trackerBoard'];
   applications: BoardApplication[];
   jobHuntId: string | null;
+  readOnly: boolean;
+  subStages: SubStageRow[];
+  tags: TagRow[];
 };
 
 export function TrackerBoardView({ messages, applications, jobHuntId }: TrackerBoardViewProps) {
