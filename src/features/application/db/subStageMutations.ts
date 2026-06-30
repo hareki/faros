@@ -54,6 +54,23 @@ export async function renameSubStage(
   return rows.at(0);
 }
 
+/**
+ * Rewrites `sortOrder` to the given order within one (user, stage). Callers pass a transaction
+ * handle so the renumbering is atomic. Ids not owned by the user (or in another stage) are
+ * silently skipped by the predicate.
+ */
+export async function reorderSubStages(
+  executor: DbExecutor,
+  { userId, stage, orderedIds }: { userId: string; stage: StageBound; orderedIds: string[] },
+): Promise<void> {
+  for (const [index, id] of orderedIds.entries()) {
+    await executor
+      .update(subStages)
+      .set({ sortOrder: index })
+      .where(and(eq(subStages.id, id), eq(subStages.userId, userId), eq(subStages.stage, stage)));
+  }
+}
+
 /** Deletes an owned sub-stage (apps referencing it have `sub_stage_id` set null by the FK). */
 export async function deleteSubStage(
   executor: DbExecutor,

@@ -6,6 +6,7 @@ import { subStages } from '@/src/db/schema';
 import {
   createSubStage,
   deleteSubStage,
+  reorderSubStages,
   renameSubStage,
 } from '@/src/features/application/db/subStageMutations';
 import { createUser } from '@/src/lib/vitest/helpers/db';
@@ -29,6 +30,31 @@ describe('createSubStage', () => {
     await expect(
       createSubStage(db, { userId: user.id, stage: 'active', name: 'HR' }),
     ).rejects.toThrow();
+  });
+});
+
+describe('reorderSubStages', () => {
+  it('rewrites sortOrder to match the given order', async () => {
+    const user = await createUser();
+    const a = await createSubStage(db, { userId: user.id, stage: 'active', name: 'A' });
+    const b = await createSubStage(db, { userId: user.id, stage: 'active', name: 'B' });
+    const c = await createSubStage(db, { userId: user.id, stage: 'active', name: 'C' });
+
+    await reorderSubStages(db, {
+      userId: user.id,
+      stage: 'active',
+      orderedIds: [c.id, a.id, b.id],
+    });
+
+    const rows = await db
+      .select({ id: subStages.id, sortOrder: subStages.sortOrder })
+      .from(subStages)
+      .where(eq(subStages.userId, user.id));
+    const order = Object.fromEntries(rows.map((r) => [r.id, r.sortOrder]));
+
+    expect(order[c.id]).toBe(0);
+    expect(order[a.id]).toBe(1);
+    expect(order[b.id]).toBe(2);
   });
 });
 

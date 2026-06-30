@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { db } from '@/src/db/client';
 import { subStages } from '@/src/db/schema';
+import { createSubStage } from '@/src/features/application/db/subStageMutations';
 import { signInAs } from '@/src/lib/vitest/helpers/auth';
 import { createUser, createVerifiedUser } from '@/src/lib/vitest/helpers/db';
 
@@ -22,6 +23,10 @@ function importRenameAction() {
 
 function importDeleteAction() {
   return import('@/src/features/application/actions/deleteSubStageAction');
+}
+
+function importReorderAction() {
+  return import('@/src/features/application/actions/reorderSubStagesAction');
 }
 
 describe('createSubStageAction', () => {
@@ -114,5 +119,39 @@ describe('deleteSubStageAction', () => {
     const result = await deleteSubStageAction({ id: sub.id });
 
     expect(result).toEqual({ status: 'error', errorKey: 'errorSubStageNotFound' });
+  });
+});
+
+// Intentional coverage: reorderSubStagesAction wraps a db.transaction — an envelope-only check
+// would not catch an uncommitted-transaction bug, so this test asserts the reorder actually
+// persisted through the action.
+describe('reorderSubStagesAction', () => {
+  it('persists the new sortOrder for each sub-stage through the action', async () => {
+    const email = 'reorder-sub-stages-success@example.com';
+    const user = await createVerifiedUser({ email, password: PASSWORD });
+
+    const a = await createSubStage(db, { userId: user.id, stage: 'active', name: 'A' });
+    const b = await createSubStage(db, { userId: user.id, stage: 'active', name: 'B' });
+    const c = await createSubStage(db, { userId: user.id, stage: 'active', name: 'C' });
+
+    await signInAs(email, PASSWORD);
+
+    const { reorderSubStagesAction } = await importReorderAction();
+    const result = await reorderSubStagesAction({
+      stage: 'active',
+      orderedIds: [c.id, a.id, b.id],
+    });
+
+    expect(result).toEqual({ status: 'success' });
+
+    const rows = await db
+      .select({ id: subStages.id, sortOrder: subStages.sortOrder })
+      .from(subStages)
+      .where(eq(subStages.userId, user.id));
+    const order = Object.fromEntries(rows.map((r) => [r.id, r.sortOrder]));
+
+    expect(order[c.id]).toBe(0);
+    expect(order[a.id]).toBe(1);
+    expect(order[b.id]).toBe(2);
   });
 });
