@@ -155,7 +155,8 @@
     },
     "favorite": {
       "add": "Đánh dấu yêu thích",
-      "remove": "Bỏ đánh dấu yêu thích"
+      "remove": "Bỏ đánh dấu yêu thích",
+      "error": "Không thể cập nhật mục yêu thích"
     }
   },
   "auth": {

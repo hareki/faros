@@ -83,15 +83,15 @@ Dependency-ordered. Each feature: sketch static UI → build BE → wire FE.
 - [x] [FE] Sketch card: company, role, sub-stage chip, tag chips, source footer → screens.md: Tracker Board (Cards)
 - [x] [BE] Add `favorite` boolean to `applications` (not null, default false) + migration → ADR-0007
 - [x] [FE] Favorite star toggle on card (local-only; reveal-on-hover/focus) → screens.md: Tracker Board (Cards)
-- [ ] [BE] Server action `toggleFavorite` — updates `applications.favorite`; no activity-log write (ADR-0007)
-- [ ] [FE] Wire favorite star to `toggleFavorite` (replace local state)
+- [x] [BE] Server action `toggleFavorite` — updates `applications.favorite`; no activity-log write (ADR-0007)
+- [x] [FE] Wire favorite star to `toggleFavorite` (replace local state)
 - [ ] [FE] Sketch card detail drawer: all metadata, activity-log timeline, resume-picker slot, notes (Lexical), event-list slot → screens.md: Application Detail Drawer
 - [ ] [BE] Sub-stage CRUD per user per stage (settings screen)
 - [ ] [BE] Tag CRUD per user
-- [ ] [BE] Board read query (apps grouped by stage for the active hunt)
+- [x] [BE] Board read query (apps grouped by stage for the active hunt)
 - [ ] [BE] Server actions: `createApplication`, `updateApplication`, `moveStage`, `setSubStage`, `setTags`, `closeApplication` (writes `closed_outcome` + `closed_at`); each calls `logActivity()`
   - `createApplication` accepts an initial `stage` (board quick-add prefills the column; migration use-case) and backfills the implied milestones for non-applied creation — `response_received` for active/final_stages, outcome-implied response/offer for closed (which also collects `closed_outcome`); see ADR-0006
-- [ ] [FE] Wire board columns + cards to real data → screens.md: Tracker Board (Kanban)
+- [ ] [FE] Wire board columns + cards to real data → screens.md: Tracker Board (Kanban) _(data wiring done via the favorite work; tag-filter + dnd remain)_
 - [ ] [FE] Wire card detail drawer (metadata, activity-log timeline, notes via Lexical) → screens.md: Application Detail Drawer
 - [ ] [FE] Sub-stage dropdown on card (writes `sub_stage_change` activity) → screens.md: Application Detail Drawer (Sub-stage picker)
 - [ ] [FE] Tag filter UI backed by a Zustand store → screens.md: Tracker Board (Filter bar)

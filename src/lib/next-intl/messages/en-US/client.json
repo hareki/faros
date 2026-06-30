@@ -155,7 +155,8 @@
     },
     "favorite": {
       "add": "Mark as favorite",
-      "remove": "Remove from favorites"
+      "remove": "Remove from favorites",
+      "error": "Couldn't update favorite"
     }
   },
   "auth": {

@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { IconCalendar, IconMessages, IconStar, IconStarFilled } from '@tabler/icons-react';
 import { useLocale } from 'next-intl';
 
@@ -19,6 +17,7 @@ import { formatDate } from '@/src/lib/formatter/date';
 import { type ClientMessages } from '@/src/lib/next-intl/utils/clientMessages';
 import { cn } from '@/src/lib/tailwind/utils';
 
+import { useToggleFavorite } from '../hooks/useToggleFavorite';
 import { type BoardApplication } from '../types';
 import { STAGE_COLOR } from '../utils/stageColors';
 
@@ -40,9 +39,10 @@ export function ApplicationCard({
   const { company, role, stage, subStage, tags, source, appliedAt } = application;
   const locale = useLocale();
 
-  // Local-only until the toggleFavorite server action lands (see ADR-0007); the board is not
-  // yet wired to real data, so this just flips the visual state for the session.
-  const [favorite, setFavorite] = useState(application.favorite);
+  const { favorite, toggle } = useToggleFavorite(
+    { id: application.id, favorite: application.favorite },
+    { errorMessage: favoriteLabels.error },
+  );
 
   // Word order around the source/date differs per locale, so the footer fills a localized
   // template ("Applied via {source} on {date}") rather than concatenating fixed fragments.
@@ -69,9 +69,7 @@ export function ApplicationCard({
             aria-pressed={favorite}
             onClick={(event) => {
               event.stopPropagation(); // the card itself becomes clickable (opens drawer) later
-              setFavorite((prev) => !prev);
-              // TODO(favorite): call the toggleFavorite server action once the BE lands
-              // (todos §2, ADR-0007).
+              toggle();
             }}
             className={cn(
               'transition-opacity',
