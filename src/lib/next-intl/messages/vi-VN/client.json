@@ -170,6 +170,23 @@
       "remote": "Từ xa",
       "hybrid": "Kết hợp",
       "onsite": "Tại văn phòng"
+    },
+    "quickAdd": {
+      "title": "Thêm đơn ứng tuyển",
+      "companyLabel": "Công ty",
+      "roleLabel": "Vị trí",
+      "outcomeLabel": "Kết quả",
+      "outcomes": {
+        "rejected": "Bị từ chối",
+        "withdrawn": "Đã rút",
+        "accepted": "Được nhận",
+        "ghosted": "Bị ghost"
+      },
+      "submit": "Thêm",
+      "cancel": "Hủy",
+      "errors": {
+        "errorNoActiveJobHunt": "Hãy bắt đầu một đợt tìm việc trước khi thêm đơn."
+      }
     }
   },
   "auth": {

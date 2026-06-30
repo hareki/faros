@@ -22,7 +22,6 @@ import { type ApplicationActionResult } from './types';
  * stage requires a `closedOutcome`; backfill of implied milestones is `createApplication`'s job
  * (ADR-0006). Yields `errorNoActiveJobHunt` when the user has no active hunt.
  */
-// fallow-ignore-next-line unused-export
 export const createApplicationAction = createServerAction({
   schema: () =>
     z

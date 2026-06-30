@@ -15,7 +15,6 @@ import { type ApplicationActionResult } from './types';
  * missing or foreign id yields `errorApplicationNotFound`. The empty => non-empty notes
  * transition logs `note_added` inside `updateApplication`.
  */
-// fallow-ignore-next-line unused-export
 export const updateApplicationAction = createServerAction({
   schema: () =>
     z.object({

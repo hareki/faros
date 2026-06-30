@@ -1,3 +1,7 @@
+'use client';
+
+import { useState } from 'react';
+
 import { IconPlus } from '@tabler/icons-react';
 
 import { SimpleEmpty } from '@/src/components/simple/SimpleEmpty';
@@ -9,6 +13,7 @@ import { cn } from '@/src/lib/tailwind/utils';
 import { ApplicationCard } from './ApplicationCard';
 import { type BoardApplication, type BoardStage } from '../types';
 import { STAGE_COLOR } from '../utils/stageColors';
+import { QuickAddDialog } from '../views/QuickAddDialog';
 
 type BoardColumnProps = {
   stage: BoardStage;
@@ -21,6 +26,8 @@ type BoardColumnProps = {
   sources: ClientMessages['trackerBoard']['sources'];
   favoriteLabels: ClientMessages['trackerBoard']['favorite'];
   jobHuntId: string | null;
+  readOnly: boolean;
+  quickAddMessages: ClientMessages['trackerBoard']['quickAdd'];
 };
 
 export function BoardColumn({
@@ -34,7 +41,11 @@ export function BoardColumn({
   sources,
   favoriteLabels,
   jobHuntId,
+  readOnly,
+  quickAddMessages,
 }: BoardColumnProps) {
+  const [addOpen, setAddOpen] = useState(false);
+
   return (
     <section
       className={`
@@ -49,18 +60,22 @@ export function BoardColumn({
           <Muted as='span'>{applications.length}</Muted>
         </div>
 
-        {/* Opens the quick-add dialog prefilled to this column's stage once wired (todos L88). */}
-        <Button
-          size='icon-sm'
-          variant='ghost'
-          tooltip={addLabel}
-          className='
-            hover:bg-background/40
-            hover:dark:bg-background/40
-          '
-        >
-          <IconPlus />
-        </Button>
+        {!readOnly && (
+          <Button
+            size='icon-sm'
+            variant='ghost'
+            tooltip={addLabel}
+            className='
+              hover:bg-background/40
+              hover:dark:bg-background/40
+            '
+            onClick={() => {
+              setAddOpen(true);
+            }}
+          >
+            <IconPlus />
+          </Button>
+        )}
       </header>
 
       {applications.length > 0 ? (
@@ -80,6 +95,13 @@ export function BoardColumn({
       ) : (
         <SimpleEmpty title={emptyTitle} className='border-0 bg-transparent' />
       )}
+
+      <QuickAddDialog
+        open={addOpen}
+        onOpenChange={setAddOpen}
+        stage={stage}
+        messages={quickAddMessages}
+      />
     </section>
   );
 }

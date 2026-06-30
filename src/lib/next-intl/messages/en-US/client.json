@@ -170,6 +170,23 @@
       "remote": "Remote",
       "hybrid": "Hybrid",
       "onsite": "Onsite"
+    },
+    "quickAdd": {
+      "title": "Add application",
+      "companyLabel": "Company",
+      "roleLabel": "Role",
+      "outcomeLabel": "Outcome",
+      "outcomes": {
+        "rejected": "Rejected",
+        "withdrawn": "Withdrawn",
+        "accepted": "Accepted",
+        "ghosted": "Ghosted"
+      },
+      "submit": "Add",
+      "cancel": "Cancel",
+      "errors": {
+        "errorNoActiveJobHunt": "Start a hunt before adding applications."
+      }
     }
   },
   "auth": {

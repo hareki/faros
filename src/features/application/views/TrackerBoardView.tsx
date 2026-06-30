@@ -20,6 +20,7 @@ export function TrackerBoardView({
   messages,
   applications,
   jobHuntId,
+  readOnly,
   subStages,
   tags,
 }: TrackerBoardViewProps) {
@@ -40,6 +41,8 @@ export function TrackerBoardView({
             favoriteLabels={messages.favorite}
             applications={applications.filter((application) => application.stage === stage)}
             jobHuntId={jobHuntId}
+            readOnly={readOnly}
+            quickAddMessages={messages.quickAdd}
           />
         ))}
       </div>

@@ -14,6 +14,7 @@ import { type ApplicationActionResult } from './types';
  * Closes an owned application with a required outcome (the Close-outcome prompt collects it). A
  * missing or foreign id yields `errorApplicationNotFound`.
  */
+// fallow-ignore-next-line unused-export
 export const closeApplicationAction = createServerAction({
   schema: () => z.object({ id: z.uuid(), outcome: z.enum(closedOutcome.enumValues) }),
   handler: async ({ id, outcome }): Promise<ApplicationActionResult> => {
