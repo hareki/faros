@@ -51,6 +51,67 @@ export async function setFavorite(
   return rows.at(0);
 }
 
+type UpdateApplicationData = {
+  company?: string;
+  role?: string;
+  source?: ApplicationSource | null;
+  jdUrl?: string | null;
+  jdText?: string | null;
+  location?: string | null;
+  workingModel?: WorkingModel | null;
+  salaryMin?: number | null;
+  salaryMax?: number | null;
+  salaryCurrency?: string | null;
+  notes?: string | null;
+};
+
+type UpdateApplicationParams = { userId: string; id: string; data: UpdateApplicationData };
+
+// Notes are stored as serialized Lexical state; the client sends null/'' when the editor has
+// no text content, so a string-presence check is the empty => non-empty test.
+function hasNoteContent(notes: string | null | undefined): boolean {
+  return notes != null && notes.trim() !== '';
+}
+
+/**
+ * Owner-scoped update of an application's editable metadata. Writes a single `note_added`
+ * activity only on the empty => non-empty `notes` transition (other metadata edits are not
+ * milestones, so they log nothing). Returns the updated row, or `undefined` when no owned app
+ * matches.
+ */
+export async function updateApplication(
+  executor: DbExecutor,
+  { userId, id, data }: UpdateApplicationParams,
+) {
+  const current = await executor
+    .select({ notes: applications.notes })
+    .from(applications)
+    .where(
+      and(
+        eq(applications.id, id),
+        inArray(applications.jobHuntId, ownedJobHuntIds(executor, userId)),
+      ),
+    )
+    .then((rows) => rows.at(0));
+
+  if (!current) {
+    return undefined;
+  }
+
+  const updated = await executor
+    .update(applications)
+    .set({ ...data, updatedAt: new Date() })
+    .where(eq(applications.id, id))
+    .returning()
+    .then((rows) => rows.at(0));
+
+  if (!hasNoteContent(current.notes) && hasNoteContent(data.notes)) {
+    await logActivity(executor, { applicationId: id, type: 'note_added' });
+  }
+
+  return updated;
+}
+
 type CreateApplicationParams = {
   jobHuntId: string;
   company: string;

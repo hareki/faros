@@ -3,7 +3,11 @@ import { describe, expect, it } from 'vitest';
 
 import { db } from '@/src/db/client';
 import { activityLog, applications } from '@/src/db/schema';
-import { createApplication, setFavorite } from '@/src/features/application/db/mutations';
+import {
+  createApplication,
+  setFavorite,
+  updateApplication,
+} from '@/src/features/application/db/mutations';
 import { createJobHunt, createUser } from '@/src/lib/vitest/helpers/db';
 
 // This local helper builds the user => hunt => application chain itself so the test can
@@ -142,5 +146,58 @@ describe('createApplication', () => {
     });
 
     expect(await activityTypes(id)).toEqual(['closed', 'created', 'offer_received']);
+  });
+});
+
+describe('updateApplication', () => {
+  async function ownedApp(userId: string) {
+    const hunt = await createJobHunt(userId);
+    const [app] = await db
+      .insert(applications)
+      .values({ jobHuntId: hunt.id, company: 'Acme', role: 'Eng' })
+      .returning();
+
+    return app;
+  }
+
+  it('updates metadata for an owned app', async () => {
+    const user = await createUser();
+    const app = await ownedApp(user.id);
+
+    const updated = await updateApplication(db, {
+      userId: user.id,
+      id: app.id,
+      data: { company: 'NewCo', location: 'Remote' },
+    });
+
+    expect(updated?.company).toBe('NewCo');
+    expect(updated?.location).toBe('Remote');
+  });
+
+  it('logs note_added once when notes go empty => non-empty', async () => {
+    const user = await createUser();
+    const app = await ownedApp(user.id);
+
+    await updateApplication(db, { userId: user.id, id: app.id, data: { notes: 'first note' } });
+    await updateApplication(db, { userId: user.id, id: app.id, data: { notes: 'edited note' } });
+
+    expect(await activityTypes(app.id)).toEqual(['note_added']);
+  });
+
+  it("leaves another user's app untouched and returns undefined", async () => {
+    const owner = await createUser();
+    const other = await createUser();
+    const app = await ownedApp(owner.id);
+
+    const result = await updateApplication(db, {
+      userId: other.id,
+      id: app.id,
+      data: { company: 'Hacked' },
+    });
+
+    expect(result).toBeUndefined();
+    const [row] = await db.select().from(applications).where(eq(applications.id, app.id));
+
+    expect(row.company).toBe('Acme');
   });
 });
