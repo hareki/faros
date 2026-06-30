@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { db } from '@/src/db/client';
 import { activityLog, applicationTags, applications, subStages, tags } from '@/src/db/schema';
 import {
+  closeApplication,
   createApplication,
   moveStage,
   setFavorite,
@@ -491,5 +492,52 @@ describe('moveStage', () => {
     expect(updated?.stage).toBe('active');
     expect(updated?.subStageId).toBe(subStage.id);
     expect(await activityTypes(app.id)).not.toContain('stage_change');
+  });
+});
+
+describe('closeApplication', () => {
+  async function activeApp(userId: string) {
+    const hunt = await createJobHunt(userId);
+    const [app] = await db
+      .insert(applications)
+      .values({ jobHuntId: hunt.id, company: 'Acme', role: 'Eng', stage: 'active' })
+      .returning();
+
+    return app;
+  }
+
+  it('closes as accepted and backfills offer_received', async () => {
+    const user = await createUser();
+    const app = await activeApp(user.id);
+
+    const updated = await closeApplication(db, {
+      userId: user.id,
+      id: app.id,
+      outcome: 'accepted',
+    });
+
+    expect(updated?.stage).toBe('closed');
+    expect(updated?.closedOutcome).toBe('accepted');
+    expect(updated?.closedAt).not.toBeNull();
+    expect(await activityTypes(app.id)).toEqual(['closed', 'offer_received']);
+  });
+
+  it('closes as ghosted with no derived milestone', async () => {
+    const user = await createUser();
+    const app = await activeApp(user.id);
+
+    await closeApplication(db, { userId: user.id, id: app.id, outcome: 'ghosted' });
+
+    expect(await activityTypes(app.id)).toEqual(['closed']);
+  });
+
+  it('returns undefined for a foreign app', async () => {
+    const owner = await createUser();
+    const other = await createUser();
+    const app = await activeApp(owner.id);
+
+    expect(
+      await closeApplication(db, { userId: other.id, id: app.id, outcome: 'rejected' }),
+    ).toBeUndefined();
   });
 });

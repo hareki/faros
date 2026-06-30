@@ -307,6 +307,52 @@ export async function setSubStage(
   return { status: 'ok' };
 }
 
+type CloseApplicationParams = { userId: string; id: string; outcome: ClosedOutcome };
+
+/**
+ * Closes an owned application: sets `stage='closed'` with the outcome + `closedAt`, clears the
+ * sub-stage, and records the `closed` activity via `recordClose` (which derives the
+ * outcome-implied response/offer). Returns the updated row, or `undefined` when no owned app
+ * matches.
+ */
+export async function closeApplication(
+  executor: DbExecutor,
+  { userId, id, outcome }: CloseApplicationParams,
+) {
+  const current = await executor
+    .select({ id: applications.id })
+    .from(applications)
+    .where(
+      and(
+        eq(applications.id, id),
+        inArray(applications.jobHuntId, ownedJobHuntIds(executor, userId)),
+      ),
+    )
+    .then((rows) => rows.at(0));
+
+  if (!current) {
+    return undefined;
+  }
+
+  const now = new Date();
+
+  const [updated] = await executor
+    .update(applications)
+    .set({
+      stage: 'closed',
+      closedOutcome: outcome,
+      closedAt: now,
+      subStageId: null,
+      updatedAt: now,
+    })
+    .where(eq(applications.id, id))
+    .returning();
+
+  await recordClose(executor, { applicationId: id, outcome });
+
+  return updated;
+}
+
 export type SetTagsResult =
   | { status: 'ok' }
   | { status: 'application_not_found' }
