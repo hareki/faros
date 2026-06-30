@@ -8,3 +8,9 @@ export type ApplicationErrorKey =
   | 'errorTagInvalid';
 
 export type ApplicationActionResult = ActionResult<ApplicationErrorKey>;
+
+export type SubStageErrorKey = 'errorSubStageNameTaken' | 'errorSubStageNotFound';
+export type SubStageActionResult = ActionResult<SubStageErrorKey>;
+
+export type TagErrorKey = 'errorTagNameTaken' | 'errorTagNotFound';
+export type TagActionResult = ActionResult<TagErrorKey>;
