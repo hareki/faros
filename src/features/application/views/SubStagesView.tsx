@@ -38,7 +38,7 @@ export function SubStagesView({ messages, subStages }: SubStagesViewProps) {
   };
 
   const handleCreate = async (stage: Stage) => {
-    const success = await vm.create(stage, addName);
+    const success = await vm.create(stage, addName.trim());
 
     if (success) {
       setAddingStage(null);

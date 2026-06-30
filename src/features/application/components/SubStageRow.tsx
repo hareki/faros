@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import {
   AlertDialog,
@@ -69,49 +69,54 @@ export function SubStageRow({ subStage, vm, messages }: SubStageRowProps) {
   return (
     <div className='flex items-center gap-2 rounded-lg border px-3 py-2'>
       {isRenaming ? (
-        <React.Fragment>
-          <Input
-            value={renameValue}
-            onChange={(e) => {
-              setRenameValue(e.target.value);
-            }}
-            placeholder={messages.namePlaceholder}
-            disabled={vm.isPending}
-            autoFocus
-            className='flex-1'
-          />
-          <Button
-            size='sm'
-            onClick={handleRenameSubmit}
-            disabled={vm.isPending || !renameValue.trim()}
-            loading={vm.isPending}
-          >
-            {messages.save}
-          </Button>
-          <Button size='sm' variant='outline' onClick={handleRenameCancel} disabled={vm.isPending}>
-            {messages.cancel}
-          </Button>
-        </React.Fragment>
+        <Input
+          value={renameValue}
+          onChange={(e) => {
+            setRenameValue(e.target.value);
+          }}
+          placeholder={messages.namePlaceholder}
+          disabled={vm.isPending}
+          autoFocus
+          className='flex-1'
+        />
       ) : (
-        <React.Fragment>
-          <Small as='span' className='flex-1'>
-            {subStage.name}
-          </Small>
-          <Button size='sm' variant='outline' onClick={handleRenameStart} disabled={vm.isPending}>
-            {messages.rename}
-          </Button>
-          <Button
-            size='sm'
-            variant='outline'
-            onClick={() => {
-              setIsDeleteOpen(true);
-            }}
-            disabled={vm.isPending}
-          >
-            {messages.delete}
-          </Button>
-        </React.Fragment>
+        <Small as='span' className='flex-1'>
+          {subStage.name}
+        </Small>
       )}
+
+      {isRenaming ? (
+        <Button
+          size='sm'
+          onClick={handleRenameSubmit}
+          disabled={vm.isPending || !renameValue.trim()}
+          loading={vm.isPending}
+        >
+          {messages.save}
+        </Button>
+      ) : (
+        <Button size='sm' variant='outline' onClick={handleRenameStart} disabled={vm.isPending}>
+          {messages.rename}
+        </Button>
+      )}
+
+      {isRenaming ? (
+        <Button size='sm' variant='outline' onClick={handleRenameCancel} disabled={vm.isPending}>
+          {messages.cancel}
+        </Button>
+      ) : (
+        <Button
+          size='sm'
+          variant='outline'
+          onClick={() => {
+            setIsDeleteOpen(true);
+          }}
+          disabled={vm.isPending}
+        >
+          {messages.delete}
+        </Button>
+      )}
+
       <AlertDialog open={isDeleteOpen} onOpenChange={handleDeleteOpenChange}>
         <AlertDialogContent>
           <AlertDialogHeader>
