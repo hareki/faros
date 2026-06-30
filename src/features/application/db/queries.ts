@@ -3,7 +3,7 @@ import 'server-only';
 import { asc, desc, eq } from 'drizzle-orm';
 
 import { type DbExecutor } from '@/src/db/client';
-import { applications, subStages } from '@/src/features/application/db/schema';
+import { applications, subStages, tags } from '@/src/features/application/db/schema';
 import { type BoardApplication, type BoardStage } from '@/src/features/application/types';
 
 /**
@@ -47,6 +47,17 @@ export async function getBoardApplications(
     favorite: row.favorite,
     appliedAt: row.appliedAt,
   }));
+}
+
+export type TagRow = { id: string; name: string; color: string | null };
+
+/** A user's tags for the settings list, the detail tag picker, and the board filter options. */
+export async function listTags(executor: DbExecutor, userId: string): Promise<TagRow[]> {
+  return executor
+    .select({ id: tags.id, name: tags.name, color: tags.color })
+    .from(tags)
+    .where(eq(tags.userId, userId))
+    .orderBy(asc(tags.name));
 }
 
 export type SubStageRow = { id: string; stage: BoardStage; name: string; sortOrder: number };
