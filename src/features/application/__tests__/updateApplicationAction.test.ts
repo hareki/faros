@@ -55,5 +55,9 @@ describe('updateApplicationAction', () => {
     const result = await updateApplicationAction({ id: app.id, company: 'Hacked' });
 
     expect(result).toEqual({ status: 'error', errorKey: 'errorApplicationNotFound' });
+
+    const [row] = await db.select().from(applications).where(eq(applications.id, app.id));
+
+    expect(row.company).toBe('Acme');
   });
 });

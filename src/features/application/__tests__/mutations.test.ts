@@ -200,4 +200,27 @@ describe('updateApplication', () => {
 
     expect(row.company).toBe('Acme');
   });
+
+  it('does not log note_added for whitespace-only notes, logs exactly once for real note', async () => {
+    const user = await createUser();
+    const app = await ownedApp(user.id);
+
+    await updateApplication(db, { userId: user.id, id: app.id, data: { notes: '   ' } });
+
+    expect(await activityTypes(app.id)).toEqual([]);
+
+    await updateApplication(db, { userId: user.id, id: app.id, data: { notes: 'real note' } });
+
+    expect(await activityTypes(app.id)).toEqual(['note_added']);
+  });
+
+  it('does not log note_added when clearing notes to null', async () => {
+    const user = await createUser();
+    const app = await ownedApp(user.id);
+
+    await updateApplication(db, { userId: user.id, id: app.id, data: { notes: 'real note' } });
+    await updateApplication(db, { userId: user.id, id: app.id, data: { notes: null } });
+
+    expect(await activityTypes(app.id)).toEqual(['note_added']);
+  });
 });
