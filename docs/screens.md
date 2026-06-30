@@ -117,7 +117,7 @@ Manages **library**-scope Resumes (the reusable ones in the picker).
 - Upload a new library resume (PDF, size-capped → Vercel Blob).
 - Delete (soft delete — keeps attribution for Retro resume-performance).
 - Application-scoped one-offs do **not** appear here; they are promoted in from the
-  application drawer.
+  application detail.
 
 ### Settings — settings route(s)
 
@@ -154,9 +154,9 @@ Dashboard.
 These carry enough logic/state to warrant their own description and implementation, and
 appear over the routes above.
 
-### Application Detail Drawer
+### Application Detail (modal + full page)
 
-Opened from any board card; the primary editing surface for one application.
+Opened from a board card as a Dialog modal over the board (an intercepting route with a bookmarkable URL). On refresh or deep-link, rendered as a full page inside the app shell with a close control to return to the board (see ADR-0008). The primary editing surface for one application.
 
 - All metadata: company, role, source, JD url / JD text, location, working model, salary
   range, notes.
