@@ -9,7 +9,7 @@ import {
   recordClose,
   recordStageChange,
 } from '@/src/features/activity/db/mutations';
-import { applications } from '@/src/features/application/db/schema';
+import { applications, subStages } from '@/src/features/application/db/schema';
 import {
   type ApplicationSource,
   type BoardStage,
@@ -226,4 +226,78 @@ export async function moveStage(executor: DbExecutor, { userId, id, to }: MoveSt
   await recordStageChange(executor, { applicationId: id, from: current.stage, to });
 
   return updated;
+}
+
+export type SetSubStageResult =
+  | { status: 'ok' }
+  | { status: 'application_not_found' }
+  | { status: 'sub_stage_invalid' };
+
+type SetSubStageParams = { userId: string; id: string; subStageId: string | null };
+
+/**
+ * Sets (or clears, with `null`) an owned application's sub-stage. The target sub-stage must
+ * belong to the user and match the app's current stage (the composite FK is the DB backstop,
+ * ADR-0001). Logs `sub_stage_change` with sub-stage names - not ids - so the timeline reads
+ * correctly after a later rename or delete.
+ */
+export async function setSubStage(
+  executor: DbExecutor,
+  { userId, id, subStageId }: SetSubStageParams,
+): Promise<SetSubStageResult> {
+  const app = await executor
+    .select({ stage: applications.stage, subStageId: applications.subStageId })
+    .from(applications)
+    .where(
+      and(
+        eq(applications.id, id),
+        inArray(applications.jobHuntId, ownedJobHuntIds(executor, userId)),
+      ),
+    )
+    .then((rows) => rows.at(0));
+
+  if (!app) {
+    return { status: 'application_not_found' };
+  }
+
+  let toName: string | null = null;
+
+  if (subStageId !== null) {
+    const target = await executor
+      .select({ name: subStages.name, stage: subStages.stage })
+      .from(subStages)
+      .where(and(eq(subStages.id, subStageId), eq(subStages.userId, userId)))
+      .then((rows) => rows.at(0));
+
+    if (target?.stage !== app.stage) {
+      return { status: 'sub_stage_invalid' };
+    }
+
+    toName = target.name;
+  }
+
+  let fromName: string | null = null;
+
+  if (app.subStageId) {
+    const previous = await executor
+      .select({ name: subStages.name })
+      .from(subStages)
+      .where(eq(subStages.id, app.subStageId))
+      .then((rows) => rows.at(0));
+
+    fromName = previous?.name ?? null;
+  }
+
+  await executor
+    .update(applications)
+    .set({ subStageId, updatedAt: new Date() })
+    .where(eq(applications.id, id));
+
+  await logActivity(executor, {
+    applicationId: id,
+    type: 'sub_stage_change',
+    metadata: { from: fromName, to: toName },
+  });
+
+  return { status: 'ok' };
 }

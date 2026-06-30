@@ -8,6 +8,7 @@ import {
   moveStage,
   setFavorite,
   updateApplication,
+  setSubStage,
 } from '@/src/features/application/db/mutations';
 import { createJobHunt, createUser } from '@/src/lib/vitest/helpers/db';
 
@@ -223,6 +224,110 @@ describe('updateApplication', () => {
     await updateApplication(db, { userId: user.id, id: app.id, data: { notes: null } });
 
     expect(await activityTypes(app.id)).toEqual(['note_added']);
+  });
+});
+
+describe('setSubStage', () => {
+  async function activeAppWithSubStages(userId: string) {
+    const hunt = await createJobHunt(userId);
+    const [app] = await db
+      .insert(applications)
+      .values({ jobHuntId: hunt.id, company: 'Acme', role: 'Eng', stage: 'active' })
+      .returning();
+    const [sub] = await db
+      .insert(subStages)
+      .values({ userId, stage: 'active', name: 'HR Screen', sortOrder: 0 })
+      .returning();
+    const [wrongStage] = await db
+      .insert(subStages)
+      .values({ userId, stage: 'final_stages', name: 'Onsite', sortOrder: 0 })
+      .returning();
+
+    return { app, sub, wrongStage };
+  }
+
+  it('sets a valid sub-stage and logs sub_stage_change with the name', async () => {
+    const user = await createUser();
+    const { app, sub } = await activeAppWithSubStages(user.id);
+
+    const result = await setSubStage(db, { userId: user.id, id: app.id, subStageId: sub.id });
+
+    expect(result).toEqual({ status: 'ok' });
+    const [row] = await db.select().from(applications).where(eq(applications.id, app.id));
+
+    expect(row.subStageId).toBe(sub.id);
+    const [log] = await db.select().from(activityLog).where(eq(activityLog.applicationId, app.id));
+
+    expect(log.type).toBe('sub_stage_change');
+    expect(log.metadata).toEqual({ from: null, to: 'HR Screen' });
+  });
+
+  it('rejects a sub-stage from a different stage', async () => {
+    const user = await createUser();
+    const { app, wrongStage } = await activeAppWithSubStages(user.id);
+
+    const result = await setSubStage(db, {
+      userId: user.id,
+      id: app.id,
+      subStageId: wrongStage.id,
+    });
+
+    expect(result).toEqual({ status: 'sub_stage_invalid' });
+  });
+
+  it('returns application_not_found for a foreign app', async () => {
+    const owner = await createUser();
+    const other = await createUser();
+    const { app, sub } = await activeAppWithSubStages(owner.id);
+
+    const result = await setSubStage(db, { userId: other.id, id: app.id, subStageId: sub.id });
+
+    expect(result).toEqual({ status: 'application_not_found' });
+  });
+
+  it('clears sub-stage with null and logs sub_stage_change with from name and to null', async () => {
+    const user = await createUser();
+    const { app, sub } = await activeAppWithSubStages(user.id);
+
+    // Set a sub-stage first so the app has one to clear
+    await db.update(applications).set({ subStageId: sub.id }).where(eq(applications.id, app.id));
+
+    const result = await setSubStage(db, { userId: user.id, id: app.id, subStageId: null });
+
+    expect(result).toEqual({ status: 'ok' });
+    const [row] = await db.select().from(applications).where(eq(applications.id, app.id));
+
+    expect(row.subStageId).toBeNull();
+    const [log] = await db.select().from(activityLog).where(eq(activityLog.applicationId, app.id));
+
+    expect(log.type).toBe('sub_stage_change');
+    expect(log.metadata).toEqual({ from: 'HR Screen', to: null });
+  });
+
+  it('rejects a sub-stage belonging to a different user even if the stage matches', async () => {
+    const owner = await createUser();
+    const other = await createUser();
+
+    // owner's app in "active" stage
+    const ownerHunt = await createJobHunt(owner.id);
+    const [ownerApp] = await db
+      .insert(applications)
+      .values({ jobHuntId: ownerHunt.id, company: 'Acme', role: 'Eng', stage: 'active' })
+      .returning();
+
+    // other user's sub-stage in "active" stage (stage matches but userId does not)
+    const [otherSub] = await db
+      .insert(subStages)
+      .values({ userId: other.id, stage: 'active', name: 'Phone Screen', sortOrder: 0 })
+      .returning();
+
+    const result = await setSubStage(db, {
+      userId: owner.id,
+      id: ownerApp.id,
+      subStageId: otherSub.id,
+    });
+
+    expect(result).toEqual({ status: 'sub_stage_invalid' });
   });
 });
 
