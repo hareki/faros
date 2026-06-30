@@ -89,7 +89,7 @@ export async function listSubStages(executor: DbExecutor, userId: string): Promi
     .orderBy(asc(subStages.stage), asc(subStages.sortOrder));
 }
 
-type ActivityType = (typeof activityLog.type.enumValues)[number];
+export type ActivityType = (typeof activityLog.type.enumValues)[number];
 
 export type ApplicationDetail = {
   id: string;

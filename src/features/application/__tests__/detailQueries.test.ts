@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { db } from '@/src/db/client';
-import { applications } from '@/src/db/schema';
+import { activityLog, applications } from '@/src/db/schema';
 import { createApplication } from '@/src/features/application/db/mutations';
 import {
   getApplicationActivity,
@@ -48,8 +48,10 @@ describe('getApplicationDetail', () => {
 
     expect(await getApplicationDetail(db, other.id, app.id)).toBeNull();
   });
+});
 
-  it('returns the activity log newest-first', async () => {
+describe('getApplicationActivity', () => {
+  it('includes the milestones backfilled on create', async () => {
     const user = await createUser();
     const hunt = await createJobHunt(user.id);
     const { id } = await createApplication(db, {
@@ -63,5 +65,28 @@ describe('getApplicationDetail', () => {
 
     expect(activity.map((a) => a.type)).toContain('created');
     expect(activity.map((a) => a.type)).toContain('response_received');
+  });
+
+  it('orders the activity newest-first', async () => {
+    const user = await createUser();
+    const hunt = await createJobHunt(user.id);
+    const [app] = await db
+      .insert(applications)
+      .values({ jobHuntId: hunt.id, company: 'Acme', role: 'Eng' })
+      .returning();
+
+    const older = new Date('2024-01-01T00:00:00Z');
+    const newer = new Date('2024-06-01T00:00:00Z');
+
+    await db.insert(activityLog).values([
+      { applicationId: app.id, type: 'note_added', occurredAt: older },
+      { applicationId: app.id, type: 'stage_change', occurredAt: newer },
+    ]);
+
+    const activity = await getApplicationActivity(db, app.id);
+
+    expect(activity[0]?.occurredAt).toEqual(newer);
+    expect(activity[0]?.type).toBe('stage_change');
+    expect(activity[1]?.type).toBe('note_added');
   });
 });
