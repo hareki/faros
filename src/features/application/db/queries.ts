@@ -1,10 +1,23 @@
 import 'server-only';
 
-import { asc, desc, eq } from 'drizzle-orm';
+import { and, asc, desc, eq } from 'drizzle-orm';
 
 import { type DbExecutor } from '@/src/db/client';
-import { applications, subStages, tags } from '@/src/features/application/db/schema';
-import { type BoardApplication, type BoardStage } from '@/src/features/application/types';
+import { activityLog } from '@/src/features/activity/db/schema';
+import {
+  applicationTags,
+  applications,
+  subStages,
+  tags,
+} from '@/src/features/application/db/schema';
+import {
+  type ApplicationSource,
+  type BoardApplication,
+  type BoardStage,
+  type ClosedOutcome,
+  type WorkingModel,
+} from '@/src/features/application/types';
+import { jobHunts } from '@/src/features/job-hunt/db/schema';
 
 /**
  * Every application on a hunt's board, newest first, shaped for the card (sub-stage + tags
@@ -74,4 +87,107 @@ export async function listSubStages(executor: DbExecutor, userId: string): Promi
     .from(subStages)
     .where(eq(subStages.userId, userId))
     .orderBy(asc(subStages.stage), asc(subStages.sortOrder));
+}
+
+type ActivityType = (typeof activityLog.type.enumValues)[number];
+
+export type ApplicationDetail = {
+  id: string;
+  jobHuntId: string;
+  company: string;
+  role: string;
+  stage: BoardStage;
+  subStageId: string | null;
+  favorite: boolean;
+  source: ApplicationSource | null;
+  jdUrl: string | null;
+  jdText: string | null;
+  location: string | null;
+  workingModel: WorkingModel | null;
+  salaryMin: number | null;
+  salaryMax: number | null;
+  salaryCurrency: string | null;
+  notes: string | null;
+  closedOutcome: ClosedOutcome | null;
+  closedAt: Date | null;
+  appliedAt: Date;
+  tagIds: string[];
+  readOnly: boolean;
+};
+
+export type ActivityEntry = {
+  id: string;
+  type: ActivityType;
+  metadata: unknown;
+  occurredAt: Date;
+};
+
+/**
+ * Full editable detail for one application the user owns (ownership via the hunt join), plus
+ * its assigned tag ids and a `readOnly` flag set when the owning hunt has ended. Returns `null`
+ * when the application is missing or not the caller's.
+ */
+export async function getApplicationDetail(
+  executor: DbExecutor,
+  userId: string,
+  applicationId: string,
+): Promise<ApplicationDetail | null> {
+  const row = (
+    await executor
+      .select({
+        id: applications.id,
+        jobHuntId: applications.jobHuntId,
+        company: applications.company,
+        role: applications.role,
+        stage: applications.stage,
+        subStageId: applications.subStageId,
+        favorite: applications.favorite,
+        source: applications.source,
+        jdUrl: applications.jdUrl,
+        jdText: applications.jdText,
+        location: applications.location,
+        workingModel: applications.workingModel,
+        salaryMin: applications.salaryMin,
+        salaryMax: applications.salaryMax,
+        salaryCurrency: applications.salaryCurrency,
+        notes: applications.notes,
+        closedOutcome: applications.closedOutcome,
+        closedAt: applications.closedAt,
+        appliedAt: applications.appliedAt,
+        huntStatus: jobHunts.status,
+      })
+      .from(applications)
+      .innerJoin(jobHunts, eq(applications.jobHuntId, jobHunts.id))
+      .where(and(eq(applications.id, applicationId), eq(jobHunts.userId, userId)))
+  ).at(0);
+
+  if (!row) {
+    return null;
+  }
+
+  const tagRows = await executor
+    .select({ tagId: applicationTags.tagId })
+    .from(applicationTags)
+    .where(eq(applicationTags.applicationId, applicationId));
+
+  const { huntStatus, ...rest } = row;
+
+  return { ...rest, tagIds: tagRows.map((t) => t.tagId), readOnly: huntStatus === 'ended' };
+}
+
+/** An application's activity timeline, newest first, for the detail surface. */
+export async function getApplicationActivity(
+  executor: DbExecutor,
+  applicationId: string,
+): Promise<ActivityEntry[]> {
+  return executor
+    .select({
+      id: activityLog.id,
+      type: activityLog.type,
+      metadata: activityLog.metadata,
+      occurredAt: activityLog.occurredAt,
+    })
+    .from(activityLog)
+    .where(eq(activityLog.applicationId, applicationId))
+    .orderBy(desc(activityLog.occurredAt));
 }
