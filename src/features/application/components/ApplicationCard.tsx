@@ -1,3 +1,4 @@
+import { useDraggable } from '@dnd-kit/react';
 import { IconCalendar, IconMessages, IconStar, IconStarFilled } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useLocale } from 'next-intl';
@@ -29,6 +30,7 @@ type ApplicationCardProps = {
   sources: ClientMessages['trackerBoard']['sources'];
   favoriteLabels: ClientMessages['trackerBoard']['favorite'];
   jobHuntId: string | null;
+  readOnly: boolean;
 };
 
 export function ApplicationCard({
@@ -38,9 +40,16 @@ export function ApplicationCard({
   sources,
   favoriteLabels,
   jobHuntId,
+  readOnly,
 }: ApplicationCardProps) {
   const { company, role, stage, subStage, tags, source, appliedAt } = application;
   const locale = useLocale();
+
+  const { ref, isDragging } = useDraggable({
+    id: application.id,
+    data: { stage: application.stage },
+    disabled: readOnly,
+  });
 
   const { favorite, toggle } = useToggleFavorite(
     { id: application.id, favorite: application.favorite },
@@ -58,7 +67,11 @@ export function ApplicationCard({
   const favoriteLabel = favorite ? favoriteLabels.remove : favoriteLabels.add;
 
   const card = (
-    <Card size='sm' className='shrink-0 cursor-pointer rounded-3xl'>
+    <Card
+      ref={ref}
+      size='sm'
+      className={cn('shrink-0 cursor-pointer rounded-3xl', isDragging && 'opacity-50')}
+    >
       <CardHeader>
         <CardTitle className='font-semibold text-pretty'>{company}</CardTitle>
         <CardDescription className='text-base text-pretty'>{role}</CardDescription>

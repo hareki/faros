@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import { useDroppable } from '@dnd-kit/react';
 import { IconPlus } from '@tabler/icons-react';
 
 import { SimpleEmpty } from '@/src/components/simple/SimpleEmpty';
@@ -45,9 +46,11 @@ export function BoardColumn({
   quickAddMessages,
 }: BoardColumnProps) {
   const [addOpen, setAddOpen] = useState(false);
+  const { ref } = useDroppable({ id: stage });
 
   return (
     <section
+      ref={ref}
       className={`
         scroll-layer max-h-full shrink-0 grow-0 basis-80 rounded-4xl bg-muted
         light:bg-crust
@@ -89,6 +92,7 @@ export function BoardColumn({
               sources={sources}
               favoriteLabels={favoriteLabels}
               jobHuntId={jobHuntId}
+              readOnly={readOnly}
             />
           ))}
         </div>
