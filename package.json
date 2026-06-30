@@ -111,10 +111,10 @@
   "lint-staged": {
     "*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}": [
       "eslint --report-unused-disable-directives --fix",
-      "oxfmt --write"
+      "oxfmt --write --no-error-on-unmatched-pattern"
     ],
     "*.{json,jsonc}": [
-      "oxfmt --write"
+      "oxfmt --write --no-error-on-unmatched-pattern"
     ]
   },
   "commitlint": {
