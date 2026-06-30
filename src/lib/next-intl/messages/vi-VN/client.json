@@ -207,5 +207,41 @@
       "errorSubStageInvalid": "Giai đoạn phụ đó không hợp lệ cho giai đoạn này.",
       "errorTagInvalid": "Một trong các thẻ đó không còn khả dụng."
     }
+  },
+  "settings": {
+    "subStages": {
+      "title": "Giai đoạn phụ",
+      "description": "Chip pipeline cho các cột Đang phỏng vấn và Vòng cuối. Kéo để sắp xếp lại.",
+      "stages": { "active": "Đang phỏng vấn", "final_stages": "Vòng cuối" },
+      "addLabel": "Thêm giai đoạn phụ",
+      "namePlaceholder": "ví dụ: Phỏng vấn kỹ thuật",
+      "rename": "Đổi tên",
+      "delete": "Xóa",
+      "save": "Lưu",
+      "cancel": "Hủy",
+      "empty": "Chưa có giai đoạn phụ nào",
+      "deleteConfirm": "Xóa giai đoạn phụ này? Đơn ứng tuyển đang dùng nó vẫn giữ nguyên giai đoạn nhưng sẽ mất chip.",
+      "errors": {
+        "errorSubStageNameTaken": "Bạn đã có một giai đoạn phụ với tên này trong giai đoạn này.",
+        "errorSubStageNotFound": "Giai đoạn phụ đó không còn tồn tại."
+      }
+    },
+    "tags": {
+      "title": "Thẻ",
+      "description": "Nhãn tùy ý để lọc bảng theo dõi.",
+      "addLabel": "Thêm thẻ",
+      "namePlaceholder": "ví dụ: remote",
+      "colorLabel": "Màu sắc",
+      "rename": "Chỉnh sửa",
+      "delete": "Xóa",
+      "save": "Lưu",
+      "cancel": "Hủy",
+      "empty": "Chưa có thẻ nào",
+      "deleteConfirm": "Xóa thẻ này? Thẻ sẽ bị gỡ khỏi tất cả đơn ứng tuyển.",
+      "errors": {
+        "errorTagNameTaken": "Bạn đã có một thẻ với tên này.",
+        "errorTagNotFound": "Thẻ đó không còn tồn tại."
+      }
+    }
   }
 }

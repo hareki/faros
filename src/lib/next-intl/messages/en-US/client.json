@@ -207,5 +207,41 @@
       "errorSubStageInvalid": "That sub-stage isn't valid for this stage.",
       "errorTagInvalid": "One of those tags is no longer available."
     }
+  },
+  "settings": {
+    "subStages": {
+      "title": "Sub-stages",
+      "description": "Pipeline chips for the Active and Final Stages columns. Drag to reorder.",
+      "stages": { "active": "Active", "final_stages": "Final Stages" },
+      "addLabel": "Add sub-stage",
+      "namePlaceholder": "e.g. Tech screen",
+      "rename": "Rename",
+      "delete": "Delete",
+      "save": "Save",
+      "cancel": "Cancel",
+      "empty": "No sub-stages yet",
+      "deleteConfirm": "Delete this sub-stage? Applications using it keep their stage but lose the chip.",
+      "errors": {
+        "errorSubStageNameTaken": "You already have a sub-stage with that name in this stage.",
+        "errorSubStageNotFound": "That sub-stage no longer exists."
+      }
+    },
+    "tags": {
+      "title": "Tags",
+      "description": "Free-form labels for filtering the board.",
+      "addLabel": "Add tag",
+      "namePlaceholder": "e.g. remote",
+      "colorLabel": "Color",
+      "rename": "Edit",
+      "delete": "Delete",
+      "save": "Save",
+      "cancel": "Cancel",
+      "empty": "No tags yet",
+      "deleteConfirm": "Delete this tag? It is removed from every application.",
+      "errors": {
+        "errorTagNameTaken": "You already have a tag with that name.",
+        "errorTagNotFound": "That tag no longer exists."
+      }
+    }
   }
 }
