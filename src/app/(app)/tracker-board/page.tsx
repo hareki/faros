@@ -29,8 +29,10 @@ type TrackerBoardProps = {
 // ended the board renders read-only (a frozen history view) — wired up with the real board.
 export default async function TrackerBoard({ searchParams }: TrackerBoardProps) {
   const user = await requireUser();
-  const { [JOB_HUNT_PARAM]: jobHuntParam } = await searchParams;
-  const selectedJobHunt = await getSelectedJobHunt(db, user.id, jobHuntParam as string | undefined);
+  const params = await searchParams;
+  const rawParam = params[JOB_HUNT_PARAM];
+  const jobHuntParam = typeof rawParam === 'string' ? rawParam : undefined;
+  const selectedJobHunt = await getSelectedJobHunt(db, user.id, jobHuntParam);
 
   // Keep `?job_hunt` carrying the live selection (also settles a missing/stale/foreign id). A
   // null selection (no hunts) falls through to the shell's first-run empty state.
@@ -39,7 +41,7 @@ export default async function TrackerBoard({ searchParams }: TrackerBoardProps) 
   }
 
   const messages = await getClientMessages();
-  const filters = await loadBoardFilters(searchParams);
+  const filters = loadBoardFilters(params);
   const [applications, subStages, tags] = selectedJobHunt
     ? await Promise.all([
         getBoardApplications(db, selectedJobHunt.id, filters),

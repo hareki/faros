@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { db } from '@/src/db/client';
 import { applicationTags, applications, subStages, tags } from '@/src/db/schema';
 import { getBoardApplications } from '@/src/features/application/db/queries';
+import { loadBoardFilters } from '@/src/features/application/utils/boardFilters';
 import { createJobHunt, createUser } from '@/src/lib/vitest/helpers/db';
 
 describe('getBoardApplications', () => {
@@ -79,6 +80,30 @@ describe('getBoardApplications filters', () => {
     await db.insert(applicationTags).values({ applicationId: tagged.id, tagId: remote.id });
 
     const result = await getBoardApplications(db, hunt.id, { tagIds: [remote.id] });
+
+    expect(result.map((a) => a.company)).toEqual(['Tagged']);
+    expect(result.map((a) => a.company)).not.toContain('Plain');
+  });
+
+  it('filters end-to-end through loadBoardFilters parser keys', async () => {
+    const user = await createUser();
+    const hunt = await createJobHunt(user.id);
+    const [tagged, _plain] = await db
+      .insert(applications)
+      .values([
+        { jobHuntId: hunt.id, company: 'Tagged', role: 'Eng' },
+        { jobHuntId: hunt.id, company: 'Plain', role: 'Eng' },
+      ])
+      .returning();
+    const [remote] = await db.insert(tags).values({ userId: user.id, name: 'remote' }).returning();
+
+    await db.insert(applicationTags).values({ applicationId: tagged.id, tagId: remote.id });
+
+    const filters = loadBoardFilters({ tagIds: remote.id });
+
+    expect(filters.tagIds).toEqual([remote.id]);
+
+    const result = await getBoardApplications(db, hunt.id, filters);
 
     expect(result.map((a) => a.company)).toEqual(['Tagged']);
     expect(result.map((a) => a.company)).not.toContain('Plain');
