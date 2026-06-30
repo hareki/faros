@@ -155,7 +155,38 @@
     },
     "favorite": {
       "add": "Đánh dấu yêu thích",
-      "remove": "Bỏ đánh dấu yêu thích"
+      "remove": "Bỏ đánh dấu yêu thích",
+      "error": "Không thể cập nhật mục yêu thích"
+    },
+    "filters": {
+      "tags": "Thẻ",
+      "subStage": "Giai đoạn phụ",
+      "source": "Nguồn",
+      "workingModel": "Hình thức làm việc",
+      "clear": "Xóa bộ lọc",
+      "all": "Tất cả"
+    },
+    "workingModels": {
+      "remote": "Từ xa",
+      "hybrid": "Kết hợp",
+      "onsite": "Tại văn phòng"
+    },
+    "quickAdd": {
+      "title": "Thêm đơn ứng tuyển",
+      "companyLabel": "Công ty",
+      "roleLabel": "Vị trí",
+      "outcomeLabel": "Kết quả",
+      "outcomes": {
+        "rejected": "Bị từ chối",
+        "withdrawn": "Đã rút",
+        "accepted": "Được nhận",
+        "ghosted": "Bị ghost"
+      },
+      "submit": "Thêm",
+      "cancel": "Hủy",
+      "errors": {
+        "errorNoActiveJobHunt": "Hãy bắt đầu một đợt tìm việc trước khi thêm đơn."
+      }
     }
   },
   "auth": {
@@ -197,6 +228,109 @@
       "submit": "Đặt lại mật khẩu",
       "passwordsMustMatch": "Mật khẩu không khớp",
       "resetSuccess": "Mật khẩu của bạn đã được đặt lại. Vui lòng đăng nhập."
+    }
+  },
+  "application": {
+    "errors": {
+      "errorApplicationNotFound": "Không tìm thấy đơn ứng tuyển đó.",
+      "errorNoActiveJobHunt": "Hãy bắt đầu một đợt tìm việc trước khi thêm đơn.",
+      "errorSubStageInvalid": "Giai đoạn phụ đó không hợp lệ cho giai đoạn này.",
+      "errorTagInvalid": "Một trong các thẻ đó không còn khả dụng."
+    }
+  },
+  "applicationDetail": {
+    "close": "Đóng",
+    "readOnlyBanner": "Đợt tìm việc này đã kết thúc. Đơn ứng tuyển ở chế độ chỉ đọc.",
+    "fields": {
+      "company": "Công ty",
+      "role": "Vị trí",
+      "source": "Nguồn",
+      "jdUrl": "URL tin tuyển dụng",
+      "jdText": "Mô tả công việc",
+      "location": "Địa điểm",
+      "workingModel": "Hình thức làm việc",
+      "salaryMin": "Lương tối thiểu",
+      "salaryMax": "Lương tối đa",
+      "salaryCurrency": "Đơn vị tiền tệ",
+      "notes": "Ghi chú"
+    },
+    "workingModels": { "remote": "Từ xa", "hybrid": "Kết hợp", "onsite": "Tại văn phòng" },
+    "subStage": {
+      "label": "Giai đoạn phụ",
+      "placeholder": "Không có giai đoạn phụ",
+      "none": "Không có"
+    },
+    "tags": { "label": "Thẻ", "placeholder": "Thêm thẻ" },
+    "save": "Lưu",
+    "saved": "Đã lưu",
+    "timelineTitle": "Hoạt động",
+    "slots": { "resume": "Chọn hồ sơ (sắp ra mắt)", "events": "Sự kiện (sắp ra mắt)" },
+    "errors": {
+      "errorApplicationNotFound": "Không tìm thấy đơn ứng tuyển đó.",
+      "errorSubStageInvalid": "Giai đoạn phụ đó không hợp lệ cho giai đoạn này.",
+      "errorTagInvalid": "Một trong các thẻ đó không còn khả dụng."
+    }
+  },
+  "activity": {
+    "created": "Đã tạo đơn ứng tuyển",
+    "stage_change": "Chuyển từ {from} sang {to}",
+    "sub_stage_change": "Giai đoạn phụ chuyển sang {to}",
+    "sub_stage_cleared": "Đã xóa giai đoạn phụ",
+    "note_added": "Đã thêm ghi chú",
+    "response_received": "Đã nhận phản hồi",
+    "offer_received": "Đã nhận offer",
+    "event_scheduled": "Đã lên lịch sự kiện",
+    "event_completed": "Sự kiện đã hoàn thành",
+    "event_cancelled": "Sự kiện đã bị hủy",
+    "resume_changed": "Đã thay đổi hồ sơ",
+    "closed": "Đã đóng - {outcome}",
+    "stages": {
+      "applied": "Đã nộp",
+      "active": "Đang phỏng vấn",
+      "final_stages": "Vòng cuối",
+      "closed": "Đã đóng"
+    },
+    "outcomes": {
+      "rejected": "bị từ chối",
+      "withdrawn": "đã rút",
+      "accepted": "được nhận",
+      "ghosted": "bị ghost"
+    }
+  },
+  "settings": {
+    "subStages": {
+      "title": "Giai đoạn phụ",
+      "description": "Chip pipeline cho các cột Đang phỏng vấn và Vòng cuối. Kéo để sắp xếp lại.",
+      "stages": { "active": "Đang phỏng vấn", "final_stages": "Vòng cuối" },
+      "addLabel": "Thêm giai đoạn phụ",
+      "namePlaceholder": "ví dụ: Phỏng vấn kỹ thuật",
+      "rename": "Đổi tên",
+      "delete": "Xóa",
+      "save": "Lưu",
+      "cancel": "Hủy",
+      "empty": "Chưa có giai đoạn phụ nào",
+      "deleteConfirm": "Xóa giai đoạn phụ này? Đơn ứng tuyển đang dùng nó vẫn giữ nguyên giai đoạn nhưng sẽ mất chip.",
+      "errors": {
+        "errorSubStageNameTaken": "Bạn đã có một giai đoạn phụ với tên này trong giai đoạn này.",
+        "errorSubStageNotFound": "Giai đoạn phụ đó không còn tồn tại."
+      }
+    },
+    "tags": {
+      "title": "Thẻ",
+      "description": "Nhãn tùy ý để lọc bảng theo dõi.",
+      "addLabel": "Thêm thẻ",
+      "namePlaceholder": "ví dụ: remote",
+      "colorLabel": "Màu sắc",
+      "rename": "Chỉnh sửa",
+      "delete": "Xóa",
+      "save": "Lưu",
+      "cancel": "Hủy",
+      "empty": "Chưa có thẻ nào",
+      "deleteConfirm": "Xóa thẻ này? Thẻ sẽ bị gỡ khỏi tất cả đơn ứng tuyển.",
+      "errors": {
+        "errorTagNameTaken": "Bạn đã có một thẻ với tên này.",
+        "errorTagNotFound": "Thẻ đó không còn tồn tại."
+      }
     }
   }
 }

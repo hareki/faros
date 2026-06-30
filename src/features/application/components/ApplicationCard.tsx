@@ -1,6 +1,6 @@
-import { useState } from 'react';
-
+import { useDraggable } from '@dnd-kit/react';
 import { IconCalendar, IconMessages, IconStar, IconStarFilled } from '@tabler/icons-react';
+import Link from 'next/link';
 import { useLocale } from 'next-intl';
 
 import { Badge } from '@/src/components/ui/Badge';
@@ -19,6 +19,7 @@ import { formatDate } from '@/src/lib/formatter/date';
 import { type ClientMessages } from '@/src/lib/next-intl/utils/clientMessages';
 import { cn } from '@/src/lib/tailwind/utils';
 
+import { useToggleFavorite } from '../hooks/useToggleFavorite';
 import { type BoardApplication } from '../types';
 import { STAGE_COLOR } from '../utils/stageColors';
 
@@ -28,6 +29,8 @@ type ApplicationCardProps = {
   appliedOn: string;
   sources: ClientMessages['trackerBoard']['sources'];
   favoriteLabels: ClientMessages['trackerBoard']['favorite'];
+  jobHuntId: string | null;
+  readOnly: boolean;
 };
 
 export function ApplicationCard({
@@ -36,13 +39,22 @@ export function ApplicationCard({
   appliedOn,
   sources,
   favoriteLabels,
+  jobHuntId,
+  readOnly,
 }: ApplicationCardProps) {
   const { company, role, stage, subStage, tags, source, appliedAt } = application;
   const locale = useLocale();
 
-  // Local-only until the toggleFavorite server action lands (see ADR-0007); the board is not
-  // yet wired to real data, so this just flips the visual state for the session.
-  const [favorite, setFavorite] = useState(application.favorite);
+  const { ref, isDragging } = useDraggable({
+    id: application.id,
+    data: { stage: application.stage },
+    disabled: readOnly,
+  });
+
+  const { favorite, toggle } = useToggleFavorite(
+    { id: application.id, favorite: application.favorite },
+    { errorMessage: favoriteLabels.error },
+  );
 
   // Word order around the source/date differs per locale, so the footer fills a localized
   // template ("Applied via {source} on {date}") rather than concatenating fixed fragments.
@@ -54,8 +66,12 @@ export function ApplicationCard({
 
   const favoriteLabel = favorite ? favoriteLabels.remove : favoriteLabels.add;
 
-  return (
-    <Card size='sm' className='shrink-0 cursor-pointer rounded-3xl'>
+  const card = (
+    <Card
+      ref={ref}
+      size='sm'
+      className={cn('shrink-0 cursor-pointer rounded-3xl', isDragging && 'opacity-50')}
+    >
       <CardHeader>
         <CardTitle className='font-semibold text-pretty'>{company}</CardTitle>
         <CardDescription className='text-base text-pretty'>{role}</CardDescription>
@@ -64,14 +80,20 @@ export function ApplicationCard({
           <Button
             size='icon-sm'
             variant='ghost'
+            disabled={readOnly}
             tooltip={favoriteLabel}
             aria-label={favoriteLabel}
             aria-pressed={favorite}
             onClick={(event) => {
-              event.stopPropagation(); // the card itself becomes clickable (opens drawer) later
-              setFavorite((prev) => !prev);
-              // TODO(favorite): call the toggleFavorite server action once the BE lands
-              // (todos §2, ADR-0007).
+              event.preventDefault(); // stop the anchor's default navigation
+              event.stopPropagation(); // stop bubbling to the card link
+
+              if (readOnly) {
+                // An ended hunt is frozen history (read-only); the server rejects the write too.
+                return;
+              }
+
+              toggle();
             }}
             className={cn(
               'transition-opacity',
@@ -154,4 +176,14 @@ export function ApplicationCard({
       </CardFooter>
     </Card>
   );
+
+  if (jobHuntId !== null) {
+    return (
+      <Link href={`/tracker-board/${application.id}?job_hunt=${jobHuntId}`} className='block'>
+        {card}
+      </Link>
+    );
+  }
+
+  return card;
 }

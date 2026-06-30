@@ -226,11 +226,17 @@ async function seed() {
       metadata: { from: 'applied', to: 'active' },
     },
     { applicationId: active.id, type: 'sub_stage_change', metadata: { to: 'Tech Screen' } },
+    { applicationId: active.id, type: 'response_received', metadata: { trigger: 'stage_advance' } },
     { applicationId: finalApp.id, type: 'created' },
     {
       applicationId: finalApp.id,
       type: 'stage_change',
       metadata: { from: 'active', to: 'final_stages' },
+    },
+    {
+      applicationId: finalApp.id,
+      type: 'response_received',
+      metadata: { trigger: 'stage_advance' },
     },
     { applicationId: closed.id, type: 'created' },
     {
@@ -238,6 +244,11 @@ async function seed() {
       type: 'closed',
       description: 'Rejected',
       metadata: { outcome: 'rejected' },
+    },
+    {
+      applicationId: closed.id,
+      type: 'response_received',
+      metadata: { trigger: 'closed_rejected' },
     },
   ]);
 

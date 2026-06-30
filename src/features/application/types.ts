@@ -1,9 +1,11 @@
 // Type-only imports of the Drizzle enums are erased at build, so the board's display
 // types stay in sync with the schema without pulling drizzle into the client bundle.
-import type { applicationSource, boardStage } from './db/schema';
+import type { applicationSource, boardStage, closedOutcome, workingModel } from './db/schema';
 
 export type BoardStage = (typeof boardStage.enumValues)[number];
 export type ApplicationSource = (typeof applicationSource.enumValues)[number];
+export type ClosedOutcome = (typeof closedOutcome.enumValues)[number];
+export type WorkingModel = (typeof workingModel.enumValues)[number];
 
 /** The four board columns, in display order (mirrors the `board_stage` enum). */
 export const BOARD_STAGES = [
@@ -15,6 +17,23 @@ export const BOARD_STAGES = [
 
 export type BoardSubStage = { id: string; name: string };
 export type BoardTag = { id: string; name: string; color: string | null };
+
+/** Source enum values as a client-safe literal array (for filters + selects). */
+export const APPLICATION_SOURCES = [
+  'linkedin',
+  'itviec',
+  'referral',
+  'direct',
+  'recruiter',
+  'other',
+] as const satisfies readonly ApplicationSource[];
+
+/** Working-model enum values as a client-safe literal array. */
+export const WORKING_MODELS = [
+  'remote',
+  'hybrid',
+  'onsite',
+] as const satisfies readonly WorkingModel[];
 
 /**
  * Everything a board card needs to render. The card currently paints only company +

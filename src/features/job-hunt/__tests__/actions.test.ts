@@ -1,10 +1,9 @@
 import { eq } from 'drizzle-orm';
-import { headers } from 'next/headers';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { db } from '@/src/db/client';
 import { jobHunts } from '@/src/db/schema';
-import { auth } from '@/src/lib/better-auth';
+import { signInAs } from '@/src/lib/vitest/helpers/auth';
 import { createVerifiedUser } from '@/src/lib/vitest/helpers/db';
 
 const PASSWORD = 'Sup3r$ecret!';
@@ -15,24 +14,6 @@ beforeEach(() => {
   vi.resetModules();
 });
 
-// Sign in via auth.api and expose the session cookie to headers() so requireUser() resolves
-// to this user for the dynamically-imported action.
-async function signIn(email: string) {
-  const { headers: responseHeaders } = await auth.api.signInEmail({
-    body: { email, password: PASSWORD },
-    headers: new Headers(),
-    returnHeaders: true,
-  });
-  const cookie = responseHeaders
-    .getSetCookie()
-    .map((entry) => entry.split(';')[0])
-    .join('; ');
-  const requestHeaders = new Headers();
-
-  requestHeaders.set('cookie', cookie);
-  vi.mocked(headers).mockResolvedValue(requestHeaders);
-}
-
 function importStart() {
   return import('@/src/features/job-hunt/actions/startJobHuntAction');
 }
@@ -42,7 +23,7 @@ describe('startJobHuntAction', () => {
     const email = 'starter@example.com';
     const user = await createVerifiedUser({ email, password: PASSWORD });
 
-    await signIn(email);
+    await signInAs(email, PASSWORD);
 
     const { startJobHuntAction } = await importStart();
     const result = await startJobHuntAction({ name: 'My Hunt' });
@@ -59,7 +40,7 @@ describe('startJobHuntAction', () => {
     const email = 'conflict@example.com';
 
     await createVerifiedUser({ email, password: PASSWORD });
-    await signIn(email);
+    await signInAs(email, PASSWORD);
 
     const { startJobHuntAction } = await importStart();
 
@@ -75,7 +56,7 @@ describe('renameJobHuntAction', () => {
     const email = 'renamer@example.com';
     const user = await createVerifiedUser({ email, password: PASSWORD });
 
-    await signIn(email);
+    await signInAs(email, PASSWORD);
 
     const { startJobHuntAction } = await importStart();
 
@@ -98,7 +79,7 @@ describe('renameJobHuntAction', () => {
     const email = 'rename-foreign@example.com';
 
     await createVerifiedUser({ email, password: PASSWORD });
-    await signIn(email);
+    await signInAs(email, PASSWORD);
 
     const { renameJobHuntAction } =
       await import('@/src/features/job-hunt/actions/renameJobHuntAction');
@@ -113,7 +94,7 @@ describe('endJobHuntAction', () => {
     const email = 'ender@example.com';
     const user = await createVerifiedUser({ email, password: PASSWORD });
 
-    await signIn(email);
+    await signInAs(email, PASSWORD);
 
     const { startJobHuntAction } = await importStart();
 

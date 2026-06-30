@@ -12,6 +12,10 @@
       "type": "stdio",
       "command": "codegraph",
       "args": ["serve", "--mcp"]
+    },
+    "fallow": {
+      "command": "pnpm",
+      "args": ["exec", "fallow-mcp"]
     }
   }
 }

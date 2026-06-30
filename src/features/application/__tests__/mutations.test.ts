@@ -1,0 +1,662 @@
+import { eq } from 'drizzle-orm';
+import { describe, expect, it } from 'vitest';
+
+import { db } from '@/src/db/client';
+import { activityLog, applicationTags, applications, subStages, tags } from '@/src/db/schema';
+import {
+  closeApplication,
+  createApplication,
+  moveStage,
+  setFavorite,
+  updateApplication,
+  setSubStage,
+  setTags,
+} from '@/src/features/application/db/mutations';
+import { createJobHunt, createUser } from '@/src/lib/vitest/helpers/db';
+
+// This local helper builds the user => hunt => application chain itself so the test can
+// control which userId owns the application. The real createApplication mutation takes
+// jobHuntId externally and does not manage user ownership internally.
+async function createApp(userId: string, overrides: { favorite?: boolean } = {}) {
+  const hunt = await createJobHunt(userId);
+  const [app] = await db
+    .insert(applications)
+    .values({
+      jobHuntId: hunt.id,
+      company: 'Acme',
+      role: 'Engineer',
+      favorite: overrides.favorite ?? false,
+    })
+    .returning();
+
+  return app;
+}
+
+describe('setFavorite', () => {
+  it('sets favorite true on an owned application', async () => {
+    const user = await createUser();
+    const app = await createApp(user.id);
+
+    const updated = await setFavorite(db, { userId: user.id, id: app.id, favorite: true });
+
+    expect(updated?.favorite).toBe(true);
+  });
+
+  it('sets favorite false on an owned application', async () => {
+    const user = await createUser();
+    const app = await createApp(user.id, { favorite: true });
+
+    const updated = await setFavorite(db, { userId: user.id, id: app.id, favorite: false });
+
+    expect(updated?.favorite).toBe(false);
+  });
+
+  it("leaves another user's application untouched and returns undefined", async () => {
+    const owner = await createUser();
+    const other = await createUser();
+    const app = await createApp(owner.id, { favorite: false });
+
+    const result = await setFavorite(db, { userId: other.id, id: app.id, favorite: true });
+
+    expect(result).toBeUndefined();
+
+    const [row] = await db.select().from(applications).where(eq(applications.id, app.id));
+
+    expect(row.favorite).toBe(false);
+  });
+});
+
+async function activityTypes(applicationId: string) {
+  const rows = await db
+    .select({ type: activityLog.type })
+    .from(activityLog)
+    .where(eq(activityLog.applicationId, applicationId));
+
+  return rows.map((r) => r.type).sort();
+}
+
+describe('createApplication', () => {
+  it('logs only created for an applied app', async () => {
+    const user = await createUser();
+    const hunt = await createJobHunt(user.id);
+
+    const { id } = await createApplication(db, {
+      jobHuntId: hunt.id,
+      company: 'Acme',
+      role: 'Engineer',
+      stage: 'applied',
+    });
+
+    expect(await activityTypes(id)).toEqual(['created']);
+  });
+
+  it('backfills response_received for an active app (ADR-0006)', async () => {
+    const user = await createUser();
+    const hunt = await createJobHunt(user.id);
+
+    const { id } = await createApplication(db, {
+      jobHuntId: hunt.id,
+      company: 'Globex',
+      role: 'FE',
+      stage: 'active',
+    });
+
+    expect(await activityTypes(id)).toEqual(['created', 'response_received']);
+  });
+
+  it('backfills response_received for a final_stages app', async () => {
+    const user = await createUser();
+    const hunt = await createJobHunt(user.id);
+
+    const { id } = await createApplication(db, {
+      jobHuntId: hunt.id,
+      company: 'Initech',
+      role: 'UI',
+      stage: 'final_stages',
+    });
+
+    expect(await activityTypes(id)).toEqual(['created', 'response_received']);
+  });
+
+  it('closed+rejected logs created+closed+response_received and sets closed columns', async () => {
+    const user = await createUser();
+    const hunt = await createJobHunt(user.id);
+
+    const { id } = await createApplication(db, {
+      jobHuntId: hunt.id,
+      company: 'Hooli',
+      role: 'Web',
+      stage: 'closed',
+      closedOutcome: 'rejected',
+    });
+
+    expect(await activityTypes(id)).toEqual(['closed', 'created', 'response_received']);
+    const [row] = await db.select().from(applications).where(eq(applications.id, id));
+
+    expect(row.closedOutcome).toBe('rejected');
+    expect(row.closedAt).not.toBeNull();
+  });
+
+  it('closed+accepted backfills offer_received', async () => {
+    const user = await createUser();
+    const hunt = await createJobHunt(user.id);
+
+    const { id } = await createApplication(db, {
+      jobHuntId: hunt.id,
+      company: 'Stark',
+      role: 'Eng',
+      stage: 'closed',
+      closedOutcome: 'accepted',
+    });
+
+    expect(await activityTypes(id)).toEqual(['closed', 'created', 'offer_received']);
+  });
+});
+
+describe('updateApplication', () => {
+  async function ownedApp(userId: string) {
+    const hunt = await createJobHunt(userId);
+    const [app] = await db
+      .insert(applications)
+      .values({ jobHuntId: hunt.id, company: 'Acme', role: 'Eng' })
+      .returning();
+
+    return app;
+  }
+
+  it('updates metadata for an owned app', async () => {
+    const user = await createUser();
+    const app = await ownedApp(user.id);
+
+    const updated = await updateApplication(db, {
+      userId: user.id,
+      id: app.id,
+      data: { company: 'NewCo', location: 'Remote' },
+    });
+
+    expect(updated?.company).toBe('NewCo');
+    expect(updated?.location).toBe('Remote');
+  });
+
+  it('logs note_added once when notes go empty => non-empty', async () => {
+    const user = await createUser();
+    const app = await ownedApp(user.id);
+
+    await updateApplication(db, { userId: user.id, id: app.id, data: { notes: 'first note' } });
+    await updateApplication(db, { userId: user.id, id: app.id, data: { notes: 'edited note' } });
+
+    expect(await activityTypes(app.id)).toEqual(['note_added']);
+  });
+
+  it("leaves another user's app untouched and returns undefined", async () => {
+    const owner = await createUser();
+    const other = await createUser();
+    const app = await ownedApp(owner.id);
+
+    const result = await updateApplication(db, {
+      userId: other.id,
+      id: app.id,
+      data: { company: 'Hacked' },
+    });
+
+    expect(result).toBeUndefined();
+    const [row] = await db.select().from(applications).where(eq(applications.id, app.id));
+
+    expect(row.company).toBe('Acme');
+  });
+
+  it('does not log note_added for whitespace-only notes, logs exactly once for real note', async () => {
+    const user = await createUser();
+    const app = await ownedApp(user.id);
+
+    await updateApplication(db, { userId: user.id, id: app.id, data: { notes: '   ' } });
+
+    expect(await activityTypes(app.id)).toEqual([]);
+
+    await updateApplication(db, { userId: user.id, id: app.id, data: { notes: 'real note' } });
+
+    expect(await activityTypes(app.id)).toEqual(['note_added']);
+  });
+
+  it('does not log note_added when clearing notes to null', async () => {
+    const user = await createUser();
+    const app = await ownedApp(user.id);
+
+    await updateApplication(db, { userId: user.id, id: app.id, data: { notes: 'real note' } });
+    await updateApplication(db, { userId: user.id, id: app.id, data: { notes: null } });
+
+    expect(await activityTypes(app.id)).toEqual(['note_added']);
+  });
+});
+
+describe('setSubStage', () => {
+  async function activeAppWithSubStages(userId: string) {
+    const hunt = await createJobHunt(userId);
+    const [app] = await db
+      .insert(applications)
+      .values({ jobHuntId: hunt.id, company: 'Acme', role: 'Eng', stage: 'active' })
+      .returning();
+    const [sub] = await db
+      .insert(subStages)
+      .values({ userId, stage: 'active', name: 'HR Screen', sortOrder: 0 })
+      .returning();
+    const [wrongStage] = await db
+      .insert(subStages)
+      .values({ userId, stage: 'final_stages', name: 'Onsite', sortOrder: 0 })
+      .returning();
+
+    return { app, sub, wrongStage };
+  }
+
+  it('sets a valid sub-stage and logs sub_stage_change with the name', async () => {
+    const user = await createUser();
+    const { app, sub } = await activeAppWithSubStages(user.id);
+
+    const result = await setSubStage(db, { userId: user.id, id: app.id, subStageId: sub.id });
+
+    expect(result).toEqual({ status: 'ok' });
+    const [row] = await db.select().from(applications).where(eq(applications.id, app.id));
+
+    expect(row.subStageId).toBe(sub.id);
+    const [log] = await db.select().from(activityLog).where(eq(activityLog.applicationId, app.id));
+
+    expect(log.type).toBe('sub_stage_change');
+    expect(log.metadata).toEqual({ from: null, to: 'HR Screen' });
+  });
+
+  it('rejects a sub-stage from a different stage', async () => {
+    const user = await createUser();
+    const { app, wrongStage } = await activeAppWithSubStages(user.id);
+
+    const result = await setSubStage(db, {
+      userId: user.id,
+      id: app.id,
+      subStageId: wrongStage.id,
+    });
+
+    expect(result).toEqual({ status: 'sub_stage_invalid' });
+  });
+
+  it('returns application_not_found for a foreign app', async () => {
+    const owner = await createUser();
+    const other = await createUser();
+    const { app, sub } = await activeAppWithSubStages(owner.id);
+
+    const result = await setSubStage(db, { userId: other.id, id: app.id, subStageId: sub.id });
+
+    expect(result).toEqual({ status: 'application_not_found' });
+  });
+
+  it('clears sub-stage with null and logs sub_stage_change with from name and to null', async () => {
+    const user = await createUser();
+    const { app, sub } = await activeAppWithSubStages(user.id);
+
+    // Set a sub-stage first so the app has one to clear
+    await db.update(applications).set({ subStageId: sub.id }).where(eq(applications.id, app.id));
+
+    const result = await setSubStage(db, { userId: user.id, id: app.id, subStageId: null });
+
+    expect(result).toEqual({ status: 'ok' });
+    const [row] = await db.select().from(applications).where(eq(applications.id, app.id));
+
+    expect(row.subStageId).toBeNull();
+    const [log] = await db.select().from(activityLog).where(eq(activityLog.applicationId, app.id));
+
+    expect(log.type).toBe('sub_stage_change');
+    expect(log.metadata).toEqual({ from: 'HR Screen', to: null });
+  });
+
+  it('rejects a sub-stage belonging to a different user even if the stage matches', async () => {
+    const owner = await createUser();
+    const other = await createUser();
+
+    // owner's app in "active" stage
+    const ownerHunt = await createJobHunt(owner.id);
+    const [ownerApp] = await db
+      .insert(applications)
+      .values({ jobHuntId: ownerHunt.id, company: 'Acme', role: 'Eng', stage: 'active' })
+      .returning();
+
+    // other user's sub-stage in "active" stage (stage matches but userId does not)
+    const [otherSub] = await db
+      .insert(subStages)
+      .values({ userId: other.id, stage: 'active', name: 'Phone Screen', sortOrder: 0 })
+      .returning();
+
+    const result = await setSubStage(db, {
+      userId: owner.id,
+      id: ownerApp.id,
+      subStageId: otherSub.id,
+    });
+
+    expect(result).toEqual({ status: 'sub_stage_invalid' });
+  });
+});
+
+describe('setTags', () => {
+  async function appAndTags(userId: string) {
+    const hunt = await createJobHunt(userId);
+    const [app] = await db
+      .insert(applications)
+      .values({ jobHuntId: hunt.id, company: 'Acme', role: 'Eng' })
+      .returning();
+    const tagRows = await db
+      .insert(tags)
+      .values([
+        { userId, name: 'remote' },
+        { userId, name: 'startup' },
+      ])
+      .returning();
+
+    return { app, tagRows };
+  }
+
+  it('replaces the tag set for an owned app', async () => {
+    const user = await createUser();
+    const { app, tagRows } = await appAndTags(user.id);
+
+    await setTags(db, { userId: user.id, id: app.id, tagIds: [tagRows[0].id, tagRows[1].id] });
+    await setTags(db, { userId: user.id, id: app.id, tagIds: [tagRows[1].id] });
+
+    const joined = await db
+      .select({ tagId: applicationTags.tagId })
+      .from(applicationTags)
+      .where(eq(applicationTags.applicationId, app.id));
+
+    expect(joined.map((r) => r.tagId)).toEqual([tagRows[1].id]);
+  });
+
+  it('rejects a tag the user does not own', async () => {
+    const user = await createUser();
+    const stranger = await createUser();
+    const { app } = await appAndTags(user.id);
+    const [foreignTag] = await db
+      .insert(tags)
+      .values({ userId: stranger.id, name: 'x' })
+      .returning();
+
+    const result = await setTags(db, { userId: user.id, id: app.id, tagIds: [foreignTag.id] });
+
+    expect(result).toEqual({ status: 'tag_invalid' });
+  });
+
+  it('clears all tags when tagIds is empty', async () => {
+    const user = await createUser();
+    const { app, tagRows } = await appAndTags(user.id);
+
+    // Set some tags first
+    await setTags(db, { userId: user.id, id: app.id, tagIds: [tagRows[0].id, tagRows[1].id] });
+
+    const result = await setTags(db, { userId: user.id, id: app.id, tagIds: [] });
+
+    expect(result).toEqual({ status: 'ok' });
+
+    const joined = await db
+      .select({ tagId: applicationTags.tagId })
+      .from(applicationTags)
+      .where(eq(applicationTags.applicationId, app.id));
+
+    expect(joined).toHaveLength(0);
+  });
+
+  it('writes no activity entries (tags are filter-only/organizational, ADR-0007)', async () => {
+    const user = await createUser();
+    const { app, tagRows } = await appAndTags(user.id);
+
+    await setTags(db, { userId: user.id, id: app.id, tagIds: [tagRows[0].id] });
+    await setTags(db, { userId: user.id, id: app.id, tagIds: [] });
+
+    expect(await activityTypes(app.id)).toEqual([]);
+  });
+
+  it('returns application_not_found for a foreign app', async () => {
+    const owner = await createUser();
+    const other = await createUser();
+    const { app, tagRows } = await appAndTags(owner.id);
+
+    const result = await setTags(db, { userId: other.id, id: app.id, tagIds: [tagRows[0].id] });
+
+    expect(result).toEqual({ status: 'application_not_found' });
+  });
+});
+
+describe('moveStage', () => {
+  async function ownedAppAt(
+    userId: string,
+    stage: 'applied' | 'active' | 'final_stages' | 'closed',
+  ) {
+    const hunt = await createJobHunt(userId);
+    const [app] = await db
+      .insert(applications)
+      .values({
+        jobHuntId: hunt.id,
+        company: 'Acme',
+        role: 'Eng',
+        stage,
+        ...(stage === 'closed'
+          ? { closedOutcome: 'withdrawn' as const, closedAt: new Date() }
+          : {}),
+      })
+      .returning();
+
+    return app;
+  }
+
+  it('moves applied => active, clears sub-stage, derives first response', async () => {
+    const user = await createUser();
+    const app = await ownedAppAt(user.id, 'applied');
+
+    const updated = await moveStage(db, { userId: user.id, id: app.id, to: 'active' });
+
+    expect(updated?.stage).toBe('active');
+    expect(updated?.subStageId).toBeNull();
+    expect(await activityTypes(app.id)).toEqual(['response_received', 'stage_change']);
+  });
+
+  it('re-opening from closed clears closed columns and logs stage_change', async () => {
+    const user = await createUser();
+    const app = await ownedAppAt(user.id, 'closed');
+
+    const updated = await moveStage(db, { userId: user.id, id: app.id, to: 'active' });
+
+    expect(updated?.stage).toBe('active');
+    expect(updated?.closedOutcome).toBeNull();
+    expect(updated?.closedAt).toBeNull();
+    expect(await activityTypes(app.id)).toContain('stage_change');
+  });
+
+  it('returns undefined for a foreign app', async () => {
+    const owner = await createUser();
+    const other = await createUser();
+    const app = await ownedAppAt(owner.id, 'applied');
+
+    expect(await moveStage(db, { userId: other.id, id: app.id, to: 'active' })).toBeUndefined();
+  });
+
+  it('same-stage no-op preserves sub-stage and writes no stage_change', async () => {
+    const user = await createUser();
+    const [subStage] = await db
+      .insert(subStages)
+      .values({ userId: user.id, name: 'HR Screen', stage: 'active' })
+      .returning();
+
+    const app = await ownedAppAt(user.id, 'active');
+
+    await db
+      .update(applications)
+      .set({ subStageId: subStage.id })
+      .where(eq(applications.id, app.id));
+
+    const updated = await moveStage(db, { userId: user.id, id: app.id, to: 'active' });
+
+    expect(updated?.stage).toBe('active');
+    expect(updated?.subStageId).toBe(subStage.id);
+    expect(await activityTypes(app.id)).not.toContain('stage_change');
+  });
+});
+
+describe('closeApplication', () => {
+  async function activeApp(userId: string) {
+    const hunt = await createJobHunt(userId);
+    const [app] = await db
+      .insert(applications)
+      .values({ jobHuntId: hunt.id, company: 'Acme', role: 'Eng', stage: 'active' })
+      .returning();
+
+    return app;
+  }
+
+  it('closes as accepted and backfills offer_received', async () => {
+    const user = await createUser();
+    const app = await activeApp(user.id);
+
+    const updated = await closeApplication(db, {
+      userId: user.id,
+      id: app.id,
+      outcome: 'accepted',
+    });
+
+    expect(updated?.stage).toBe('closed');
+    expect(updated?.closedOutcome).toBe('accepted');
+    expect(updated?.closedAt).not.toBeNull();
+    expect(await activityTypes(app.id)).toEqual(['closed', 'offer_received']);
+  });
+
+  it('closes as ghosted with no derived milestone', async () => {
+    const user = await createUser();
+    const app = await activeApp(user.id);
+
+    await closeApplication(db, { userId: user.id, id: app.id, outcome: 'ghosted' });
+
+    expect(await activityTypes(app.id)).toEqual(['closed']);
+  });
+
+  it('returns undefined for a foreign app', async () => {
+    const owner = await createUser();
+    const other = await createUser();
+    const app = await activeApp(owner.id);
+
+    expect(
+      await closeApplication(db, { userId: other.id, id: app.id, outcome: 'rejected' }),
+    ).toBeUndefined();
+  });
+});
+
+describe('ended hunt is read-only (server-enforced)', () => {
+  // ADR-0002/ADR-0008: an ended hunt is frozen history, so the editing mutations must reject
+  // writes to an application under it even for the owner - otherwise a stale client could write
+  // activity rows that corrupt the frozen funnel. Each case asserts the not-found result, an
+  // unchanged row, and no new activity.
+  async function endedHuntApp(
+    userId: string,
+    overrides: {
+      stage?: 'applied' | 'active' | 'final_stages' | 'closed';
+      favorite?: boolean;
+    } = {},
+  ) {
+    const hunt = await createJobHunt(userId, { status: 'ended' });
+    const [app] = await db
+      .insert(applications)
+      .values({
+        jobHuntId: hunt.id,
+        company: 'Acme',
+        role: 'Eng',
+        stage: overrides.stage ?? 'active',
+        favorite: overrides.favorite ?? false,
+      })
+      .returning();
+
+    return app;
+  }
+
+  async function reload(id: string) {
+    const [row] = await db.select().from(applications).where(eq(applications.id, id));
+
+    return row;
+  }
+
+  it('setFavorite refuses to toggle and leaves the row unchanged', async () => {
+    const user = await createUser();
+    const app = await endedHuntApp(user.id, { favorite: false });
+
+    const result = await setFavorite(db, { userId: user.id, id: app.id, favorite: true });
+
+    expect(result).toBeUndefined();
+    expect((await reload(app.id)).favorite).toBe(false);
+  });
+
+  it('updateApplication refuses to edit and logs no note_added', async () => {
+    const user = await createUser();
+    const app = await endedHuntApp(user.id);
+
+    const result = await updateApplication(db, {
+      userId: user.id,
+      id: app.id,
+      data: { company: 'NewCo', notes: 'a real note' },
+    });
+
+    expect(result).toBeUndefined();
+    expect((await reload(app.id)).company).toBe('Acme');
+    expect(await activityTypes(app.id)).toEqual([]);
+  });
+
+  it('moveStage refuses to move and logs no stage_change', async () => {
+    const user = await createUser();
+    const app = await endedHuntApp(user.id, { stage: 'applied' });
+
+    const result = await moveStage(db, { userId: user.id, id: app.id, to: 'active' });
+
+    expect(result).toBeUndefined();
+    expect((await reload(app.id)).stage).toBe('applied');
+    expect(await activityTypes(app.id)).toEqual([]);
+  });
+
+  it('setSubStage refuses to set and logs no sub_stage_change', async () => {
+    const user = await createUser();
+    const app = await endedHuntApp(user.id, { stage: 'active' });
+    const [sub] = await db
+      .insert(subStages)
+      .values({ userId: user.id, stage: 'active', name: 'HR Screen', sortOrder: 0 })
+      .returning();
+
+    const result = await setSubStage(db, { userId: user.id, id: app.id, subStageId: sub.id });
+
+    expect(result).toEqual({ status: 'application_not_found' });
+    expect((await reload(app.id)).subStageId).toBeNull();
+    expect(await activityTypes(app.id)).toEqual([]);
+  });
+
+  it('closeApplication refuses to close and logs no closed', async () => {
+    const user = await createUser();
+    const app = await endedHuntApp(user.id, { stage: 'active' });
+
+    const result = await closeApplication(db, {
+      userId: user.id,
+      id: app.id,
+      outcome: 'rejected',
+    });
+
+    expect(result).toBeUndefined();
+    const row = await reload(app.id);
+
+    expect(row.stage).toBe('active');
+    expect(row.closedOutcome).toBeNull();
+    expect(await activityTypes(app.id)).toEqual([]);
+  });
+
+  it('setTags refuses to assign tags', async () => {
+    const user = await createUser();
+    const app = await endedHuntApp(user.id);
+    const [tag] = await db.insert(tags).values({ userId: user.id, name: 'remote' }).returning();
+
+    const result = await setTags(db, { userId: user.id, id: app.id, tagIds: [tag.id] });
+
+    expect(result).toEqual({ status: 'application_not_found' });
+    const joined = await db
+      .select({ tagId: applicationTags.tagId })
+      .from(applicationTags)
+      .where(eq(applicationTags.applicationId, app.id));
+
+    expect(joined).toHaveLength(0);
+  });
+});

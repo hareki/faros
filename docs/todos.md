@@ -83,22 +83,21 @@ Dependency-ordered. Each feature: sketch static UI → build BE → wire FE.
 - [x] [FE] Sketch card: company, role, sub-stage chip, tag chips, source footer → screens.md: Tracker Board (Cards)
 - [x] [BE] Add `favorite` boolean to `applications` (not null, default false) + migration → ADR-0007
 - [x] [FE] Favorite star toggle on card (local-only; reveal-on-hover/focus) → screens.md: Tracker Board (Cards)
-- [ ] [BE] Server action `toggleFavorite` — updates `applications.favorite`; no activity-log write (ADR-0007)
-- [ ] [FE] Wire favorite star to `toggleFavorite` (replace local state)
-- [ ] [FE] Sketch card detail drawer: all metadata, activity-log timeline, resume-picker slot, notes (Lexical), event-list slot → screens.md: Application Detail Drawer
-- [ ] [BE] Sub-stage CRUD per user per stage (settings screen)
-- [ ] [BE] Tag CRUD per user
-- [ ] [BE] Board read query (apps grouped by stage for the active hunt)
-- [ ] [BE] Server actions: `createApplication`, `updateApplication`, `moveStage`, `setSubStage`, `setTags`, `closeApplication` (writes `closed_outcome` + `closed_at`); each calls `logActivity()`
+- [x] [BE] Server action `toggleFavorite` — updates `applications.favorite`; no activity-log write (ADR-0007)
+- [x] [FE] Wire favorite star to `toggleFavorite` (replace local state)
+- [x] [FE] Sketch card detail (modal + full page): all metadata, activity-log timeline, resume-picker slot, notes (Lexical), event-list slot → screens.md: Application Detail (ADR-0008)
+- [x] [BE] Sub-stage CRUD per user per stage (settings screen)
+- [x] [BE] Tag CRUD per user
+- [x] [BE] Board read query (apps grouped by stage for the active hunt)
+- [x] [BE] Server actions: `createApplication`, `updateApplication`, `moveStage`, `setSubStage`, `setTags`, `closeApplication` (writes `closed_outcome` + `closed_at`); each calls `logActivity()`
   - `createApplication` accepts an initial `stage` (board quick-add prefills the column; migration use-case) and backfills the implied milestones for non-applied creation — `response_received` for active/final_stages, outcome-implied response/offer for closed (which also collects `closed_outcome`); see ADR-0006
-- [ ] [FE] Wire board columns + cards to real data → screens.md: Tracker Board (Kanban)
-- [ ] [FE] Wire card detail drawer (metadata, activity-log timeline, notes via Lexical) → screens.md: Application Detail Drawer
-- [ ] [FE] Sub-stage dropdown on card (writes `sub_stage_change` activity) → screens.md: Application Detail Drawer (Sub-stage picker)
-- [ ] [FE] Tag filter UI backed by a Zustand store → screens.md: Tracker Board (Filter bar)
-- [ ] [FE] dnd-kit: drag cards between columns (writes `stage_change`; opens closed-outcome prompt when dropping into Closed) → screens.md: Tracker Board (Drag & drop) + Close-outcome prompt
-- [ ] [FE] dnd-kit: reorder sub-stages in settings → screens.md: Settings (Sub-stages)
+- [x] [FE] Wire board columns + cards to real data → screens.md: Tracker Board (Kanban)
+- [x] [FE] Wire card detail (modal + full page): metadata, activity-log timeline, notes via Lexical → screens.md: Application Detail (ADR-0008)
+- [x] [FE] Sub-stage dropdown on card (writes `sub_stage_change` activity) → screens.md: Application Detail (Sub-stage picker, ADR-0008)
+- [x] [FE] Tag/sub-stage/source/working-model filter bar backed by nuqs URL state => screens.md: Tracker Board (Filter bar)
+- [x] [FE] dnd-kit: drag cards between columns (writes `stage_change`; opens closed-outcome prompt when dropping into Closed) → screens.md: Tracker Board (Drag & drop) + Close-outcome prompt
 
-> Note: the drawer's resume-picker and event-list slots are wired when features 3 and 4 land.
+> Note: Sub-stage reorder shipped in Phase 3 Settings work. The detail's resume-picker and event-list slots are wired when features 3 and 4 land.
 
 ### 3. Resumes
 

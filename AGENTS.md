@@ -18,6 +18,18 @@ Run package.json scripts with `pnpm`, never `bun` (the scripts already shell out
 
 Tests run against a dedicated Neon `test` branch (`env/.env.test`), truncating every table between tests (`src/lib/vitest/setup.ts`), so `fileParallelism` is off and a host guard refuses to run unless `DB_CONNECTION_STRING` points at the test branch — dev/prod can never be wiped. `server-only` is stubbed and the auth email boundary is mocked in setup.
 
+## Verify before done
+
+After finishing a major task (a feature, bug fix, refactor, or any change that spans multiple files or alters behavior), validate the work before claiming it is done. Trivial edits (a typo, a comment, a one-line tweak) can skip the full pass.
+
+Run all three, in order, and report the outcome honestly (never claim success on a failure):
+
+1. `pnpm cleanup` (typecheck + fmt + lint). Fix whatever it surfaces. If you edited any `messages/**/*.json`, run `pnpm i18n:generate` first.
+2. `pnpm test` (Vitest run). If a test fails, fix the cause rather than the test; if the change lacks a covering test, add one.
+3. The fallow `mcp__fallow__audit` tool, which runs dead-code + complexity + duplication over the changed files and returns a verdict. Address what it flags, or note why it is acceptable.
+
+Only call the task complete once all three pass.
+
 ## Architecture
 
 Feature-sliced under `src/features/<feature>/` (auth, job-hunt, application, resume, event, activity, notification). A feature folder typically holds `db/` (`schema.ts`, `queries.ts`, `mutations.ts`), `actions/`, `schemas/` (Zod), `view-models/`, `views/`, `components/`, `server/`. Shared infra is in `src/lib/` (better-auth, next-intl, drizzle, form, t3-env, …); shared UI in `src/components/`.
@@ -37,7 +49,6 @@ Before using domain vocabulary or touching hunt/application/resume lifecycle, re
 - The React Compiler is enabled, so do not use `useMemo`, `useCallback`, or `memo` unless there is a very good reason to.
 - Define a named `XxxProps` type for component props instead of inlining the object type literal in the parameter list (e.g. `SimpleEmptyProps`).
 - Render text through the typography primitives in `src/components/ui/Typography.tsx` (`H1`–`H4`, `P`, `Lead`, `Large`, `Small`, `Muted`, `Blockquote`, `List`, `InlineCode`) instead of hand-styling raw `<h1>`–`<h4>`/`<p>`/`<span>`/`<small>` with text size/weight/color classes. Use the polymorphic `as` prop to change the rendered element (e.g. `<Small as='span'>`) and `className` to fine-tune. Exception: base UI primitives in `src/components/ui/` that wrap third-party primitives (e.g. `DialogTitle`, `SheetDescription`) keep their own elements.
-- Route metadata must be localized: export an async `generateMetadata` (never a static `export const metadata`) and pull strings via `await getTranslations('metadata')`. Page titles live under the `metadata` namespace in `server.json` (server-only); the `%s | Faros` title template and `metadataBase` are defined once on the root layout (`src/layout.tsx`), so each page only returns its own translated `title`.
 
 ## Agent skills
 
