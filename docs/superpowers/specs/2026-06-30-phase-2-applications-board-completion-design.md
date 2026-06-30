@@ -1,4 +1,4 @@
-# Phase 2 — Applications & Board Completion — Design
+# Phase 2 - Applications & Board Completion - Design
 
 **Date:** 2026-06-30
 **Status:** Approved
@@ -7,7 +7,7 @@
 
 Phase 2 (Applications & board) is partially built: the schema, the board read query, and
 the favorite toggle (BE action + optimistic FE) are done. The remaining work
-(`docs/todos.md` L88–L99) is the bulk of the feature's behaviour — every application
+(`docs/todos.md` L88–L99) is the bulk of the feature's behaviour - every application
 mutation, sub-stage/tag CRUD, the settings screens, the application detail surface, and the
 board's interactive layer (quick-add, filtering, drag-and-drop). This design covers all of
 it as one cohesive spec, to be executed as a phased implementation plan.
@@ -21,7 +21,7 @@ In scope (the remaining unchecked Phase 2 items):
 - BE: sub-stage CRUD (per user, per stage) and tag CRUD (per user).
 - FE: Settings screens for sub-stages (CRUD + drag-reorder) and tags (CRUD).
 - FE: Application detail as a **modal + full-page** surface (replaces the "drawer" wording).
-- FE: board wiring of the interactive layer — quick-add, the filter bar, and drag-and-drop
+- FE: board wiring of the interactive layer - quick-add, the filter bar, and drag-and-drop
   between columns with the close-outcome prompt.
 
 Explicitly **not** in scope (deferred to features 3 and 4 per `docs/todos.md` L101): the
@@ -44,7 +44,7 @@ intercepting routes**:
   detail as a full page** inside the existing app shell (header + sidebar intact), with a
   **top-right close button** back to `/tracker-board`.
 - Both segments are **Server Components** that server-fetch the detail and stream a
-  **skeleton** (Suspense) while it loads — no spinner, no client-side read round-trip. The
+  **skeleton** (Suspense) while it loads - no spinner, no client-side read round-trip. The
   fetched data is passed as typed props into the client editing components, matching the
   codebase's RSC-fetch-then-props convention.
 
@@ -53,7 +53,7 @@ Recorded as **ADR-0008**. The word "drawer" is retired across the docs.
 ### D2. Board filtering is server-side and URL-driven (resolves todos L97 vs screens.md)
 
 `docs/todos.md` L97 ("Tag filter backed by a Zustand store") conflicts with `docs/screens.md`
-("filter by Tag, Sub-stage, source, working model — state in the URL via nuqs"). `screens.md`
+("filter by Tag, Sub-stage, source, working model - state in the URL via nuqs"). `screens.md`
 is canonical (per `AGENTS.md`) and `nuqs` is already a dependency, so:
 
 - The filter bar covers **four dimensions**: Tag, Sub-stage, Source, Working model.
@@ -71,16 +71,16 @@ logging is precise:
 
 - **`closeApplication`** writes a `closed` activity through the existing `recordClose`
   helper (which derives `response_received`/`offer_received` from the outcome). It does
-  **not** also write `stage_change`. Consequently **`moveStage` rejects `to: 'closed'`** —
+  **not** also write `stage_change`. Consequently **`moveStage` rejects `to: 'closed'`**:
   closing is always `closeApplication`'s job.
 - **`moveStage`** clears `sub_stage_id`, and when re-opening from Closed also clears
   `closed_outcome`/`closed_at`, then calls `recordStageChange` (which auto-derives the first
-  `response_received` on `applied → active/final_stages`).
+  `response_received` on `applied => active/final_stages`).
 - **`setSubStage`** logs `sub_stage_change` with sub-stage **names** (not ids), matching the
-  seed — so the timeline reads correctly even after a sub-stage is later renamed or deleted.
+  seed - so the timeline reads correctly even after a sub-stage is later renamed or deleted.
 - **`setTags`** writes **no** activity (tags are filter-only/organizational, like
   `favorite`).
-- **`updateApplication`** writes `note_added` **only on the empty → non-empty transition** of
+- **`updateApplication`** writes `note_added` **only on the empty => non-empty transition** of
   `notes` (mirrors the `ensure*` "only if none yet" pattern); other metadata edits are not
   milestones and log nothing.
 - **`createApplication`** backfills per ADR-0006: always `created`; `active`/`final_stages`
@@ -89,9 +89,9 @@ logging is precise:
 ### D4. Ownership resolution
 
 `createApplication` resolves the user's **active** hunt server-side via `getActiveJobHunt`
-and never trusts a client-supplied `jobHuntId` — quick-add only exists on the active board
+and never trusts a client-supplied `jobHuntId` - quick-add only exists on the active board
 (ended hunts are read-only). All other application mutations scope by
-`application → job_hunt → user` using the same subquery pattern as the existing `setFavorite`
+`application => job_hunt => user` using the same subquery pattern as the existing `setFavorite`
 mutation.
 
 ### D5. Notes are stored as serialized Lexical state
@@ -107,30 +107,30 @@ CRUD), then FE in dependency order (settings validates the CRUD end-to-end; deta
 the same sub-stage/tag data; board drag-and-drop is added last so it integrates with the
 already-built click-to-open detail on the same card).
 
-### Phase 1 — BE: application mutations + server actions
+### Phase 1 - BE: application mutations + server actions
 
 Files: `src/features/application/db/mutations.ts` (extend), `src/features/application/actions/*`,
 `src/features/application/actions/types.ts` (extend), `src/db/seed.ts` (reconcile).
 
-Mutations — `server-only`, take a `DbExecutor`, transactional so the state change and its
+Mutations - `server-only`, take a `DbExecutor`, transactional so the state change and its
 activity rows commit together:
 
-- `createApplication` — insert + ADR-0006 backfill (D3). Closed creation sets
+- `createApplication` - insert + ADR-0006 backfill (D3). Closed creation sets
   `closedOutcome`/`closedAt` to satisfy the `applications_closed_state` CHECK.
-- `updateApplication` — owner-scoped update of editable metadata (company, role, source,
+- `updateApplication` - owner-scoped update of editable metadata (company, role, source,
   jdUrl, jdText, location, workingModel, salary min/max/currency, notes); `note_added` on the
-  empty→non-empty notes transition (D3). Returns updated row or `undefined`.
-- `moveStage` — owner-scoped; reads current stage for `from`, clears sub-stage (and closed
+  empty=>non-empty notes transition (D3). Returns updated row or `undefined`.
+- `moveStage` - owner-scoped; reads current stage for `from`, clears sub-stage (and closed
   fields when re-opening), `recordStageChange`. Rejects `to: 'closed'` (D3).
-- `setSubStage` — owner-scoped; validates the sub-stage belongs to the user and is valid for
+- `setSubStage` - owner-scoped; validates the sub-stage belongs to the user and is valid for
   the application's current stage (the composite FK enforces stage-match at the DB level as a
   backstop); logs `sub_stage_change` with names. Accepts `null` to clear.
-- `setTags` — owner-scoped; validates all tag ids belong to the user; replaces the
+- `setTags` - owner-scoped; validates all tag ids belong to the user; replaces the
   `application_tags` set (delete + insert) in one transaction; no activity.
-- `closeApplication` — owner-scoped; sets `stage='closed'`, `closedOutcome`, `closedAt=now`,
+- `closeApplication` - owner-scoped; sets `stage='closed'`, `closedOutcome`, `closedAt=now`,
   clears sub-stage; `recordClose(outcome)`.
 
-Server actions — `createServerAction({ schema, handler })` + `requireUser`, running the
+Server actions - `createServerAction({ schema, handler })` + `requireUser`, running the
 mutation inside `db.transaction`, returning `ApplicationActionResult`:
 
 - `createApplicationAction` (resolves active hunt; schema requires `closedOutcome` iff
@@ -145,7 +145,7 @@ the activity helpers (`recordStageChange`/`recordClose`/`ensureResponseReceived`
 seeded non-applied apps (the `active` app and the `closed`-rejected app) are
 funnel-consistent.
 
-### Phase 2 — BE: sub-stage & tag CRUD
+### Phase 2 - BE: sub-stage & tag CRUD
 
 Files: `src/features/application/db/queries.ts` (extend), `db/mutations.ts` (extend),
 `actions/*`.
@@ -159,7 +159,7 @@ Files: `src/features/application/db/queries.ts` (extend), `db/mutations.ts` (ext
 - Actions + error keys (`errorSubStageNameTaken`, `errorSubStageNotFound`,
   `errorTagNameTaken`, `errorTagNotFound`).
 
-### Phase 3 — FE: Settings screens
+### Phase 3 - FE: Settings screens
 
 Files: `src/app/(app)/settings/sub-stages/page.tsx` + `settings/tags/page.tsx` (fill the
 stubs), feature `views/`, `view-models/`, `components/`; new i18n `settings.subStages` /
@@ -171,7 +171,7 @@ stubs), feature `views/`, `view-models/`, `components/`; new i18n `settings.subS
   `reorderSubStagesAction`. (Absorbs todo L99.)
 - Tags view: list with name + color swatch; add / edit (name + color) / delete.
 
-### Phase 4 — FE: Application detail (modal + full page)
+### Phase 4 - FE: Application detail (modal + full page)
 
 Files under `src/app/(app)/tracker-board/`: `layout.tsx` (renders `children` + the `@modal`
 slot), `@modal/default.tsx` (null), `@modal/(.)[applicationId]/page.tsx` (Dialog host),
@@ -181,10 +181,10 @@ client components (metadata form, sub-stage picker, tag multi-select, Lexical no
 activity timeline), `view-models/`; new i18n `applicationDetail` + `activity` client
 namespaces.
 
-- `getApplicationDetail(userId, applicationId)` — full application row + activity timeline
+- `getApplicationDetail(userId, applicationId)` - full application row + activity timeline
   (ordered by `occurredAt`) + the user's sub-stages and tags (for the pickers); `notFound()`
   when not owned/missing; flags **read-only** when the owning hunt is ended.
-- `ApplicationDetailView` (client) — metadata form (`updateApplicationAction`), sub-stage
+- `ApplicationDetailView` (client) - metadata form (`updateApplicationAction`), sub-stage
   Combobox shown only for `active`/`final_stages` (`setSubStageAction`), tag multi-select
   (`setTagsAction`), Lexical notes editor (`updateApplicationAction`), favorite toggle (reuse
   existing), activity-log timeline (rendered from `type` + `metadata`, localized). Resume +
@@ -192,21 +192,21 @@ namespaces.
 - Board cards become links to the detail URL; the existing favorite button keeps
   `stopPropagation`.
 
-### Phase 5 — FE: Board interactions
+### Phase 5 - FE: Board interactions
 
 Files: `src/app/(app)/tracker-board/page.tsx` (extend), feature `components/`/`views/`,
 shared `nuqs` parser module, `db/queries.ts` (`getBoardApplications` gains filters); i18n
 `trackerBoard.filters` + `quickAdd` + close-outcome strings.
 
 - **Quick-add dialog**: per-column `+` prefills that column's stage (ADR-0006); the **Closed**
-  column adds a required `closed_outcome` field. `createApplicationAction` →
+  column adds a required `closed_outcome` field. `createApplicationAction` =>
   `router.refresh()`. Also a board-level quick-add defaulting to Applied.
 - **Filter bar** (D2): four dimensions, `nuqs` URL state, server-side filtering in
   `getBoardApplications`; options from the user's tags/sub-stages and the source/working-model
   enums (the board page fetches these alongside the applications).
 - **Drag-and-drop** (`@dnd-kit/react`): optimistic move + `router.refresh()` (favorite
-  pattern). Dropping into **Closed** opens the shared **Close-outcome prompt** (Dialog) →
-  `closeApplicationAction`; cancel reverts. Other drops → `moveStageAction`. Disabled for
+  pattern). Dropping into **Closed** opens the shared **Close-outcome prompt** (Dialog) =>
+  `closeApplicationAction`; cancel reverts. Other drops => `moveStageAction`. Disabled for
   ended (read-only) hunts. The Close-outcome prompt is shared with the Closed-column quick-add
   and the detail's close action.
 
@@ -214,11 +214,11 @@ shared `nuqs` parser module, `db/queries.ts` (`getBoardApplications` gains filte
 
 Per the project's "update docs with code" rule:
 
-- **New ADR-0008** — application detail as an intercepting-route modal with a full-page
+- **New ADR-0008** - application detail as an intercepting-route modal with a full-page
   fallback (records D1).
-- **`docs/screens.md`** — rename "Application Detail Drawer" → "Application Detail (modal +
+- **`docs/screens.md`** - rename "Application Detail Drawer" => "Application Detail (modal +
   full page)"; describe the dual behaviour; confirm the four-dimension `nuqs` filter bar.
-- **`docs/todos.md`** — rewrite L97 (nuqs, four dimensions); rename "drawer" → "detail/modal"
+- **`docs/todos.md`** - rewrite L97 (nuqs, four dimensions); rename "drawer" => "detail/modal"
   in L88/L95/L96; note L99 folded into the Settings phase.
 
 ## Testing
@@ -229,9 +229,9 @@ cover:
 
 - `createApplication` backfill per initial stage (applied / active / final_stages / closed
   outcomes); Closed-state CHECK satisfied.
-- `updateApplication` writes `note_added` once (empty→non-empty only); metadata-only edits log
+- `updateApplication` writes `note_added` once (empty=>non-empty only); metadata-only edits log
   nothing.
-- `moveStage` clears sub-stage; auto-derives first response on `applied → active/final`;
+- `moveStage` clears sub-stage; auto-derives first response on `applied => active/final`;
   rejects `to: 'closed'`; clears closed fields on re-open.
 - `setSubStage` stage-compatibility + ownership; `setTags` replace semantics + ownership;
   `closeApplication` outcome-implied response/offer derivations.
