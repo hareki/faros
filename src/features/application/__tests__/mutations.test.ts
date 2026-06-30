@@ -2,13 +2,14 @@ import { eq } from 'drizzle-orm';
 import { describe, expect, it } from 'vitest';
 
 import { db } from '@/src/db/client';
-import { activityLog, applications, subStages } from '@/src/db/schema';
+import { activityLog, applicationTags, applications, subStages, tags } from '@/src/db/schema';
 import {
   createApplication,
   moveStage,
   setFavorite,
   updateApplication,
   setSubStage,
+  setTags,
 } from '@/src/features/application/db/mutations';
 import { createJobHunt, createUser } from '@/src/lib/vitest/helpers/db';
 
@@ -328,6 +329,93 @@ describe('setSubStage', () => {
     });
 
     expect(result).toEqual({ status: 'sub_stage_invalid' });
+  });
+});
+
+describe('setTags', () => {
+  async function appAndTags(userId: string) {
+    const hunt = await createJobHunt(userId);
+    const [app] = await db
+      .insert(applications)
+      .values({ jobHuntId: hunt.id, company: 'Acme', role: 'Eng' })
+      .returning();
+    const tagRows = await db
+      .insert(tags)
+      .values([
+        { userId, name: 'remote' },
+        { userId, name: 'startup' },
+      ])
+      .returning();
+
+    return { app, tagRows };
+  }
+
+  it('replaces the tag set for an owned app', async () => {
+    const user = await createUser();
+    const { app, tagRows } = await appAndTags(user.id);
+
+    await setTags(db, { userId: user.id, id: app.id, tagIds: [tagRows[0].id, tagRows[1].id] });
+    await setTags(db, { userId: user.id, id: app.id, tagIds: [tagRows[1].id] });
+
+    const joined = await db
+      .select({ tagId: applicationTags.tagId })
+      .from(applicationTags)
+      .where(eq(applicationTags.applicationId, app.id));
+
+    expect(joined.map((r) => r.tagId)).toEqual([tagRows[1].id]);
+  });
+
+  it('rejects a tag the user does not own', async () => {
+    const user = await createUser();
+    const stranger = await createUser();
+    const { app } = await appAndTags(user.id);
+    const [foreignTag] = await db
+      .insert(tags)
+      .values({ userId: stranger.id, name: 'x' })
+      .returning();
+
+    const result = await setTags(db, { userId: user.id, id: app.id, tagIds: [foreignTag.id] });
+
+    expect(result).toEqual({ status: 'tag_invalid' });
+  });
+
+  it('clears all tags when tagIds is empty', async () => {
+    const user = await createUser();
+    const { app, tagRows } = await appAndTags(user.id);
+
+    // Set some tags first
+    await setTags(db, { userId: user.id, id: app.id, tagIds: [tagRows[0].id, tagRows[1].id] });
+
+    const result = await setTags(db, { userId: user.id, id: app.id, tagIds: [] });
+
+    expect(result).toEqual({ status: 'ok' });
+
+    const joined = await db
+      .select({ tagId: applicationTags.tagId })
+      .from(applicationTags)
+      .where(eq(applicationTags.applicationId, app.id));
+
+    expect(joined).toHaveLength(0);
+  });
+
+  it('writes no activity entries (tags are filter-only/organizational, ADR-0007)', async () => {
+    const user = await createUser();
+    const { app, tagRows } = await appAndTags(user.id);
+
+    await setTags(db, { userId: user.id, id: app.id, tagIds: [tagRows[0].id] });
+    await setTags(db, { userId: user.id, id: app.id, tagIds: [] });
+
+    expect(await activityTypes(app.id)).toEqual([]);
+  });
+
+  it('returns application_not_found for a foreign app', async () => {
+    const owner = await createUser();
+    const other = await createUser();
+    const { app, tagRows } = await appAndTags(owner.id);
+
+    const result = await setTags(db, { userId: other.id, id: app.id, tagIds: [tagRows[0].id] });
+
+    expect(result).toEqual({ status: 'application_not_found' });
   });
 });
 

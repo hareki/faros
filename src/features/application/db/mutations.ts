@@ -9,7 +9,12 @@ import {
   recordClose,
   recordStageChange,
 } from '@/src/features/activity/db/mutations';
-import { applications, subStages } from '@/src/features/application/db/schema';
+import {
+  applicationTags,
+  applications,
+  subStages,
+  tags,
+} from '@/src/features/application/db/schema';
 import {
   type ApplicationSource,
   type BoardStage,
@@ -298,6 +303,62 @@ export async function setSubStage(
     type: 'sub_stage_change',
     metadata: { from: fromName, to: toName },
   });
+
+  return { status: 'ok' };
+}
+
+export type SetTagsResult =
+  | { status: 'ok' }
+  | { status: 'application_not_found' }
+  | { status: 'tag_invalid' };
+
+type SetTagsParams = { userId: string; id: string; tagIds: string[] };
+
+/**
+ * Replaces an owned application's tag set. Every tag id must belong to the user. Tags are
+ * filter-only/organizational, so this writes no activity (mirrors `setFavorite`, ADR-0007).
+ */
+export async function setTags(
+  executor: DbExecutor,
+  { userId, id, tagIds }: SetTagsParams,
+): Promise<SetTagsResult> {
+  const app = await executor
+    .select({ id: applications.id })
+    .from(applications)
+    .where(
+      and(
+        eq(applications.id, id),
+        inArray(applications.jobHuntId, ownedJobHuntIds(executor, userId)),
+      ),
+    )
+    .then((rows) => rows.at(0));
+
+  if (!app) {
+    return { status: 'application_not_found' };
+  }
+
+  const uniqueIds = [...new Set(tagIds)];
+
+  if (uniqueIds.length > 0) {
+    const owned = await executor
+      .select({ id: tags.id })
+      .from(tags)
+      .where(and(eq(tags.userId, userId), inArray(tags.id, uniqueIds)));
+
+    if (owned.length !== uniqueIds.length) {
+      return { status: 'tag_invalid' };
+    }
+  }
+
+  await executor.delete(applicationTags).where(eq(applicationTags.applicationId, id));
+
+  if (uniqueIds.length > 0) {
+    await executor
+      .insert(applicationTags)
+      .values(uniqueIds.map((tagId) => ({ applicationId: id, tagId })));
+  }
+
+  await executor.update(applications).set({ updatedAt: new Date() }).where(eq(applications.id, id));
 
   return { status: 'ok' };
 }
