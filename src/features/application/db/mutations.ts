@@ -3,8 +3,25 @@ import 'server-only';
 import { and, eq, inArray } from 'drizzle-orm';
 
 import { type DbExecutor } from '@/src/db/client';
+import {
+  ensureResponseReceived,
+  logActivity,
+  recordClose,
+} from '@/src/features/activity/db/mutations';
 import { applications } from '@/src/features/application/db/schema';
+import {
+  type ApplicationSource,
+  type BoardStage,
+  type ClosedOutcome,
+  type WorkingModel,
+} from '@/src/features/application/types';
 import { jobHunts } from '@/src/features/job-hunt/db/schema';
+
+// All applications whose hunt belongs to the user - the ownership predicate every
+// application mutation filters by (subquery form, like the original setFavorite).
+function ownedJobHuntIds(executor: DbExecutor, userId: string) {
+  return executor.select({ id: jobHunts.id }).from(jobHunts).where(eq(jobHunts.userId, userId));
+}
 
 type SetFavoriteParams = { userId: string; id: string; favorite: boolean };
 
@@ -26,13 +43,72 @@ export async function setFavorite(
     .where(
       and(
         eq(applications.id, id),
-        inArray(
-          applications.jobHuntId,
-          executor.select({ id: jobHunts.id }).from(jobHunts).where(eq(jobHunts.userId, userId)),
-        ),
+        inArray(applications.jobHuntId, ownedJobHuntIds(executor, userId)),
       ),
     )
     .returning();
 
   return rows.at(0);
+}
+
+type CreateApplicationParams = {
+  jobHuntId: string;
+  company: string;
+  role: string;
+  stage: BoardStage;
+  source?: ApplicationSource | null;
+  jdUrl?: string | null;
+  jdText?: string | null;
+  location?: string | null;
+  workingModel?: WorkingModel | null;
+  salaryMin?: number | null;
+  salaryMax?: number | null;
+  salaryCurrency?: string | null;
+  notes?: string | null;
+  closedOutcome?: ClosedOutcome | null;
+};
+
+/**
+ * Inserts an application into the given hunt and backfills the milestones the equivalent
+ * Applied-then-advance path would have written (ADR-0006), so a migrated/backdated app stays
+ * funnel-consistent: `active`/`final_stages` get a first `response_received`; `closed` goes
+ * through `recordClose` so the outcome's implications (rejected => response, accepted => offer)
+ * hold. Always logs `created`. Caller passes a transaction handle so the row and its activity
+ * rows commit together. Returns the new id.
+ */
+export async function createApplication(
+  executor: DbExecutor,
+  params: CreateApplicationParams,
+): Promise<{ id: string }> {
+  const isClosed = params.stage === 'closed';
+
+  const [row] = await executor
+    .insert(applications)
+    .values({
+      jobHuntId: params.jobHuntId,
+      company: params.company,
+      role: params.role,
+      stage: params.stage,
+      source: params.source ?? null,
+      jdUrl: params.jdUrl ?? null,
+      jdText: params.jdText ?? null,
+      location: params.location ?? null,
+      workingModel: params.workingModel ?? null,
+      salaryMin: params.salaryMin ?? null,
+      salaryMax: params.salaryMax ?? null,
+      salaryCurrency: params.salaryCurrency ?? null,
+      notes: params.notes ?? null,
+      ...(isClosed ? { closedOutcome: params.closedOutcome ?? null, closedAt: new Date() } : {}),
+    })
+    .returning({ id: applications.id });
+
+  await logActivity(executor, { applicationId: row.id, type: 'created' });
+
+  if (params.stage === 'active' || params.stage === 'final_stages') {
+    await ensureResponseReceived(executor, { applicationId: row.id, trigger: 'stage_advance' });
+  } else if (isClosed && params.closedOutcome) {
+    await recordClose(executor, { applicationId: row.id, outcome: params.closedOutcome });
+  }
+
+  return row;
 }

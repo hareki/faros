@@ -1,10 +1,9 @@
 import { eq } from 'drizzle-orm';
-import { headers } from 'next/headers';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { db } from '@/src/db/client';
 import { applications } from '@/src/db/schema';
-import { auth } from '@/src/lib/better-auth';
+import { signInAs } from '@/src/lib/vitest/helpers/auth';
 import { createJobHunt, createVerifiedUser } from '@/src/lib/vitest/helpers/db';
 
 const PASSWORD = 'Sup3r$ecret!';
@@ -14,24 +13,6 @@ const PASSWORD = 'Sup3r$ecret!';
 beforeEach(() => {
   vi.resetModules();
 });
-
-// Sign in via auth.api and expose the session cookie to headers() so requireUser() resolves to
-// this user for the dynamically-imported action.
-async function signIn(email: string) {
-  const { headers: responseHeaders } = await auth.api.signInEmail({
-    body: { email, password: PASSWORD },
-    headers: new Headers(),
-    returnHeaders: true,
-  });
-  const cookie = responseHeaders
-    .getSetCookie()
-    .map((entry) => entry.split(';')[0])
-    .join('; ');
-  const requestHeaders = new Headers();
-
-  requestHeaders.set('cookie', cookie);
-  vi.mocked(headers).mockResolvedValue(requestHeaders);
-}
 
 function importAction() {
   return import('@/src/features/application/actions/toggleFavoriteAction');
@@ -53,7 +34,7 @@ describe('toggleFavoriteAction', () => {
     const user = await createVerifiedUser({ email, password: PASSWORD });
     const app = await createApp(user.id);
 
-    await signIn(email);
+    await signInAs(email, PASSWORD);
 
     const { toggleFavoriteAction } = await importAction();
     const result = await toggleFavoriteAction({ id: app.id, favorite: true });
@@ -71,7 +52,7 @@ describe('toggleFavoriteAction', () => {
     await createVerifiedUser({ email: 'intruder@example.com', password: PASSWORD });
     const app = await createApp(owner.id);
 
-    await signIn('intruder@example.com');
+    await signInAs('intruder@example.com', PASSWORD);
 
     const { toggleFavoriteAction } = await importAction();
     const result = await toggleFavoriteAction({ id: app.id, favorite: true });
@@ -88,7 +69,7 @@ describe('toggleFavoriteAction', () => {
 
     await createVerifiedUser({ email, password: PASSWORD });
 
-    await signIn(email);
+    await signInAs(email, PASSWORD);
 
     const { toggleFavoriteAction } = await importAction();
     const result = await toggleFavoriteAction({ id: 'not-a-uuid', favorite: true });

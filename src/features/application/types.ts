@@ -1,9 +1,11 @@
 // Type-only imports of the Drizzle enums are erased at build, so the board's display
 // types stay in sync with the schema without pulling drizzle into the client bundle.
-import type { applicationSource, boardStage } from './db/schema';
+import type { applicationSource, boardStage, closedOutcome, workingModel } from './db/schema';
 
 export type BoardStage = (typeof boardStage.enumValues)[number];
 export type ApplicationSource = (typeof applicationSource.enumValues)[number];
+export type ClosedOutcome = (typeof closedOutcome.enumValues)[number];
+export type WorkingModel = (typeof workingModel.enumValues)[number];
 
 /** The four board columns, in display order (mirrors the `board_stage` enum). */
 export const BOARD_STAGES = [
